@@ -1,0 +1,13 @@
+system galaxy_server (
+  cpu.arch='x86_64' and
+  cpu.count>=2 and
+  memory.size>=256m and
+  net_interface.0.connection = 'public' and
+  net_interface.0.dns_name = 'master' and
+  disk.0.os.name = 'linux' and
+  disk.0.image.url = 'one://ramses.i3m.upv.es/95' and
+  disk.0.os.credentials.username = 'ubuntu' and
+  disk.0.os.credentials.password = 'yoyoyo'
+)
+
+deploy master 1
