@@ -9,6 +9,7 @@ import javax.ws.rs.core.Response.StatusType;
 public class ServiceResponse {
 
 	private Response response;
+	private String serviceResult;
 
 	private Response getResponse() {
 		return response;
@@ -16,6 +17,7 @@ public class ServiceResponse {
 
 	public ServiceResponse(Response response) {
 		this.response = response;
+		this.serviceResult = getResponse().readEntity(String.class);
 	}
 
 	/**
@@ -23,14 +25,14 @@ public class ServiceResponse {
 	 */
 	@Override
 	public String toString() {
-		return getResponse().readEntity(String.class);
+		return serviceResult;
 	}
 
 	/**
 	 * Gets the returned string by the server
 	 */
 	public String getResult() {
-		return toString();
+		return serviceResult;
 	}
 
 	/**

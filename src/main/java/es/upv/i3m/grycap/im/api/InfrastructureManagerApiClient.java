@@ -116,6 +116,25 @@ public class InfrastructureManagerApiClient {
 		return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS
 				+ PATH_SEPARATOR + vmId + PATH_SEPARATOR + propertyName, MediaType.TEXT_PLAIN);
 	}
+	
+	/**
+	 * Return property 'propertyName' from to the virtual machine with ID 'vmId'
+	 * associated to the infrastructure with ID 'infId'.
+	 * 
+	 * @param infId
+	 *            : infrastructure id
+	 * @param vmId
+	 *            : virtual machine id
+	 * @param propertyName
+	 *            : VM property to retrieve from the virtual machine
+	 * @return : a string with the property information
+	 * @throws InvalidAuthFileException
+	 */
+	public ServiceResponse getVMProperty(String infId, String vmId, VmProperties vmProperty)
+			throws AuthFileNotFoundException {
+		return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS
+				+ PATH_SEPARATOR + vmId + PATH_SEPARATOR + vmProperty.toString(), MediaType.TEXT_PLAIN);
+	}
 
 	/**
 	 * Return the contextualization log associated to the infrastructure with ID

@@ -10,6 +10,8 @@ import org.junit.Test;
 
 import es.upv.i3m.grycap.file.FileIO;
 import es.upv.i3m.grycap.im.api.InfrastructureManagerApiClient;
+import es.upv.i3m.grycap.im.api.VmProperties;
+import es.upv.i3m.grycap.im.api.VmStates;
 import es.upv.i3m.grycap.im.client.ServiceResponse;
 import es.upv.i3m.grycap.im.exceptions.AuthFileNotFoundException;
 import es.upv.i3m.grycap.logger.ImJavaApiLogger;
@@ -30,14 +32,7 @@ public class InfrastructureManagerApiClientTest {
 	// VM identifiers
 	private static final String VM_DEFAULT_ID = "0";
 	private static final String VM_ID_ONE = "1";
-	// Possible VM states
-	private static final String VM_STATE_RUNNING = "running";
-	private static final String VM_STATE_PENDING = "pending";
-	private static final String VM_STATE_STOPPED = "stopped";
-	private static final String VM_STATE_UNCONFIGURED = "unconfigured";
-	// VM properties
-	private static final String VM_STATE_PROPERTY = "state";
-	private static final String VM_CPU_COUNT_PROPERTY = "cpu.count";
+	// Max retries for rest calls
 	private static final Integer MAX_RETRY = 20;
 	// Flag to activate/deactivate the dummy provider
 	private static final boolean DUMMY_PROVIDER = true;
@@ -51,15 +46,17 @@ public class InfrastructureManagerApiClientTest {
 	private void setInfrastructureId(String infrastructureId) {
 		this.infrastructureId = infrastructureId;
 	}
-	
+
 	private InfrastructureManagerApiClient getImApiClient() {
 		return imApiClient;
 	}
 
 	private void waitUntilRunningOrUncofiguredState(String vmId) throws AuthFileNotFoundException {
 		while (true) {
-			String vmState = getImApiClient().getVMProperty(getInfrastructureId(), vmId, VM_STATE_PROPERTY).getResult();
-			if (vmState.equals(VM_STATE_RUNNING) || vmState.equals(VM_STATE_UNCONFIGURED)) {
+			String vmState = getImApiClient().getVMProperty(getInfrastructureId(), vmId, VmProperties.STATE)
+					.getResult();
+
+			if (VmStates.RUNNING.equals(vmState) || VmStates.UNCONFIGURED.equals(vmState)) {
 				break;
 			}
 			sleep(5000);
@@ -69,7 +66,7 @@ public class InfrastructureManagerApiClientTest {
 	/**
 	 * Sleep the number of milliseconds specified unless the provider tested is
 	 * the dummy one.<br>
-	 * The dummy provider doesn't have wait times.
+	 * The dummy provider doesn't need wait times.
 	 * 
 	 * @param milliseconds
 	 */
@@ -108,14 +105,14 @@ public class InfrastructureManagerApiClientTest {
 	 * Check if the VM state is the same as the 'state' parameter
 	 * 
 	 * @param vmId
-	 * @param state
+	 * @param vmState
 	 * @throws AuthFileNotFoundException
 	 */
-	private void checkVMState(String vmId, String state) throws AuthFileNotFoundException {
+	private void checkVMState(String vmId, VmStates vmState) throws AuthFileNotFoundException {
 		ServiceResponse response = getImApiClient().getVMProperty(getInfrastructureId(), VM_DEFAULT_ID,
-				VM_STATE_PROPERTY);
+				VmProperties.STATE);
 		checkServiceResponse(response);
-		if (!response.getResult().equals(state)) {
+		if (!vmState.equals(response.getResult())) {
 			Assert.fail();
 		}
 	}
@@ -183,9 +180,9 @@ public class InfrastructureManagerApiClientTest {
 	@Test
 	public void testGetVMProperty() throws AuthFileNotFoundException, IOException {
 		if (DUMMY_PROVIDER) {
-			checkVMState(VM_DEFAULT_ID, VM_STATE_RUNNING);
+			checkVMState(VM_DEFAULT_ID, VmStates.RUNNING);
 		} else {
-			checkVMState(VM_DEFAULT_ID, VM_STATE_PENDING);
+			checkVMState(VM_DEFAULT_ID, VmStates.PENDING);
 		}
 	}
 
@@ -291,7 +288,7 @@ public class InfrastructureManagerApiClientTest {
 		waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
 		ServiceResponse response = getImApiClient().stopInfrastructure(getInfrastructureId());
 		checkServiceResponse(response);
-		checkVMState(VM_DEFAULT_ID, VM_STATE_STOPPED);
+		checkVMState(VM_DEFAULT_ID, VmStates.STOPPED);
 	}
 
 	@Test
@@ -299,14 +296,14 @@ public class InfrastructureManagerApiClientTest {
 		waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
 		ServiceResponse response = getImApiClient().stopInfrastructure(getInfrastructureId());
 		checkServiceResponse(response);
-		checkVMState(VM_DEFAULT_ID, VM_STATE_STOPPED);
+		checkVMState(VM_DEFAULT_ID, VmStates.STOPPED);
 		sleep(3000);
 		response = getImApiClient().startInfrastructure(getInfrastructureId());
 		checkServiceResponse(response);
 		if (DUMMY_PROVIDER) {
-			checkVMState(VM_DEFAULT_ID, VM_STATE_RUNNING);
+			checkVMState(VM_DEFAULT_ID, VmStates.RUNNING);
 		} else {
-			checkVMState(VM_DEFAULT_ID, VM_STATE_PENDING);
+			checkVMState(VM_DEFAULT_ID, VmStates.PENDING);
 		}
 	}
 
@@ -315,7 +312,7 @@ public class InfrastructureManagerApiClientTest {
 		waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
 		ServiceResponse response = getImApiClient().stopVM(getInfrastructureId(), VM_DEFAULT_ID);
 		checkServiceResponse(response);
-		checkVMState(VM_DEFAULT_ID, VM_STATE_STOPPED);
+		checkVMState(VM_DEFAULT_ID, VmStates.STOPPED);
 	}
 
 	@Test
@@ -323,14 +320,14 @@ public class InfrastructureManagerApiClientTest {
 		waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
 		ServiceResponse response = getImApiClient().stopVM(getInfrastructureId(), VM_DEFAULT_ID);
 		checkServiceResponse(response);
-		checkVMState(VM_DEFAULT_ID, VM_STATE_STOPPED);
+		checkVMState(VM_DEFAULT_ID, VmStates.STOPPED);
 		sleep(3000);
 		response = getImApiClient().startVM(getInfrastructureId(), VM_DEFAULT_ID);
 		checkServiceResponse(response);
 		if (DUMMY_PROVIDER) {
-			checkVMState(VM_DEFAULT_ID, VM_STATE_RUNNING);
+			checkVMState(VM_DEFAULT_ID, VmStates.RUNNING);
 		} else {
-			checkVMState(VM_DEFAULT_ID, VM_STATE_PENDING);
+			checkVMState(VM_DEFAULT_ID, VmStates.PENDING);
 		}
 	}
 
@@ -341,7 +338,7 @@ public class InfrastructureManagerApiClientTest {
 		sleep(45000);
 		getImApiClient().alterVM(getInfrastructureId(), VM_DEFAULT_ID, FileIO.readUTF8File(RADL_ALTER_VM_FILE_PATH));
 		ServiceResponse response = getImApiClient().getVMProperty(getInfrastructureId(), VM_DEFAULT_ID,
-				VM_CPU_COUNT_PROPERTY);
+				VmProperties.CPU_COUNT);
 		checkServiceResponse(response);
 		// Check that the alteration of the VM has been successful
 		String cpuCount = response.getResult();
