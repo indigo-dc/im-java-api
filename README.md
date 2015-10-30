@@ -22,7 +22,7 @@ this command compiles the code and executes the tests. If you want to compile th
 ```
 mvn clean install -DskipTests
 ```
-When the compilation finishes you will have a **target** folder. Inside you can find the compiled java classes and the packaged jars. The jar **im-java-api-0.0.1-jar-with-dependencies.jar** includes all the libraries needed by the im-java-api and can be used independently. The jar **im-java-api-0.0.1.jar** contains only the im-java-api code and needs external libraries to work. The external libraries needed by the project are specified in the pom.xml
+When the compilation finishes you will have a **target** folder. Inside you can find the compiled java classes and the packaged jars. The jar **im-java-api-0.0.1-jar-with-dependencies.jar** includes all the libraries needed by the im-java-api and can be used independently. The jar **im-java-api-0.0.1.jar** contains only the im-java-api compiled code and needs external libraries to work. The external libraries needed by the project are specified in the pom.xml
 
 1.3 CONFIGURATION
 -----------------
