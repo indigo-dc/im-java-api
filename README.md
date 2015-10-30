@@ -1,14 +1,14 @@
 Infrastructure Manager Java API
 ===============
-This project offers an API that allows to connect to the Infrastructure Manager REST services.
-For more information about the IM capabilities check: [IM Web](http://www.grycap.upv.es/im/index.php).
+This project offers an API that allows to connect to the Infrastructure Manager REST API.
+For more information about the IM capabilities check: [IM Web](http://www.grycap.upv.es/im).
 
 1. INSTALLATION
 ===============
 
 1.1 REQUISITES
 --------------
-This project has been created with maven. 
+This project has been created with maven.
 To compile it you will need at least **Apache Maven 3.0.5** and **Java 1.7**.
 Maven will take care of downloading all the extra dependencies needed for the project.
 
@@ -26,7 +26,7 @@ When the compilation finishes you will have a **target** folder. Inside you can 
 
 1.3 CONFIGURATION
 -----------------
-This project don't need any configuration files to work.
+This project does not need any configuration files to work.
 If you want you can define a **log4j.properties** to log the REST service calls.
 To configure the logger you have to create a **log4j.properties** file and set the logger properties.
 The log4j.properties file of the tests can help you with the logger configuration.
