@@ -36,15 +36,29 @@ The log4j.properties file of the tests can help you with the logger configuratio
 The tests defined in the class **InfrastructureManagerApiClientTest** show how to use the im-java-api.
 Also check the following lines to see some examples of use:
 
-### 1.4.1 Create and destroy an infrastructure
+### 1.4.1 Create the API client
 ```
-InfrastructureManagerApiClient imClient = new InfrastructureManagerApiClient("PROVIDER_URL", "AUTH_FILE_PATH");
+InfrastructureManagerApiClient imClient = new InfrastructureManagerApiClient("IM_ENDPOINT", "AUTH_FILE_PATH");
+```
+When creating a new client you have to specify a valid IM URL, and an authorization file path with the credentials required for the infrastrcture deployment.
+More information about the authorization file can be found here: [Auth file](http://www.grycap.upv.es/im/doc/client.html#auth-file).
+You can also check the authorization file used for the tests that is available in 'src/test/resources/'.
+
+### 1.4.2 Create and destroy an infrastructure
+```
 // Infrastructure creation based on a TOSCA file
-ServiceResponse response = imClient.createInfrastructure(FileIO.readUTF8File(TOSCA_FILE_PATH));
-// Method to extract the infId of the serrver response
-setInfrastructureId(response);
+ServiceResponse response = getImApiClient().createInfrastructure(FileIO.readUTF8File(TOSCA_FILE_PATH));
+... USE THE INFRASTRUCTURE ...
 // Infrastructure destruction
 imClient.destroyInfrastructure(getInfrastructureId());
 ```
+The **ServiceResponse** class returned by the **createInfrastructure** method contains all the information of the web service response. Check the **ServiceResponse** class methods for more information.
 
-
+### 1.4.3 Get VM property
+```
+getImApiClient().getVMProperty(getInfrastructureId(), VM_DEFAULT_ID, VM_STATE_PROPERTY);
+```
+### 1.4.4 Stop the infrastructure
+```
+getImApiClient().stopInfrastructure(getInfrastructureId());
+```
