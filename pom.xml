@@ -15,6 +15,7 @@
 		<junit.version>4.12</junit.version>
 		<log4j.version>1.2.17</log4j.version>
 		<java.version>7</java.version>
+		<maven-javadoc-plugin.version>2.10.3</maven-javadoc-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -37,7 +38,6 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -49,6 +49,14 @@
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>${maven-javadoc-plugin.version}</version>
+				<configuration>
+					<reportOutputDirectory>apidocs</reportOutputDirectory>
 				</configuration>
 			</plugin>
 			<!-- Include dependencies inside the JAR -->
