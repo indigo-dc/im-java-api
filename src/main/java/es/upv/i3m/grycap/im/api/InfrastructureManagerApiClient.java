@@ -33,12 +33,6 @@ public class InfrastructureManagerApiClient {
 	private static final String PATH_INFRASTRUCTURES = "infrastructures";
 	private static final String PATH_VMS = "vms";
 	private static final String PATH_SEPARATOR = "/";
-	// Specific path fragments for specific IM calls
-	private static final String INFRASTRUCTURE_PROPERTY_START = "start";
-	private static final String INFRASTRUCTURE_PROPERTY_STOP = "stop";
-	private static final String INFRASTRUCTURE_PROPERTY_CONTMSG = "contmsg";
-	private static final String INFRASTRUCTURE_PROPERTY_RADL = "radl";
-	private static final String INFRASTRUCTURE_PROPERTY_RECONFIGURE = "reconfigure";
 	// IM REST parameters
 	private static final String REST_PARAMETER_NAME_CONTEXT = "context";
 	private static final String REST_PARAMETER_NAME_VMLIST = "vm_list";
@@ -162,7 +156,7 @@ public class InfrastructureManagerApiClient {
 	 */
 	public ServiceResponse getInfrastructureContMsg(String infId) throws AuthFileNotFoundException {
 		return getImClient().get(
-				PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + INFRASTRUCTURE_PROPERTY_CONTMSG,
+				PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.CONTMSG,
 				MediaType.TEXT_PLAIN);
 	}
 
@@ -177,7 +171,21 @@ public class InfrastructureManagerApiClient {
 	 */
 	public ServiceResponse getInfrastructureRADL(String infId) throws AuthFileNotFoundException {
 		return getImClient().get(
-				PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + INFRASTRUCTURE_PROPERTY_RADL,
+				PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.RADL,
+				MediaType.TEXT_PLAIN);
+	}
+	
+	/**
+	 * Return a string with the infrastructure state.
+	 * 
+	 * @param infId
+	 *            : infrastructure id
+	 * @return : original RADL of the infrastructure
+	 * @throws InvalidAuthFileException
+	 */
+	public ServiceResponse getInfrastructureState(String infId) throws AuthFileNotFoundException {
+		return getImClient().get(
+				PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.STATE,
 				MediaType.TEXT_PLAIN);
 	}
 
@@ -286,7 +294,7 @@ public class InfrastructureManagerApiClient {
 	 */
 	public ServiceResponse stopInfrastructure(String infId) throws AuthFileNotFoundException {
 		return getImClient().put(
-				PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + INFRASTRUCTURE_PROPERTY_STOP,
+				PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.STOP,
 				MediaType.TEXT_PLAIN, "", MediaType.TEXT_PLAIN);
 	}
 
@@ -302,7 +310,7 @@ public class InfrastructureManagerApiClient {
 	 */
 	public ServiceResponse startInfrastructure(String infId) throws AuthFileNotFoundException {
 		return getImClient().put(
-				PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + INFRASTRUCTURE_PROPERTY_START,
+				PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.START,
 				MediaType.TEXT_PLAIN, "", MediaType.TEXT_PLAIN);
 	}
 
@@ -320,7 +328,7 @@ public class InfrastructureManagerApiClient {
 	public ServiceResponse stopVM(String infId, String vmId) throws AuthFileNotFoundException {
 		return getImClient().put(
 				PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS + PATH_SEPARATOR + vmId
-						+ PATH_SEPARATOR + INFRASTRUCTURE_PROPERTY_STOP,
+						+ PATH_SEPARATOR + ImValues.STOP,
 				MediaType.TEXT_PLAIN, "", MediaType.TEXT_PLAIN);
 	}
 
@@ -338,7 +346,7 @@ public class InfrastructureManagerApiClient {
 	public ServiceResponse startVM(String infId, String vmId) throws AuthFileNotFoundException {
 		return getImClient().put(
 				PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS + PATH_SEPARATOR + vmId
-						+ PATH_SEPARATOR + INFRASTRUCTURE_PROPERTY_START,
+						+ PATH_SEPARATOR + ImValues.START,
 				MediaType.TEXT_PLAIN, "", MediaType.TEXT_PLAIN);
 	}
 
@@ -380,7 +388,7 @@ public class InfrastructureManagerApiClient {
 	 */
 	public ServiceResponse reconfigure(String infId) throws AuthFileNotFoundException {
 		return getImClient().put(
-				PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + INFRASTRUCTURE_PROPERTY_RECONFIGURE,
+				PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.RECONFIGURE,
 				MediaType.TEXT_PLAIN, "", MediaType.TEXT_PLAIN);
 	}
 
@@ -418,12 +426,12 @@ public class InfrastructureManagerApiClient {
 			}
 			return getImClient().put(
 					PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
-							+ INFRASTRUCTURE_PROPERTY_RECONFIGURE,
+							+ ImValues.RECONFIGURE,
 					MediaType.TEXT_PLAIN, radlFile, MediaType.TEXT_PLAIN, parameters);
 		} else {
 			return getImClient().put(
 					PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
-							+ INFRASTRUCTURE_PROPERTY_RECONFIGURE,
+							+ ImValues.RECONFIGURE,
 					MediaType.TEXT_PLAIN, radlFile, MediaType.TEXT_PLAIN);
 		}
 	}
