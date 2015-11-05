@@ -70,7 +70,6 @@ public class InfrastructureManagerApiClientTest {
 		while (true) {
 			String vmState = getImApiClient().getVMProperty(getInfrastructureId(), vmId, VmProperties.STATE)
 					.getResult();
-
 			if (VmStates.RUNNING.equals(vmState) || VmStates.UNCONFIGURED.equals(vmState)) {
 				break;
 			}
@@ -112,6 +111,7 @@ public class InfrastructureManagerApiClientTest {
 	 */
 	private void checkServiceResponse(ServiceResponse response) {
 		if (!response.isReponseSuccessful()) {
+			ImJavaApiLogger.severe(this.getClass(), response.getResult());
 			Assert.fail();
 		}
 	}
@@ -213,6 +213,13 @@ public class InfrastructureManagerApiClientTest {
 	@Test
 	public void testGetInfrastructureRADL() throws AuthFileNotFoundException, IOException {
 		ServiceResponse response = getImApiClient().getInfrastructureRADL(getInfrastructureId());
+		checkServiceResponse(response);
+		checkStringHasContent(response.getResult());
+	}
+	
+	@Test
+	public void testGetInfrastructureState() throws AuthFileNotFoundException, IOException {
+		ServiceResponse response = getImApiClient().getInfrastructureState(getInfrastructureId());
 		checkServiceResponse(response);
 		checkStringHasContent(response.getResult());
 	}

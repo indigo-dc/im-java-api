@@ -10,4 +10,4 @@ system galaxy_server (
   disk.0.os.credentials.password = 'yoyoyo'
 )
 
-deploy master 1
+deploy galaxy_server 1
