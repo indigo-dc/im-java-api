@@ -33,7 +33,7 @@ public class FileIO {
 	 * 
 	 * @param path
 	 *            : file to read
-	 * @return : string with the loaded file
+	 * @return : String with the loaded file
 	 * @throws IOException
 	 */
 	public static String readUTF8File(String path) throws IOException {
@@ -48,7 +48,7 @@ public class FileIO {
 	 *            : file to read
 	 * @param encoding
 	 *            : charset of the file to read
-	 * @return : string with the loaded file
+	 * @return : String with the loaded file
 	 * @throws IOException
 	 */
 	public static String readFile(String path, Charset encoding) throws IOException {
@@ -62,7 +62,7 @@ public class FileIO {
 	 * 
 	 * @param path
 	 *            : file to read
-	 * @return : string with the loaded file
+	 * @return : String with the loaded file
 	 * @throws IOException
 	 */
 	public static String readUTF8FileAndReplaceNewLines(String path) throws IOException {
