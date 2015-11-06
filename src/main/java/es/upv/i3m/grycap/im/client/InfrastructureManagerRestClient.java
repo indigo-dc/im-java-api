@@ -77,10 +77,14 @@ public class InfrastructureManagerRestClient {
 
 	/**
 	 * Generic GET call
+	 * 
 	 * @param path
+	 *            : specific path for the call (e.g. infrastructures/02154-659a)
 	 * @param requestType
+	 *            : accepted response media types
 	 * @param parameters
-	 * @return
+	 *            : extra parameters for the call (if needed)
+	 * @return : ServiceResponse wrapper class
 	 * @throws AuthFileNotFoundException
 	 */
 	public ServiceResponse get(String path, String requestType, RestCallParameter... parameters)
@@ -91,12 +95,18 @@ public class InfrastructureManagerRestClient {
 
 	/**
 	 * Generic POST call
+	 * 
 	 * @param path
+	 *            : specific path for the call (e.g. infrastructures/02154-659a)
 	 * @param requestType
+	 *            : accepted response media types
 	 * @param content
+	 *            : content of the POST call
 	 * @param postType
+	 *            : content type
 	 * @param parameters
-	 * @return
+	 *            : extra parameters for the call (if needed)
+	 * @return : ServiceResponse wrapper class
 	 * @throws AuthFileNotFoundException
 	 */
 	public ServiceResponse post(String path, String requestType, String content, String postType,
@@ -108,12 +118,19 @@ public class InfrastructureManagerRestClient {
 
 	/**
 	 * Generic PUT call
+	 * 
 	 * @param path
+	 *            : specific path for the call (e.g. infrastructures/02154-659a)
 	 * @param requestType
+	 *            : accepted response media types
 	 * @param content
+	 *            : content of the PUT call
 	 * @param putType
+	 *            : content type
 	 * @param parameters
-	 * @return
+	 *            : extra parameters for the call (if needed)
+	 * 
+	 * @return : ServiceResponse wrapper class
 	 * @throws AuthFileNotFoundException
 	 */
 	public ServiceResponse put(String path, String requestType, String content, String putType,
@@ -125,10 +142,14 @@ public class InfrastructureManagerRestClient {
 
 	/**
 	 * Generic DELETE call
+	 * 
 	 * @param path
+	 *            : specific path for the call (e.g. infrastructures/02154-659a)
 	 * @param requestType
+	 *            : accepted response media types
 	 * @param parameters
-	 * @return
+	 *            : extra parameters for the call (if needed)
+	 * @return : ServiceResponse wrapper class
 	 * @throws AuthFileNotFoundException
 	 */
 	public ServiceResponse delete(String path, String requestType, RestCallParameter... parameters)
