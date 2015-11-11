@@ -72,8 +72,3 @@ getImApiClient().getVMProperty(getInfrastructureId(), VM_DEFAULT_ID, "state");
 ```
 getImApiClient().stopInfrastructure(getInfrastructureId());
 ```
-
-2. LICENSE
-===============
-
-See [LICENSE](https://github.com/indigo-dc/im-java-api/blob/gh-pages/LICENSE)
