@@ -1,3 +1,5 @@
+[![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+
 Infrastructure Manager Java API
 ===============
 This project offers an API that allows to connect to the Infrastructure Manager REST API.
