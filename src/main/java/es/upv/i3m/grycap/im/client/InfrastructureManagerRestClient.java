@@ -164,8 +164,14 @@ public class InfrastructureManagerRestClient {
     }
 
     /**
-     * Build a new Rest client.
+     * Returns a new Rest client.
      * 
+     * @param path
+     *            : url where the client is going to connect
+     * @param requestType
+     *            : accepted response media types
+     * @param parameters
+     *            : extra parameters for the call (if needed)
      * @return : new REST client
      * @throws AuthFileNotFoundException
      */
@@ -188,6 +194,13 @@ public class InfrastructureManagerRestClient {
         }
     }
 
+    /**
+     * Build a new Rest client.
+     * 
+     * @param ssl
+     *            : tells the method if the client needs to support SSL or not
+     * @return : new REST client
+     */
     private static Client buildClient(boolean ssl) {
         if (ssl) {
             SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
