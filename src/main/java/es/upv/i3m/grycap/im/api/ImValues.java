@@ -20,33 +20,21 @@ package es.upv.i3m.grycap.im.api;
  */
 public enum ImValues {
 
-	START("start"),
-	STOP("stop"),
-	CONTMSG("contmsg"),
-	RADL("radl"),
-	STATE("state"),
-	RECONFIGURE("reconfigure");
-			
-	private final String value;
+    START("start"),
+    STOP("stop"),
+    CONTMSG("contmsg"),
+    RADL("radl"),
+    STATE("state"),
+    RECONFIGURE("reconfigure");
 
-	ImValues(String value) {
-		this.value = value;
-	}
+    private final String value;
 
-	@Override
-	public String toString() {
-		return value;
-	}
-	
-	/**
-	 * Return True if the string passed matches the internal value of the
-	 * instance created
-	 * 
-	 * @param value
-	 *            : string to compare
-	 * @return : True if equal, false otherwise
-	 */
-	public boolean equals(String value){
-		return this.value.equals(value);
-	}
+    ImValues(String value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return value;
+    }
 }
