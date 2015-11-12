@@ -17,11 +17,15 @@ package es.upv.i3m.grycap.im.client;
 
 import java.io.IOException;
 
+import javax.net.ssl.SSLContext;
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.UriBuilder;
+
+import org.glassfish.jersey.SslConfigurator;
 
 import es.upv.i3m.grycap.file.FileIO;
 import es.upv.i3m.grycap.im.exceptions.AuthFileNotFoundException;
@@ -168,19 +172,28 @@ public class InfrastructureManagerRestClient {
     private Builder getRestClient(String path, String requestType, RestCallParameter... parameters)
             throws AuthFileNotFoundException {
         if (getAuthFile() != null) {
+            boolean ssl = path.startsWith("https");
             if (parameters != null && parameters.length > 0) {
-                WebTarget webtarget = ClientBuilder.newBuilder().build().target(UriBuilder.fromUri(getTarget()).build())
-                        .path(path);
+                WebTarget webtarget = buildClient(ssl).target(UriBuilder.fromUri(getTarget()).build()).path(path);
                 for (RestCallParameter parameter : parameters) {
                     webtarget.queryParam(parameter.getParameterName(), parameter.getParameterValues());
                 }
                 return webtarget.request(requestType).header(AUTH_HEADER_TAG, getAuthFile());
             } else {
-                return ClientBuilder.newBuilder().build().target(UriBuilder.fromUri(getTarget()).build()).path(path)
-                        .request(requestType).header(AUTH_HEADER_TAG, getAuthFile());
+                return buildClient(ssl).target(UriBuilder.fromUri(getTarget()).build()).path(path).request(requestType)
+                        .header(AUTH_HEADER_TAG, getAuthFile());
             }
         } else {
             throw new AuthFileNotFoundException("Authorization file not specified");
+        }
+    }
+
+    private static Client buildClient(boolean ssl) {
+        if (ssl) {
+            SSLContext sslContext = SslConfigurator.newInstance(true).createSSLContext();
+            return ClientBuilder.newBuilder().sslContext(sslContext).build();
+        } else {
+            return ClientBuilder.newBuilder().build();
         }
     }
 
