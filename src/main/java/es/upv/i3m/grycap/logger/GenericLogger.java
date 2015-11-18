@@ -17,7 +17,7 @@ package es.upv.i3m.grycap.logger;
 
 import org.apache.log4j.Logger;
 
-abstract class GenericLogger {
+public abstract class GenericLogger {
 
     protected GenericLogger() {
     }
@@ -28,7 +28,7 @@ abstract class GenericLogger {
      * 
      * @param message
      */
-    public static void warning(Logger logger, String message) {
+    private static void warning(Logger logger, String message) {
         logger.warn(message);
     }
 
@@ -38,7 +38,7 @@ abstract class GenericLogger {
      * 
      * @param message
      */
-    public static void warning(Logger logger, String className, String message) {
+    protected static void warning(Logger logger, String className, String message) {
         warning(logger, className + ": " + message);
     }
 
@@ -48,7 +48,7 @@ abstract class GenericLogger {
      * 
      * @param message
      */
-    public static void info(Logger logger, String message) {
+    private static void info(Logger logger, String message) {
         logger.info(message);
     }
 
@@ -58,7 +58,7 @@ abstract class GenericLogger {
      * 
      * @param message
      */
-    public static void info(Logger logger, String className, String message) {
+    protected static void info(Logger logger, String className, String message) {
         info(logger, className + ": " + message);
     }
 
@@ -68,19 +68,7 @@ abstract class GenericLogger {
      * 
      * @param message
      */
-    public static void debug(Logger logger, String message) {
-        if (logger.isDebugEnabled()) {
-            logger.debug(message);
-        }
-    }
-
-    /**
-     * For following the trace of the execution. I.e. Knowing if the application
-     * access to a method, opening database connection, etc.
-     * 
-     * @param message
-     */
-    public static void debug(Logger logger, String className, String message) {
+    protected static void debug(Logger logger, String className, String message) {
         if (logger.isDebugEnabled()) {
             logger.debug(className + ": " + message);
         }
@@ -92,7 +80,7 @@ abstract class GenericLogger {
      * 
      * @param message
      */
-    public static void severe(Logger logger, String message) {
+    private static void severe(Logger logger, String message) {
         logger.error(message);
     }
 
@@ -101,7 +89,7 @@ abstract class GenericLogger {
      * 
      * @param message
      */
-    public static void severe(Logger logger, String className, String message) {
+    protected static void severe(Logger logger, String className, String message) {
         severe(logger, className + ": " + message);
     }
 
@@ -110,7 +98,7 @@ abstract class GenericLogger {
      * 
      * @param message
      */
-    public static void severe(Logger logger, String className, Throwable throwable) {
+    protected static void severe(Logger logger, String className, Throwable throwable) {
         logger.error("Error in '" + className + "'", throwable);
     }
 }

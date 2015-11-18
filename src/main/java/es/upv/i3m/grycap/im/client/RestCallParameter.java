@@ -15,6 +15,7 @@
  */
 package es.upv.i3m.grycap.im.client;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,9 +47,8 @@ public class RestCallParameter {
 
     public void addValue(Object value) {
         if (parameterValue == null) {
-            parameterValue = Arrays.asList(value);
-        } else {
-            parameterValue.add(value);
+            parameterValue = new ArrayList<>();
         }
+        parameterValue.add(value);
     }
 }

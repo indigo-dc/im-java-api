@@ -17,6 +17,8 @@ package es.upv.i3m.grycap.client;
 
 import java.io.IOException;
 
+import javax.ws.rs.core.Response.Status;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -344,8 +346,18 @@ public class InfrastructureManagerApiClientTest {
                 FileIO.readUTF8File(TOSCA_FILE_PATH));
         checkServiceResponse(response);
         waitUntilRunningOrUncofiguredState(VM_ID_ONE);
-        response = getImApiClient().reconfigure(getInfrastructureId(), FileIO.readUTF8File(TOSCA_FILE_PATH),
-                new int[] { 0 });
+        response = getImApiClient().reconfigure(getInfrastructureId(), FileIO.readUTF8File(TOSCA_FILE_PATH), 0, 1);
         checkServiceResponse(response);
+    }
+
+    @Test
+    public void testServiceResponse() throws AuthFileNotFoundException {
+        ServiceResponse response = getImApiClient().getInfrastructureList();
+        Assert.assertFalse(response.toString().isEmpty());
+        Assert.assertFalse(response.getResult().isEmpty());
+        Assert.assertEquals(response.getServiceStatusCode(), 200);
+        Assert.assertEquals(response.getServiceStatusInfo(), Status.OK);
+        Assert.assertEquals(response.getReasonPhrase(), "OK");
+        Assert.assertEquals(response.isReponseSuccessful(), true);
     }
 }
