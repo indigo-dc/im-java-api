@@ -174,7 +174,11 @@ public class InfrastructureManagerApiClient {
     }
 
     /**
-     * Return a string with the infrastructure state.
+     * Return a JSON with the infrastructure and virtual machines states.<br>
+     * The JSON has a 'vm_states' array describing the states of all the
+     * machines of the infrastructure and a 'state' that describes the general
+     * state of the infrastructure ( e.g. {"vm_states": {"144838424585":
+     * "running"}, "state": "running"} ).
      * 
      * @param infId
      *            : infrastructure id

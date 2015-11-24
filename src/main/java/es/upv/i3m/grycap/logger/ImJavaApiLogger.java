@@ -21,6 +21,10 @@ public class ImJavaApiLogger extends GenericLogger {
 
     private static final Logger LOGGER = Logger.getLogger(ImJavaApiLogger.class);
 
+    private ImJavaApiLogger() {
+        super();
+    }
+
     public static void debug(Class<?> clazz, String message) {
         debug(LOGGER, clazz.getName(), message);
     }
