@@ -360,4 +360,10 @@ public class InfrastructureManagerApiClientTest {
         Assert.assertEquals(response.getReasonPhrase(), "OK");
         Assert.assertEquals(response.isReponseSuccessful(), true);
     }
+
+    @Test
+    public void testServiceResponseUnsuccessful() throws AuthFileNotFoundException {
+        ServiceResponse response = getImApiClient().getVMInfo("", VM_DEFAULT_ID);
+        Assert.assertEquals(response.isReponseSuccessful(), false);
+    }
 }
