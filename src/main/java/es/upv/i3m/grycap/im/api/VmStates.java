@@ -20,23 +20,29 @@ package es.upv.i3m.grycap.im.api;
  */
 public enum VmStates {
 
-    PENDING("pending"),
-    RUNNING("running"),
-    UNCONFIGURED("unconfigured"),
-    CONFIGURED("configured"),
-    STOPPED("stopped"),
-    OFF("off"),
-    FAILED("failed"),
-    UNKNOWN("unknown");
+  PENDING("pending"), RUNNING("running"), UNCONFIGURED("unconfigured"), CONFIGURED(
+      "configured"), STOPPED("stopped"), OFF("off"), FAILED("failed"), UNKNOWN("unknown");
 
-    private final String value;
+  private final String value;
 
-    VmStates(String value) {
-        this.value = value;
+  VmStates(String value) {
+    this.value = value;
+  }
+
+  @Override
+  public String toString() {
+    return value;
+  }
+
+  public static VmStates getEnumFromValue(String value) {
+    if (value != null) {
+      for (VmStates state : VmStates.values()) {
+        if (value.equalsIgnoreCase(state.value)) {
+          return state;
+        }
+      }
     }
+    return null;
+  }
 
-    @Override
-    public String toString() {
-        return value;
-    }
 }
