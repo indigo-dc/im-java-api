@@ -44,6 +44,14 @@ public enum VmStates {
         return value;
     }
 
+    /**
+     * Returns a VmState if the String passed is the same as one of the states
+     * of the enum<br>
+     * 
+     * @param value
+     *            : state to retrieve
+     * @return A state of VmStates, null if not found.
+     */
     public static VmStates getEnumFromValue(String value) {
         if (value != null) {
             for (VmStates property : VmStates.values()) {
