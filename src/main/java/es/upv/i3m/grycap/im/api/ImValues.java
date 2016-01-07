@@ -35,6 +35,29 @@ public enum ImValues {
 
     @Override
     public String toString() {
+        return getValue();
+    }
+
+    public String getValue() {
         return value;
+    }
+
+    /**
+     * Returns a ImValue if the String passed is the same as one of the states
+     * of the enum<br>
+     * 
+     * @param value
+     *            : state to retrieve
+     * @return A state of ImValues, null if not found.
+     */
+    public static ImValues getEnumFromValue(String value) {
+        if (value != null) {
+            for (ImValues imValue : ImValues.values()) {
+                if (value.equalsIgnoreCase(imValue.getValue())) {
+                    return imValue;
+                }
+            }
+        }
+        return null;
     }
 }

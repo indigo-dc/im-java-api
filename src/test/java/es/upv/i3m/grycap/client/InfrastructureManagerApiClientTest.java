@@ -26,6 +26,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import es.upv.i3m.grycap.file.FileIO;
+import es.upv.i3m.grycap.im.api.ImValues;
 import es.upv.i3m.grycap.im.api.InfrastructureManagerApiClient;
 import es.upv.i3m.grycap.im.api.VmProperties;
 import es.upv.i3m.grycap.im.api.VmStates;
@@ -193,7 +194,7 @@ public class InfrastructureManagerApiClientTest {
     @Test
     public void testAddResourceNoContext() throws AuthFileNotFoundException, IOException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
-        // Wait for the machine to be properly configured
+        // Add a new resource
         ServiceResponse response = getImApiClient().addResource(getInfrastructureId(),
                 FileIO.readUTF8File(TOSCA_FILE_PATH));
         int retry;
@@ -207,12 +208,13 @@ public class InfrastructureManagerApiClientTest {
         if (retry == MAX_RETRY) {
             Assert.fail();
         }
+        checkServiceResponse(response);
     }
 
     @Test
     public void testAddResourceContextTrue() throws AuthFileNotFoundException, IOException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
-        // Wait for the machine to be properly configured
+        // Add a new resource
         ServiceResponse response = getImApiClient().addResource(getInfrastructureId(),
                 FileIO.readUTF8File(TOSCA_FILE_PATH), true);
         int retry;
@@ -226,12 +228,13 @@ public class InfrastructureManagerApiClientTest {
         if (retry == MAX_RETRY) {
             Assert.fail();
         }
+        checkServiceResponse(response);
     }
 
     @Test
     public void testAddResourceContextFalse() throws AuthFileNotFoundException, IOException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
-        // Wait for the machine to be properly configured
+        // Add a new resource
         ServiceResponse response = getImApiClient().addResource(getInfrastructureId(),
                 FileIO.readUTF8File(TOSCA_FILE_PATH), false);
         int retry;
@@ -245,6 +248,7 @@ public class InfrastructureManagerApiClientTest {
         if (retry == MAX_RETRY) {
             Assert.fail();
         }
+        checkServiceResponse(response);
     }
 
     @Test
@@ -365,5 +369,21 @@ public class InfrastructureManagerApiClientTest {
     public void testServiceResponseUnsuccessful() throws AuthFileNotFoundException {
         ServiceResponse response = getImApiClient().getVMInfo("", VM_DEFAULT_ID);
         Assert.assertEquals(response.isReponseSuccessful(), false);
+    }
+
+    @Test
+    public void testEnums() throws AuthFileNotFoundException {
+        if (!VmStates.PENDING.equals(VmStates.getEnumFromValue("pending"))) {
+            Assert.fail();
+        }
+        Assert.assertNull(VmStates.getEnumFromValue("not_valid"));
+        if (!ImValues.START.equals(ImValues.getEnumFromValue("start"))) {
+            Assert.fail();
+        }
+        Assert.assertNull(ImValues.getEnumFromValue("not_valid"));
+        if (!VmProperties.CPU_ARCH.equals(VmProperties.getEnumFromValue("cpu.arch"))) {
+            Assert.fail();
+        }
+        Assert.assertNull(VmProperties.getEnumFromValue("not_valid"));
     }
 }

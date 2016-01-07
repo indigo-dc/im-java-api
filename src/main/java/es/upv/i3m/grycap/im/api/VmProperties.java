@@ -47,6 +47,29 @@ public enum VmProperties {
 
     @Override
     public String toString() {
+        return getValue();
+    }
+
+    public String getValue() {
         return value;
+    }
+
+    /**
+     * Returns a VmPropertie if the String passed is the same as one of the
+     * states of the enum<br>
+     * 
+     * @param value
+     *            : state to retrieve
+     * @return A state of VmProperties, null if not found.
+     */
+    public static VmProperties getEnumFromValue(String value) {
+        if (value != null) {
+            for (VmProperties property : VmProperties.values()) {
+                if (value.equalsIgnoreCase(property.getValue())) {
+                    return property;
+                }
+            }
+        }
+        return null;
     }
 }
