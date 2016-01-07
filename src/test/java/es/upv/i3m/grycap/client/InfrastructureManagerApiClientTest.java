@@ -376,11 +376,14 @@ public class InfrastructureManagerApiClientTest {
         if (!VmStates.PENDING.equals(VmStates.getEnumFromValue("pending"))) {
             Assert.fail();
         }
+        Assert.assertNull(VmStates.getEnumFromValue("not_valid"));
         if (!ImValues.START.equals(ImValues.getEnumFromValue("start"))) {
             Assert.fail();
         }
+        Assert.assertNull(ImValues.getEnumFromValue("not_valid"));
         if (!VmProperties.CPU_ARCH.equals(VmProperties.getEnumFromValue("cpu.arch"))) {
             Assert.fail();
         }
+        Assert.assertNull(VmProperties.getEnumFromValue("not_valid"));
     }
 }
