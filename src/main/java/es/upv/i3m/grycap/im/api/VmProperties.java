@@ -47,6 +47,21 @@ public enum VmProperties {
 
     @Override
     public String toString() {
+        return getValue();
+    }
+
+    public String getValue() {
         return value;
+    }
+
+    public static VmProperties getEnumFromValue(String value) {
+        if (value != null) {
+            for (VmProperties property : VmProperties.values()) {
+                if (value.equalsIgnoreCase(property.getValue())) {
+                    return property;
+                }
+            }
+        }
+        return null;
     }
 }

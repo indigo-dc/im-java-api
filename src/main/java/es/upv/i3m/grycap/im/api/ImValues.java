@@ -37,4 +37,19 @@ public enum ImValues {
     public String toString() {
         return value;
     }
+
+    public String getValue() {
+        return value;
+    }
+
+    public static ImValues getEnumFromValue(String value) {
+        if (value != null) {
+            for (ImValues imValue : ImValues.values()) {
+                if (value.equalsIgnoreCase(imValue.getValue())) {
+                    return imValue;
+                }
+            }
+        }
+        return null;
+    }
 }
