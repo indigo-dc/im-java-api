@@ -47,8 +47,8 @@ public enum ImValues {
      * of the enum<br>
      * 
      * @param value
-     *            : state to retrieve
-     * @return A state of ImValues, null if not found.
+     *            : string of the value to retrieve
+     * @return A ImValue, null if not found.
      */
     public static ImValues getEnumFromValue(String value) {
         if (value != null) {

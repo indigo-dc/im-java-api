@@ -55,12 +55,12 @@ public enum VmProperties {
     }
 
     /**
-     * Returns a VmPropertie if the String passed is the same as one of the
+     * Returns a VmProperty if the String passed is the same as one of the
      * states of the enum<br>
      * 
      * @param value
-     *            : state to retrieve
-     * @return A state of VmProperties, null if not found.
+     *            : string of the value to retrieve
+     * @return A VmProperty, null if not found.
      */
     public static VmProperties getEnumFromValue(String value) {
         if (value != null) {
