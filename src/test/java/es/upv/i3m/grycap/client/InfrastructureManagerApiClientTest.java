@@ -75,11 +75,6 @@ public class InfrastructureManagerApiClientTest {
         while (true) {
             String vmState = getImApiClient().getVMProperty(getInfrastructureId(), vmId, VmProperties.STATE, false)
                     .getResult();
-
-            System.out.println();
-            System.out.println("ESTADOOOOOOOOOOOOOOo: " + vmState);
-            System.out.println();
-
             if (VmStates.RUNNING.toString().equals(vmState) || VmStates.UNCONFIGURED.toString().equals(vmState)) {
                 break;
             }
