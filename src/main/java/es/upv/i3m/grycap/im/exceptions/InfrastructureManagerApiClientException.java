@@ -15,11 +15,11 @@
  */
 package es.upv.i3m.grycap.im.exceptions;
 
-public class AuthFileNotFoundException extends InfrastructureManagerApiClientException {
+public class InfrastructureManagerApiClientException extends Exception {
 
-    private static final long serialVersionUID = -6678679656451108306L;
+    private static final long serialVersionUID = -6282342599838768683L;
 
-    public AuthFileNotFoundException(String message) {
+    public InfrastructureManagerApiClientException(String message) {
         super(message);
     }
 }
