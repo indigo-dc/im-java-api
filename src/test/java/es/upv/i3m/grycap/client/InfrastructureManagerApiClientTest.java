@@ -34,6 +34,7 @@ import es.upv.i3m.grycap.im.api.VmStates;
 import es.upv.i3m.grycap.im.client.ServiceResponse;
 import es.upv.i3m.grycap.im.exceptions.AuthFileNotFoundException;
 import es.upv.i3m.grycap.im.exceptions.InfrastructureManagerApiClientException;
+import es.upv.i3m.grycap.im.exceptions.NotValidRestApiBodyContentType;
 import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
 public class InfrastructureManagerApiClientTest {
@@ -72,8 +73,13 @@ public class InfrastructureManagerApiClientTest {
 
     private void waitUntilRunningOrUncofiguredState(String vmId) throws AuthFileNotFoundException {
         while (true) {
-            String vmState = getImApiClient().getVMProperty(getInfrastructureId(), vmId, VmProperties.STATE, true)
+            String vmState = getImApiClient().getVMProperty(getInfrastructureId(), vmId, VmProperties.STATE, false)
                     .getResult();
+
+            System.out.println();
+            System.out.println("ESTADOOOOOOOOOOOOOOo: " + vmState);
+            System.out.println();
+
             if (VmStates.RUNNING.toString().equals(vmState) || VmStates.UNCONFIGURED.toString().equals(vmState)) {
                 break;
             }
@@ -95,6 +101,7 @@ public class InfrastructureManagerApiClientTest {
      * Fail the test if the response is not successful
      * 
      * @param response
+     * @throws InterruptedException
      */
     private void checkServiceResponse(ServiceResponse response) {
         if (!response.isReponseSuccessful()) {
@@ -111,8 +118,8 @@ public class InfrastructureManagerApiClientTest {
      * @throws AuthFileNotFoundException
      */
     private void checkVMState(String vmId, VmStates vmState) throws AuthFileNotFoundException {
-        ServiceResponse response = getImApiClient().getVMProperty(getInfrastructureId(), VM_DEFAULT_ID,
-                VmProperties.STATE, true);
+        ServiceResponse response = getImApiClient().getVMProperty(getInfrastructureId(), vmId, VmProperties.STATE,
+                false);
         checkServiceResponse(response);
         if (!vmState.toString().equals(response.getResult())) {
             Assert.fail();
@@ -193,6 +200,25 @@ public class InfrastructureManagerApiClientTest {
     @Test
     public void testGetVMProperty() throws AuthFileNotFoundException, IOException {
         checkVMState(VM_DEFAULT_ID, VmStates.RUNNING);
+    }
+
+    @Test
+    public void testOldGetVMProperty() throws AuthFileNotFoundException, IOException {
+        ServiceResponse response = getImApiClient().getVMProperty(getInfrastructureId(), VM_DEFAULT_ID,
+                VmProperties.STATE);
+        checkServiceResponse(response);
+
+        response = getImApiClient().getVMProperty(getInfrastructureId(), VM_DEFAULT_ID, VmProperties.STATE.getValue(),
+                true);
+        checkServiceResponse(response);
+
+        response = getImApiClient().getVMProperty(getInfrastructureId(), VM_DEFAULT_ID, VmProperties.STATE.getValue(),
+                false);
+        checkServiceResponse(response);
+
+        if (!VmStates.RUNNING.toString().equals(response.getResult())) {
+            Assert.fail();
+        }
     }
 
     @Test
@@ -339,6 +365,24 @@ public class InfrastructureManagerApiClientTest {
                 FileIO.readUTF8File(RADL_JSON_ALTER_VM_FILE_PATH));
         ServiceResponse response = getImApiClient().getVMProperty(getInfrastructureId(), VM_DEFAULT_ID,
                 VmProperties.CPU_COUNT);
+        checkServiceResponse(response);
+        // Check that the alteration of the VM has been successful
+        String cpuCount = response.getResult();
+        if (cpuCount == null || cpuCount.isEmpty() || !cpuCount.equals("2")) {
+            Assert.fail();
+        }
+    }
+
+    @Test(expected = NotValidRestApiBodyContentType.class)
+    public void testAlterVMToscaContent()
+            throws IOException, InterruptedException, InfrastructureManagerApiClientException {
+        waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
+        // Wait for the machine to be properly configured
+        getImApiClient().alterVM(getInfrastructureId(), VM_DEFAULT_ID, FileIO.readUTF8File(RADL_ALTER_VM_FILE_PATH),
+                RestApiBodyContentType.TOSCA, false);
+
+        ServiceResponse response = getImApiClient().getVMProperty(getInfrastructureId(), VM_DEFAULT_ID,
+                VmProperties.CPU_COUNT, false);
         checkServiceResponse(response);
         // Check that the alteration of the VM has been successful
         String cpuCount = response.getResult();
@@ -503,13 +547,6 @@ public class InfrastructureManagerApiClientTest {
         Assert.assertEquals(response.getReasonPhrase(), "OK");
         Assert.assertEquals(response.isReponseSuccessful(), true);
     }
-
-    // @Test
-    // public void testServiceResponseUnsuccessful() throws
-    // AuthFileNotFoundException {
-    // ServiceResponse response = getImApiClient().getVMInfo("", VM_DEFAULT_ID);
-    // Assert.assertEquals(response.isReponseSuccessful(), false);
-    // }
 
     @Test
     public void testServiceResponseUnsuccessfulRequestJson() throws AuthFileNotFoundException {

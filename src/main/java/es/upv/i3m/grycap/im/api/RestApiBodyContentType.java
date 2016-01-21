@@ -57,4 +57,12 @@ public enum RestApiBodyContentType {
         }
         return null;
     }
+
+    // @Override
+    // public boolean equals(Object object) {
+    // if (object instanceof RestApiBodyContentType) {
+    //
+    // } else
+    // return false;
+    // }
 }

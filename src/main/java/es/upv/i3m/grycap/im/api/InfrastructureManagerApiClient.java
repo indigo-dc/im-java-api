@@ -530,7 +530,7 @@ public class InfrastructureManagerApiClient {
     public ServiceResponse alterVM(String infId, String vmId, String radlFile, RestApiBodyContentType bodyContentType,
             boolean requestJson) throws InfrastructureManagerApiClientException {
 
-        if (bodyContentType.equals(RestApiBodyContentType.TOSCA)) {
+        if (bodyContentType.compareTo(RestApiBodyContentType.TOSCA) == 0) {
             throw notValidContentException;
         }
 
@@ -572,23 +572,6 @@ public class InfrastructureManagerApiClient {
     }
 
     /**
-     * @deprecated Perform the reconfigure action in all the virtual machines in
-     *             the the infrastructure with ID 'infID'.<br>
-     *             This method starts the contextualization process again.<br>
-     *             To reconfigure the VMs see the reconfigure methods that
-     *             include the 'radl' parameter.
-     * 
-     * @param infId
-     *            : infrastructure id
-     * @throws InvalidAuthFileException
-     */
-    @Deprecated
-    public ServiceResponse reconfigure(String infId) throws AuthFileNotFoundException {
-        return getImClient().put(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.RECONFIGURE,
-                MediaType.TEXT_PLAIN, "", RestApiBodyContentType.RADL.getValue());
-    }
-
-    /**
      * Perform the reconfigure action in all the virtual machines in the the
      * infrastructure with ID 'infID'.<br>
      * This method starts the contextualization process again.<br>
@@ -597,18 +580,11 @@ public class InfrastructureManagerApiClient {
      * 
      * @param infId
      *            : infrastructure id
-     * @param bodyContentType
-     *            : set the body content type. Can be RADL or RADL_JSON
      * @throws InvalidAuthFileException
      */
-    public ServiceResponse reconfigure(String infId, RestApiBodyContentType bodyContentType)
-            throws InfrastructureManagerApiClientException {
-
-        if (bodyContentType.equals(RestApiBodyContentType.TOSCA)) {
-            throw notValidContentException;
-        }
+    public ServiceResponse reconfigure(String infId) throws AuthFileNotFoundException {
         return getImClient().put(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.RECONFIGURE,
-                MediaType.TEXT_PLAIN, "", bodyContentType.getValue());
+                MediaType.TEXT_PLAIN, "", RestApiBodyContentType.RADL.getValue());
     }
 
     /**
