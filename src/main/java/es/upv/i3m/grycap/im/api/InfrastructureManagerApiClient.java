@@ -22,6 +22,8 @@ import es.upv.i3m.grycap.im.client.InfrastructureManagerRestClient;
 import es.upv.i3m.grycap.im.client.RestCallParameter;
 import es.upv.i3m.grycap.im.client.ServiceResponse;
 import es.upv.i3m.grycap.im.exceptions.AuthFileNotFoundException;
+import es.upv.i3m.grycap.im.exceptions.InfrastructureManagerApiClientException;
+import es.upv.i3m.grycap.im.exceptions.NotValidRestApiBodyContentType;
 
 /**
  * This class offers the user an API to communicate with the Infrastructure
@@ -39,6 +41,9 @@ public class InfrastructureManagerApiClient {
 
     // Rest client needed to make the calls to the IM services
     private InfrastructureManagerRestClient imClient;
+
+    private final NotValidRestApiBodyContentType notValidContentException = new NotValidRestApiBodyContentType(
+            "TOSCA content type not supported");
 
     /**
      * Create a new IM client
@@ -87,6 +92,28 @@ public class InfrastructureManagerApiClient {
     }
 
     /**
+     * @deprecated Return information about the virtual machine with ID vmId
+     *             associated to the infrastructure with ID infId.<br>
+     *             The returned string is in RADL format.<br>
+     *             See more the details of the output in <a href=
+     *             "http://www.grycap.upv.es/im/doc/xmlrpc.html#getvminfo-xmlrpc">
+     *             GetVMInfo</a>
+     * 
+     * @param infId
+     *            : infrastructure id
+     * @param vmId
+     *            : virtual machine id
+     * @return : RADL file
+     * @throws InvalidAuthFileException
+     */
+    @Deprecated
+    public ServiceResponse getVMInfo(String infId, String vmId) throws AuthFileNotFoundException {
+        return getImClient().get(
+                PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS + PATH_SEPARATOR + vmId,
+                MediaType.TEXT_PLAIN);
+    }
+
+    /**
      * Return information about the virtual machine with ID vmId associated to
      * the infrastructure with ID infId.<br>
      * The returned string is in RADL format.<br>
@@ -98,18 +125,27 @@ public class InfrastructureManagerApiClient {
      *            : infrastructure id
      * @param vmId
      *            : virtual machine id
+     * @param requestJson
+     *            : specifies the format of the result in the ServiceResponse
      * @return : RADL file
      * @throws InvalidAuthFileException
      */
-    public ServiceResponse getVMInfo(String infId, String vmId) throws AuthFileNotFoundException {
-        return getImClient().get(
-                PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS + PATH_SEPARATOR + vmId,
-                MediaType.TEXT_PLAIN);
+    public ServiceResponse getVMInfo(String infId, String vmId, boolean requestJson) throws AuthFileNotFoundException {
+        if (requestJson) {
+            return getImClient().get(
+                    PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS + PATH_SEPARATOR + vmId,
+                    MediaType.APPLICATION_JSON);
+        } else {
+            return getImClient().get(
+                    PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS + PATH_SEPARATOR + vmId,
+                    MediaType.TEXT_PLAIN);
+        }
     }
 
     /**
-     * Return property 'propertyName' from to the virtual machine with ID 'vmId'
-     * associated to the infrastructure with ID 'infId'.
+     * @deprecated Return property 'propertyName' from to the virtual machine
+     *             with ID 'vmId' associated to the infrastructure with ID
+     *             'infId'.
      * 
      * @param infId
      *            : infrastructure id
@@ -117,13 +153,66 @@ public class InfrastructureManagerApiClient {
      *            : virtual machine id
      * @param propertyName
      *            : name of the property to retrieve from the virtual machine
-     * @return : a string with the property information
+     * 
+     * @return : a json with the property information
      * @throws InvalidAuthFileException
      */
+    @Deprecated
     public ServiceResponse getVMProperty(String infId, String vmId, String propertyName)
             throws AuthFileNotFoundException {
         return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS
-                + PATH_SEPARATOR + vmId + PATH_SEPARATOR + propertyName, MediaType.TEXT_PLAIN);
+                + PATH_SEPARATOR + vmId + PATH_SEPARATOR + propertyName, MediaType.APPLICATION_JSON);
+    }
+
+    /**
+     * @deprecated Return property 'propertyName' from to the virtual machine
+     *             with ID 'vmId' associated to the infrastructure with ID
+     *             'infId'.
+     * 
+     * @param infId
+     *            : infrastructure id
+     * @param vmId
+     *            : virtual machine id
+     * @param propertyName
+     *            : name of the property to retrieve from the virtual machine
+     * @param requestJson
+     *            : specifies the format of the result in the ServiceResponse
+     * 
+     * @return : a string with the property information
+     * @throws InvalidAuthFileException
+     */
+    @Deprecated
+    public ServiceResponse getVMProperty(String infId, String vmId, String propertyName, boolean requestJson)
+            throws AuthFileNotFoundException {
+        if (requestJson) {
+            return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS
+                    + PATH_SEPARATOR + vmId + PATH_SEPARATOR + propertyName, MediaType.APPLICATION_JSON);
+        } else {
+            return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS
+                    + PATH_SEPARATOR + vmId + PATH_SEPARATOR + propertyName, MediaType.TEXT_PLAIN);
+        }
+    }
+
+    /**
+     * @deprecated Return property 'propertyName' from to the virtual machine
+     *             with ID 'vmId' associated to the infrastructure with ID
+     *             'infId'.
+     * 
+     * @param infId
+     *            : infrastructure id
+     * @param vmId
+     *            : virtual machine id
+     * @param vmProperty
+     *            : VM property to retrieve from the virtual machine
+     * 
+     * @return : a json with the property information
+     * @throws InvalidAuthFileException
+     */
+    @Deprecated
+    public ServiceResponse getVMProperty(String infId, String vmId, VmProperties vmProperty)
+            throws AuthFileNotFoundException {
+        return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS
+                + PATH_SEPARATOR + vmId + PATH_SEPARATOR + vmProperty.toString(), MediaType.APPLICATION_JSON);
     }
 
     /**
@@ -136,13 +225,21 @@ public class InfrastructureManagerApiClient {
      *            : virtual machine id
      * @param vmProperty
      *            : VM property to retrieve from the virtual machine
+     * @param requestJson
+     *            : specifies the format of the result in the ServiceResponse
+     * 
      * @return : a string with the property information
      * @throws InvalidAuthFileException
      */
-    public ServiceResponse getVMProperty(String infId, String vmId, VmProperties vmProperty)
+    public ServiceResponse getVMProperty(String infId, String vmId, VmProperties vmProperty, boolean requestJson)
             throws AuthFileNotFoundException {
-        return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS
-                + PATH_SEPARATOR + vmId + PATH_SEPARATOR + vmProperty.toString(), MediaType.TEXT_PLAIN);
+        if (requestJson) {
+            return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS
+                    + PATH_SEPARATOR + vmId + PATH_SEPARATOR + vmProperty.toString(), MediaType.APPLICATION_JSON);
+        } else {
+            return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS
+                    + PATH_SEPARATOR + vmId + PATH_SEPARATOR + vmProperty.toString(), MediaType.TEXT_PLAIN);
+        }
     }
 
     /**
@@ -204,17 +301,74 @@ public class InfrastructureManagerApiClient {
     }
 
     /**
-     * Create and configure an infrastructure with the requirements specified in
-     * the RADL document of the body contents.<br>
-     * If success, it is returned the URI of the new infrastructure.
+     * @deprecated Create and configure an infrastructure with the requirements
+     *             specified in the TOSCA document of the body content.<br>
+     *             If success, it is returned the URI of the new infrastructure.
      * 
      * @param radlFile
      *            : file with the virtual machine properties and configuration
      * @return : URI of the new infrastructure
      * @throws InvalidAuthFileException
      */
+    @Deprecated
     public ServiceResponse createInfrastructure(String radlFile) throws AuthFileNotFoundException {
-        return getImClient().post(PATH_INFRASTRUCTURES, MediaType.TEXT_PLAIN, radlFile, MediaType.TEXT_PLAIN);
+        return getImClient().post(PATH_INFRASTRUCTURES, MediaType.TEXT_PLAIN, radlFile,
+                RestApiBodyContentType.TOSCA.getValue());
+    }
+
+    /**
+     * Create and configure an infrastructure with the requirements specified in
+     * the document of the body contents.<br>
+     * If success, it is returned the URI of the new infrastructure.
+     * 
+     * @param radlFile
+     *            : file with the virtual machine properties and configuration
+     * @param bodyContentType
+     *            : set the body content type. Can be RADL, RADL_JSON or TOSCA.
+     * @return : URI of the new infrastructure
+     * @throws InvalidAuthFileException
+     */
+    public ServiceResponse createInfrastructure(String radlFile, RestApiBodyContentType bodyContentType)
+            throws AuthFileNotFoundException {
+        return getImClient().post(PATH_INFRASTRUCTURES, MediaType.TEXT_PLAIN, radlFile, bodyContentType.getValue());
+    }
+
+    /**
+     * @deprecated Add the resources specified in the body contents to the
+     *             infrastructure with ID 'infId'. The RADL restrictions are the
+     *             same as in <a href=
+     *             "http://www.grycap.upv.es/im/doc/xmlrpc.html#addresource-xmlrpc">
+     *             RPC-XML AddResource</a><br>
+     *             If success, it is returned a list of URIs of the new virtual
+     *             machines. <br>
+     *             The context parameter is optional and is a flag to specify if
+     *             the contextualization step will be launched just after the VM
+     *             addition.<br>
+     *             As default the contextualization flag is set to True.
+     * 
+     * @param infId
+     *            : infrastructure id
+     * @param radlFile
+     *            : file with the virtual machine properties and configuration
+     * @param context
+     *            : flag to specify if the contextualization step will be
+     *            launched just after the VM addition
+     * @return : list of URIs of the new virtual machines
+     * 
+     * @throws InvalidAuthFileException
+     * @throws IncorrectContextInputException
+     */
+    @Deprecated
+    public ServiceResponse addResource(String infId, String radlFile, boolean... context)
+            throws AuthFileNotFoundException {
+        if (context != null && context.length > 0) {
+            return getImClient().post(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId, MediaType.TEXT_PLAIN, radlFile,
+                    RestApiBodyContentType.TOSCA.getValue(),
+                    new RestCallParameter(REST_PARAMETER_NAME_CONTEXT, context[0]));
+        } else {
+            return getImClient().post(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId, MediaType.TEXT_PLAIN, radlFile,
+                    RestApiBodyContentType.TOSCA.getValue());
+        }
     }
 
     /**
@@ -232,6 +386,8 @@ public class InfrastructureManagerApiClient {
      *            : infrastructure id
      * @param radlFile
      *            : file with the virtual machine properties and configuration
+     * @param bodyContentType
+     *            : set the body content type. Can be RADL, RADL_JSON or TOSCA.
      * @param context
      *            : flag to specify if the contextualization step will be
      *            launched just after the VM addition
@@ -240,14 +396,14 @@ public class InfrastructureManagerApiClient {
      * @throws InvalidAuthFileException
      * @throws IncorrectContextInputException
      */
-    public ServiceResponse addResource(String infId, String radlFile, boolean... context)
-            throws AuthFileNotFoundException {
+    public ServiceResponse addResource(String infId, String radlFile, RestApiBodyContentType bodyContentType,
+            boolean... context) throws AuthFileNotFoundException {
         if (context != null && context.length > 0) {
             return getImClient().post(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId, MediaType.TEXT_PLAIN, radlFile,
-                    MediaType.TEXT_PLAIN, new RestCallParameter(REST_PARAMETER_NAME_CONTEXT, context[0]));
+                    bodyContentType.getValue(), new RestCallParameter(REST_PARAMETER_NAME_CONTEXT, context[0]));
         } else {
             return getImClient().post(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId, MediaType.TEXT_PLAIN, radlFile,
-                    MediaType.TEXT_PLAIN);
+                    bodyContentType.getValue());
         }
     }
 
@@ -361,14 +517,58 @@ public class InfrastructureManagerApiClient {
      *            : virtual machine id
      * @param radlFile
      *            : file with the virtual machine properties and configuration
+     * @param bodyContentType
+     *            : set the body content type. Can be RADL or RADL_JSON
+     * @param requestJson
+     *            : specifies the format of the result in the ServiceResponse
+     * 
+     * @return : RADL with information about the virtual machine modified
+     * @throws NotValidRestApiBodyContentType
+     * 
+     * @throws InvalidAuthFileException
+     */
+    public ServiceResponse alterVM(String infId, String vmId, String radlFile, RestApiBodyContentType bodyContentType,
+            boolean requestJson) throws InfrastructureManagerApiClientException {
+
+        if (bodyContentType.compareTo(RestApiBodyContentType.TOSCA) == 0) {
+            throw notValidContentException;
+        }
+
+        if (requestJson) {
+            return getImClient().put(
+                    PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS + PATH_SEPARATOR + vmId,
+                    MediaType.APPLICATION_JSON, radlFile, bodyContentType.getValue());
+        } else {
+            return getImClient().put(
+                    PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS + PATH_SEPARATOR + vmId,
+                    MediaType.TEXT_PLAIN, radlFile, bodyContentType.getValue());
+        }
+    }
+
+    /**
+     * @deprecated Change the features of the virtual machine with ID 'vmId' in
+     *             the infrastructure with with ID 'infId', specified by the
+     *             RADL document specified in the body contents.<br>
+     *             Return a RADL with information about the virtual machine,
+     *             like <a href=
+     *             "http://www.grycap.upv.es/im/doc/xmlrpc.html#getvminfo-xmlrpc">
+     *             GetVMInfo</a>.
+     * 
+     * @param infId
+     *            : infrastructure id
+     * @param vmId
+     *            : virtual machine id
+     * @param radlFile
+     *            : file with the virtual machine properties and configuration
      * @return : RADL with information about the virtual machine modified
      * 
      * @throws InvalidAuthFileException
      */
+    @Deprecated
     public ServiceResponse alterVM(String infId, String vmId, String radlFile) throws AuthFileNotFoundException {
         return getImClient().put(
                 PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS + PATH_SEPARATOR + vmId,
-                MediaType.TEXT_PLAIN, radlFile, MediaType.TEXT_PLAIN);
+                MediaType.APPLICATION_JSON, radlFile, RestApiBodyContentType.RADL_JSON.getValue());
     }
 
     /**
@@ -384,7 +584,50 @@ public class InfrastructureManagerApiClient {
      */
     public ServiceResponse reconfigure(String infId) throws AuthFileNotFoundException {
         return getImClient().put(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.RECONFIGURE,
-                MediaType.TEXT_PLAIN, "", MediaType.TEXT_PLAIN);
+                MediaType.TEXT_PLAIN, "", RestApiBodyContentType.RADL.getValue());
+    }
+
+    /**
+     * @deprecated Perform the reconfigure action in all the virtual machines in
+     *             the the infrastructure with ID 'infID.' It updates the
+     *             configuration of the infrastructure as indicated in the
+     *             'radlFile'. The RADL restrictions are the same as in <a href=
+     *             "http://www.grycap.upv.es/im/doc/xmlrpc.html#reconfigure-xmlrpc">
+     *             RPC-XML Reconfigure</a><br>
+     *             If no RADL are specified, the contextualization process is
+     *             started again. The 'vmList' parameter is optional and is a
+     *             comma separated array of IDs of the VMs to reconfigure. If
+     *             not specified all the VMs will be reconfigured.
+     * 
+     * @param infId
+     *            : infrastructure id
+     * @param radlFile
+     *            : file with the infrastructure properties and configuration
+     * @param vmList
+     *            : comma separated list of IDs of the VMs to reconfigure
+     * @throws AuthFileNotFoundException
+     * @throws UriBuilderException
+     * @throws IllegalArgumentException
+     */
+    @Deprecated
+    public ServiceResponse reconfigure(String infId, String radlFile, int... vmList) throws AuthFileNotFoundException {
+        String putContent = radlFile;
+        if (putContent == null || putContent.isEmpty()) {
+            putContent = "";
+        }
+        if (vmList != null && vmList.length > 0) {
+            RestCallParameter parameters = new RestCallParameter(REST_PARAMETER_NAME_VMLIST);
+            for (int vmId : vmList) {
+                parameters.addValue(vmId);
+            }
+            return getImClient().put(
+                    PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.RECONFIGURE,
+                    MediaType.TEXT_PLAIN, putContent, RestApiBodyContentType.RADL.getValue(), parameters);
+        } else {
+            return getImClient().put(
+                    PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.RECONFIGURE,
+                    MediaType.TEXT_PLAIN, putContent, RestApiBodyContentType.RADL.getValue());
+        }
     }
 
     /**
@@ -403,13 +646,21 @@ public class InfrastructureManagerApiClient {
      *            : infrastructure id
      * @param radlFile
      *            : file with the infrastructure properties and configuration
+     * @param bodyContentType
+     *            : set the body content type. Can be RADL or RADL_JSON
      * @param vmList
      *            : comma separated list of IDs of the VMs to reconfigure
      * @throws AuthFileNotFoundException
+     * @throws NotValidRestApiBodyContentType
      * @throws UriBuilderException
      * @throws IllegalArgumentException
      */
-    public ServiceResponse reconfigure(String infId, String radlFile, int... vmList) throws AuthFileNotFoundException {
+    public ServiceResponse reconfigure(String infId, String radlFile, RestApiBodyContentType bodyContentType,
+            int... vmList) throws InfrastructureManagerApiClientException {
+
+        if (bodyContentType.equals(RestApiBodyContentType.TOSCA)) {
+            throw notValidContentException;
+        }
         String putContent = radlFile;
         if (putContent == null || putContent.isEmpty()) {
             putContent = "";
@@ -421,11 +672,11 @@ public class InfrastructureManagerApiClient {
             }
             return getImClient().put(
                     PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.RECONFIGURE,
-                    MediaType.TEXT_PLAIN, putContent, MediaType.TEXT_PLAIN, parameters);
+                    MediaType.TEXT_PLAIN, putContent, bodyContentType.getValue(), parameters);
         } else {
             return getImClient().put(
                     PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.RECONFIGURE,
-                    MediaType.TEXT_PLAIN, putContent, MediaType.TEXT_PLAIN);
+                    MediaType.TEXT_PLAIN, putContent, bodyContentType.getValue());
         }
     }
 }

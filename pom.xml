@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>es.upv.i3m.grycap</groupId>
 	<artifactId>im-java-api</artifactId>
-	<version>0.1.2</version>
+	<version>0.2.0</version>
 	<name>IM Java API</name>
 	<description>Java client for the REST API of the IM</description>
 
@@ -104,10 +104,12 @@
 							<goal>check</goal>
 						</goals>
 						<configuration>
-							<rules><!-- implementation is needed only for Maven 2 -->
+							<rules>
+								<!-- implementation is needed only for Maven 2 -->
 								<rule implementation="org.jacoco.maven.RuleConfiguration">
 									<element>BUNDLE</element>
-									<limits><!-- implementation is needed only for Maven 2 -->
+									<limits>
+										<!-- implementation is needed only for Maven 2 -->
 										<limit implementation="org.jacoco.report.check.Limit">
 											<counter>COMPLEXITY</counter>
 											<value>COVEREDRATIO</value>

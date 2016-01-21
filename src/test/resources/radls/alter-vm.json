@@ -1,0 +1,21 @@
+[
+  {
+    "id": "galaxy_server",
+    "class": "system",
+    "cpu.arch": "x86_64",
+    "cpu.count_min": 2,
+    "memory.size_min": 536870912,
+    "net_interface.0.connection": "public",
+    "net_interface.0.dns_name": "master",
+    "disk.0.os.name": "linux",
+    "disk.0.image.url": "one://ramses.i3m.upv.es/95",
+    "disk.0.os.credentials.username": "ubuntu",
+    "disk.0.os.credentials.password": "yoyoyo"
+
+  },
+  {
+    "class": "deploy",
+    "system": "galaxy_server",
+    "vm_number": 1
+  }
+]
