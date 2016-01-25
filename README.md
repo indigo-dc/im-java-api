@@ -57,18 +57,3 @@ ServiceResponse response = getImApiClient().createInfrastructure(FileIO.readUTF8
 imClient.destroyInfrastructure(getInfrastructureId());
 ```
 The **ServiceResponse** class returned by the **createInfrastructure** method contains all the information of the web service response. Check the **ServiceResponse** class methods for more information.
-
-### 1.4.3 Get VM property
-The enum class **VmProperties.java** stores the main properties of the virtual machines. The **getVMProperty** method of the API admits the enum class VmProperties or a String if the user wants an specific property not listed in the class.
-```
-getImApiClient().getVMProperty(getInfrastructureId(), VM_DEFAULT_ID, VmProperties.STATE);
-```
-is equivalent to 
-```
-getImApiClient().getVMProperty(getInfrastructureId(), VM_DEFAULT_ID, "state");
-```
-
-### 1.4.4 Stop the infrastructure
-```
-getImApiClient().stopInfrastructure(getInfrastructureId());
-```
