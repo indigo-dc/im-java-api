@@ -561,13 +561,21 @@ public class InfrastructureManagerApiClientTest {
             Assert.fail();
         }
         Assert.assertNull(VmStates.getEnumFromValue("not_valid"));
+
         if (!ImValues.START.equals(ImValues.getEnumFromValue("start"))) {
             Assert.fail();
         }
         Assert.assertNull(ImValues.getEnumFromValue("not_valid"));
+
         if (!VmProperties.CPU_ARCH.equals(VmProperties.getEnumFromValue("cpu.arch"))) {
             Assert.fail();
         }
         Assert.assertNull(VmProperties.getEnumFromValue("not_valid"));
+
+        if (!RestApiBodyContentType.TOSCA
+                .equals(RestApiBodyContentType.getEnumFromValue(RestApiBodyContentType.TOSCA.toString()))) {
+            Assert.fail();
+        }
+        Assert.assertNull(RestApiBodyContentType.getEnumFromValue("not_valid"));
     }
 }

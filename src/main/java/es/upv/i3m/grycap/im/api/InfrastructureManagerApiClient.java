@@ -127,7 +127,7 @@ public class InfrastructureManagerApiClient {
      *            : virtual machine id
      * @param requestJson
      *            : specifies the format of the result in the ServiceResponse
-     * @return : RADL file
+     * @return : Plain RADL file or Json RADL file.
      * @throws InvalidAuthFileException
      */
     public ServiceResponse getVMInfo(String infId, String vmId, boolean requestJson) throws AuthFileNotFoundException {
