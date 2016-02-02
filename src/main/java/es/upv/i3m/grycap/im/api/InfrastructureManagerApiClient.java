@@ -38,6 +38,7 @@ public class InfrastructureManagerApiClient {
     // IM REST parameters
     private static final String REST_PARAMETER_NAME_CONTEXT = "context";
     private static final String REST_PARAMETER_NAME_VMLIST = "vm_list";
+    private static final String REST_PARAMETER_INFRASTRUCTURE_OUTPUTS = "outputs";
 
     // Rest client needed to make the calls to the IM services
     private InfrastructureManagerRestClient imClient;
@@ -678,5 +679,22 @@ public class InfrastructureManagerApiClient {
                     PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.RECONFIGURE,
                     MediaType.TEXT_PLAIN, putContent, bodyContentType.getValue());
         }
+    }
+
+    /**
+     * Return the outputs that are defined in the TOSCA document.<br>
+     * The returned result has the structure of a JSON dictionary although its
+     * treated as a String.<br>
+     * I.e. ServiceResponse.getResult() --> "{"private_ip": "10.0.0.1"}".
+     * 
+     * @param infId
+     *            : infrastructure id
+     * @return : outputs defined in the TOSCA document or '{}' if empty
+     * @throws InvalidAuthFileException
+     */
+    public ServiceResponse getInfrastructureOutputs(String infId) throws AuthFileNotFoundException {
+        return getImClient().get(
+                PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + REST_PARAMETER_INFRASTRUCTURE_OUTPUTS,
+                MediaType.APPLICATION_JSON);
     }
 }

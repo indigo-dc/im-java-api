@@ -56,6 +56,8 @@ public class InfrastructureManagerApiClientTest {
     private static final String VM_ID_ONE = "1";
     // Max retries for rest calls
     private static final Integer MAX_RETRY = 20;
+    // getInfrastructureOuputs expected result
+    private static final String EXPECTED_INFRASTRUCTURE_OUTPUT = "{\"private_ip\": \"10.0.0.1\"}";
     // ID of the infrastructure created
     private String infrastructureId;
 
@@ -577,5 +579,12 @@ public class InfrastructureManagerApiClientTest {
             Assert.fail();
         }
         Assert.assertNull(RestApiBodyContentType.getEnumFromValue("not_valid"));
+    }
+
+    @Test
+    public void testInfrastructureOutputs() throws AuthFileNotFoundException {
+        ServiceResponse response = getImApiClient().getInfrastructureOutputs(getInfrastructureId());
+        checkServiceResponse(response);
+        Assert.assertTrue(response.getResult().equals(EXPECTED_INFRASTRUCTURE_OUTPUT));
     }
 }
