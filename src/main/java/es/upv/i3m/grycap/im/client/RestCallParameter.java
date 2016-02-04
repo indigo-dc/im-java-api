@@ -16,8 +16,10 @@
 package es.upv.i3m.grycap.im.client;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import es.upv.i3m.grycap.im.lang.ImMessages;
+import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
 /**
  * Stores the parameters passed to the REST calls in a (name, ...values)
@@ -25,30 +27,61 @@ import java.util.List;
  */
 public class RestCallParameter {
 
-    String parameterName;
-    List<Object> parameterValue;
+    private String parameterName;
+    private List<Object> parameterValues;
 
     public RestCallParameter(String parameterName) {
-        this.parameterName = parameterName;
+        setParameterName(parameterName);
     }
 
     public RestCallParameter(String parameterName, Object parameterValue) {
-        this.parameterName = parameterName;
-        this.parameterValue = Arrays.asList(parameterValue);
+        setParameterName(parameterName);
+        addValue(parameterValue);
+    }
+
+    public RestCallParameter(String parameterName, List<?> parameterValue) {
+        setParameterName(parameterName);
+        setParameterValues(parameterValue);
+    }
+
+    public void addValue(Object value) {
+        if (parameterValues == null) {
+            parameterValues = new ArrayList<>();
+        }
+        parameterValues.add(value);
+    }
+
+    private void checkNullValue(Object value) {
+        // Runtime exception if returns a null value
+        if (value == null) {
+            ImJavaApiLogger.severe(this.getClass(), ImMessages.EXCEPTION_NULL_VALUE);
+            throw new NullPointerException();
+        }
     }
 
     public String getParameterName() {
+        checkNullValue(parameterName);
         return parameterName;
     }
 
     public Object[] getParameterValues() {
-        return parameterValue.toArray();
+        checkNullValue(parameterValues);
+        return parameterValues.toArray();
     }
 
-    public void addValue(Object value) {
-        if (parameterValue == null) {
-            parameterValue = new ArrayList<>();
+    private void setParameterName(String parameterName) {
+        if (parameterName == null) {
+            ImJavaApiLogger.warning(this.getClass(), ImMessages.WARNING_NULL_PARAMETER_NAME);
         }
-        parameterValue.add(value);
+        this.parameterName = parameterName;
+    }
+
+    private void setParameterValues(List<?> parameterValues) {
+        if (parameterValues == null || parameterValues.isEmpty()) {
+            ImJavaApiLogger.warning(this.getClass(), ImMessages.WARNING_NULL_OR_EMPTY_PARAMETER_VALUES);
+        }
+        for (Object parameterValue : parameterValues) {
+            addValue(parameterValue);
+        }
     }
 }

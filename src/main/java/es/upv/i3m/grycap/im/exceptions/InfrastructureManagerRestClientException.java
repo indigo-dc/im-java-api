@@ -15,11 +15,15 @@
  */
 package es.upv.i3m.grycap.im.exceptions;
 
-public class InfrastructureManagerApiClientException extends Exception {
+public class InfrastructureManagerRestClientException extends ImClientException {
 
-    private static final long serialVersionUID = -6282342599838768683L;
+    private static final long serialVersionUID = 5895451467400071373L;
 
-    public InfrastructureManagerApiClientException(String message) {
+    public InfrastructureManagerRestClientException() {
+        super();
+    }
+
+    public InfrastructureManagerRestClientException(String message) {
         super(message);
     }
 }

@@ -15,11 +15,15 @@
  */
 package es.upv.i3m.grycap.im.exceptions;
 
-public class AuthFileNotFoundException extends InfrastructureManagerApiClientException {
+public class ToscaContentTypeNotSupportedException extends ImClientException {
 
-    private static final long serialVersionUID = -6678679656451108306L;
+    private static final long serialVersionUID = -7217747611188930564L;
 
-    public AuthFileNotFoundException(String message) {
+    public ToscaContentTypeNotSupportedException() {
+        super();
+    }
+
+    public ToscaContentTypeNotSupportedException(String message) {
         super(message);
     }
 }
