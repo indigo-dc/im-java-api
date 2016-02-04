@@ -19,47 +19,28 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 import javax.ws.rs.core.Response.StatusType;
 
+import es.upv.i3m.grycap.im.lang.ImMessages;
+import es.upv.i3m.grycap.logger.ImJavaApiLogger;
+
 /**
  * Response returned by the REST service
  */
 public class ServiceResponse {
 
     private Response response;
-    private String serviceResult;
+    private String result;
 
     public ServiceResponse(Response response) {
-        this.response = response;
-        this.serviceResult = getResponse().readEntity(String.class);
+        setResponse(response);
+        setServiceResult(getResponse().readEntity(String.class));
     }
 
-    private Response getResponse() {
-        return response;
-    }
-
-    /**
-     * Reads the returned string by the server
-     */
-    @Override
-    public String toString() {
-        return serviceResult;
-    }
-
-    /**
-     * Gets the returned string by the server
-     */
-    public String getResult() {
-        return serviceResult;
-    }
-
-    /**
-     * Status code of the service (e.g. 200, 404, ...)
-     */
-    public int getServiceStatusCode() {
-        return getResponse().getStatus();
-    }
-
-    public StatusType getServiceStatusInfo() {
-        return getResponse().getStatusInfo();
+    private void checkNullValue(Object value) {
+        // Runtime exception if returns a null value
+        if (value == null) {
+            ImJavaApiLogger.severe(this.getClass(), ImMessages.EXCEPTION_NULL_VALUE);
+            throw new NullPointerException();
+        }
     }
 
     /**
@@ -69,12 +50,61 @@ public class ServiceResponse {
         return getServiceStatusInfo().getReasonPhrase();
     }
 
+    private Response getResponse() {
+        checkNullValue(response);
+        return response;
+    }
+
+    /**
+     * Gets the returned string by the server
+     */
+    public String getResult() {
+        checkNullValue(response);
+        return result;
+    }
+
+    /**
+     * Status code of the service (e.g. 200, 404, ...)
+     */
+    public int getServiceStatusCode() {
+        return getResponse().getStatus();
+    }
+
+    /**
+     * @see javax.ws.rs.core.Response#getStatusInfo()
+     */
+    public StatusType getServiceStatusInfo() {
+        return getResponse().getStatusInfo();
+    }
+
     /**
      * Return true if the message is successful, i.e. the message has one of the
      * following status codes 2xx. Return false otherwise
      */
     public boolean isReponseSuccessful() {
         return getServiceStatusInfo().getFamily() == Family.SUCCESSFUL;
+    }
+
+    private void setResponse(Response response) {
+        if (response == null) {
+            ImJavaApiLogger.warning(this.getClass(), ImMessages.WARNING_NULL_SERVICE_RESPONSE);
+        }
+        this.response = response;
+    }
+
+    private void setServiceResult(String serviceResult) {
+        if (serviceResult == null) {
+            ImJavaApiLogger.warning(this.getClass(), ImMessages.WARNING_NULL_SERVICE_RESULT);
+        }
+        this.result = serviceResult;
+    }
+
+    /**
+     * Reads the returned string by the server
+     */
+    @Override
+    public String toString() {
+        return getResult();
     }
 
 }

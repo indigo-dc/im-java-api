@@ -16,6 +16,7 @@
 package es.upv.i3m.grycap.client;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.ws.rs.core.Response.Status;
 
@@ -28,13 +29,13 @@ import org.junit.Test;
 import es.upv.i3m.grycap.file.FileIO;
 import es.upv.i3m.grycap.im.api.ImValues;
 import es.upv.i3m.grycap.im.api.InfrastructureManagerApiClient;
+import es.upv.i3m.grycap.im.api.InfrastructureStatus;
 import es.upv.i3m.grycap.im.api.RestApiBodyContentType;
 import es.upv.i3m.grycap.im.api.VmProperties;
 import es.upv.i3m.grycap.im.api.VmStates;
 import es.upv.i3m.grycap.im.client.ServiceResponse;
-import es.upv.i3m.grycap.im.exceptions.AuthFileNotFoundException;
-import es.upv.i3m.grycap.im.exceptions.InfrastructureManagerApiClientException;
-import es.upv.i3m.grycap.im.exceptions.NotValidRestApiBodyContentType;
+import es.upv.i3m.grycap.im.exceptions.ImClientException;
+import es.upv.i3m.grycap.im.exceptions.ToscaContentTypeNotSupportedException;
 import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
 public class InfrastructureManagerApiClientTest {
@@ -57,7 +58,8 @@ public class InfrastructureManagerApiClientTest {
     // Max retries for rest calls
     private static final Integer MAX_RETRY = 20;
     // getInfrastructureOuputs expected result
-    private static final String EXPECTED_INFRASTRUCTURE_OUTPUT = "{\"private_ip\": \"10.0.0.1\"}";
+    private static final String EXPECTED_INFRASTRUCTURE_OUTPUT_PRIVATE_IP_KEY = "private_ip";
+    private static final String EXPECTED_INFRASTRUCTURE_OUTPUT_PRIVATE_IP_VALUE = "10.0.0.1";
     // ID of the infrastructure created
     private String infrastructureId;
 
@@ -73,7 +75,7 @@ public class InfrastructureManagerApiClientTest {
         return imApiClient;
     }
 
-    private void waitUntilRunningOrUncofiguredState(String vmId) throws AuthFileNotFoundException {
+    private void waitUntilRunningOrUncofiguredState(String vmId) throws ImClientException {
         while (true) {
             String vmState = getImApiClient().getVMProperty(getInfrastructureId(), vmId, VmProperties.STATE, false)
                     .getResult();
@@ -112,9 +114,9 @@ public class InfrastructureManagerApiClientTest {
      * 
      * @param vmId
      * @param vmState
-     * @throws AuthFileNotFoundException
+     * @throws ImClientException
      */
-    private void checkVMState(String vmId, VmStates vmState) throws AuthFileNotFoundException {
+    private void checkVMState(String vmId, VmStates vmState) throws ImClientException {
         ServiceResponse response = getImApiClient().getVMProperty(getInfrastructureId(), vmId, VmProperties.STATE,
                 false);
         checkServiceResponse(response);
@@ -123,33 +125,45 @@ public class InfrastructureManagerApiClientTest {
         }
     }
 
-    private ServiceResponse addToscaResource(String toscaFilePath) throws AuthFileNotFoundException, IOException {
-        return getImApiClient().addResource(getInfrastructureId(), FileIO.readUTF8File(toscaFilePath),
-                RestApiBodyContentType.TOSCA);
+    private ServiceResponse addToscaResource(String toscaFilePath) throws ImClientException {
+        ServiceResponse response = null;
+        try {
+            response = getImApiClient().addResource(getInfrastructureId(), FileIO.readUTF8File(toscaFilePath),
+                    RestApiBodyContentType.TOSCA);
+        } catch (IOException e) {
+            Assert.fail();
+        }
+        return response;
     }
 
     @BeforeClass
     public static void setRestClient() {
         try {
             imApiClient = new InfrastructureManagerApiClient(IM_DUMMY_PROVIDER_URL, AUTH_FILE_PATH);
-        } catch (AuthFileNotFoundException e) {
+        } catch (ImClientException e) {
             ImJavaApiLogger.severe(InfrastructureManagerApiClientTest.class, e.getMessage());
             Assert.fail();
         }
     }
 
     @Before
-    public void createInfrastructure() throws IOException, AuthFileNotFoundException {
-        ServiceResponse response = getImApiClient().createInfrastructure(FileIO.readUTF8File(TOSCA_FILE_PATH),
-                RestApiBodyContentType.TOSCA);
-        checkServiceResponse(response);
-        String[] parsedURI = response.getResult().split("/");
-        // Get the last element which is the infId
-        setInfrastructureId(parsedURI[parsedURI.length - 1]);
+    public void createInfrastructure() throws ImClientException {
+        try {
+            ServiceResponse response = getImApiClient().createInfrastructure(FileIO.readUTF8File(TOSCA_FILE_PATH),
+                    RestApiBodyContentType.TOSCA);
+
+            checkServiceResponse(response);
+            String[] parsedURI = response.getResult().split("/");
+            // Get the last element which is the infId
+            setInfrastructureId(parsedURI[parsedURI.length - 1]);
+        } catch (IOException e) {
+            ImJavaApiLogger.severe(InfrastructureManagerApiClientTest.class, e.getMessage());
+            Assert.fail();
+        }
     }
 
     @After
-    public void destroyInfrastructure() throws AuthFileNotFoundException, IOException {
+    public void destroyInfrastructure() throws ImClientException {
         checkServiceResponse(getImApiClient().destroyInfrastructure(getInfrastructureId()));
     }
 
@@ -159,12 +173,12 @@ public class InfrastructureManagerApiClientTest {
     }
 
     @Test
-    public void testInfrasturesList() throws AuthFileNotFoundException {
+    public void testInfrasturesList() throws ImClientException {
         checkServiceResponse(getImApiClient().getInfrastructureList());
     }
 
     @Test
-    public void testInfrastructureInfo() throws AuthFileNotFoundException, IOException {
+    public void testInfrastructureInfo() throws ImClientException {
         String test = IM_DUMMY_PROVIDER_URL + "/infrastructures/" + getInfrastructureId() + "/vms/0";
         ServiceResponse response = getImApiClient().getInfrastructureInfo(getInfrastructureId());
         checkServiceResponse(response);
@@ -174,72 +188,46 @@ public class InfrastructureManagerApiClientTest {
     }
 
     @Test
-    public void testGetVMInfo() throws AuthFileNotFoundException, IOException {
-        ServiceResponse response = getImApiClient().getVMInfo(getInfrastructureId(), VM_DEFAULT_ID);
-        checkServiceResponse(response);
-        checkStringHasContent(response.getResult());
-    }
-
-    @Test
-    public void testGetVMInfoRequestJson() throws AuthFileNotFoundException, IOException {
+    public void testGetVMInfoRequestJson() throws ImClientException {
         ServiceResponse response = getImApiClient().getVMInfo(getInfrastructureId(), VM_DEFAULT_ID, true);
         checkServiceResponse(response);
         checkStringHasContent(response.getResult());
     }
 
     @Test
-    public void testGetVMInfoRequestString() throws AuthFileNotFoundException, IOException {
+    public void testGetVMInfoRequestString() throws ImClientException {
         ServiceResponse response = getImApiClient().getVMInfo(getInfrastructureId(), VM_DEFAULT_ID, false);
         checkServiceResponse(response);
         checkStringHasContent(response.getResult());
     }
 
     @Test
-    public void testGetVMProperty() throws AuthFileNotFoundException, IOException {
+    public void testGetVMProperty() throws ImClientException {
         checkVMState(VM_DEFAULT_ID, VmStates.RUNNING);
     }
 
     @Test
-    public void testOldGetVMProperty() throws AuthFileNotFoundException, IOException {
-        ServiceResponse response = getImApiClient().getVMProperty(getInfrastructureId(), VM_DEFAULT_ID,
-                VmProperties.STATE);
-        checkServiceResponse(response);
-
-        response = getImApiClient().getVMProperty(getInfrastructureId(), VM_DEFAULT_ID, VmProperties.STATE.getValue(),
-                true);
-        checkServiceResponse(response);
-
-        response = getImApiClient().getVMProperty(getInfrastructureId(), VM_DEFAULT_ID, VmProperties.STATE.getValue(),
-                false);
-        checkServiceResponse(response);
-
-        if (!VmStates.RUNNING.toString().equals(response.getResult())) {
-            Assert.fail();
-        }
-    }
-
-    @Test
-    public void testGetInfrastructureContMsg() throws AuthFileNotFoundException, IOException {
+    public void testGetInfrastructureContMsg() throws ImClientException {
         ServiceResponse response = getImApiClient().getInfrastructureContMsg(getInfrastructureId());
         checkServiceResponse(response);
     }
 
     @Test
-    public void testGetInfrastructureRADL() throws AuthFileNotFoundException, IOException {
+    public void testGetInfrastructureRADL() throws ImClientException {
         ServiceResponse response = getImApiClient().getInfrastructureRADL(getInfrastructureId());
         checkServiceResponse(response);
         checkStringHasContent(response.getResult());
     }
 
     @Test
-    public void testGetInfrastructureState() throws AuthFileNotFoundException, IOException {
+    public void testGetInfrastructureState() throws ImClientException {
         ServiceResponse response = getImApiClient().getInfrastructureState(getInfrastructureId());
         checkServiceResponse(response);
         checkStringHasContent(response.getResult());
     }
 
     @Test
-    public void testAddResourceNoContext() throws AuthFileNotFoundException, IOException {
+    public void testAddResourceNoContext() throws ImClientException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
         // Add a new resource
         ServiceResponse response = addToscaResource(TOSCA_FILE_PATH);
@@ -258,7 +246,7 @@ public class InfrastructureManagerApiClientTest {
     }
 
     @Test
-    public void testAddResourceContextTrue() throws AuthFileNotFoundException, IOException {
+    public void testAddResourceContextTrue() throws ImClientException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
         // Add a new resource
         ServiceResponse response = addToscaResource(TOSCA_FILE_PATH);
@@ -277,7 +265,7 @@ public class InfrastructureManagerApiClientTest {
     }
 
     @Test
-    public void testAddResourceContextFalse() throws AuthFileNotFoundException, IOException {
+    public void testAddResourceContextFalse() throws ImClientException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
         // Add a new resource
         ServiceResponse response = addToscaResource(TOSCA_FILE_PATH);
@@ -296,28 +284,28 @@ public class InfrastructureManagerApiClientTest {
     }
 
     @Test
-    public void testRemoveResourceNoContext() throws AuthFileNotFoundException, IOException {
+    public void testRemoveResourceNoContext() throws ImClientException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
         ServiceResponse response = getImApiClient().removeResource(getInfrastructureId(), VM_DEFAULT_ID);
         checkServiceResponse(response);
     }
 
     @Test
-    public void testRemoveResourceContextTrue() throws AuthFileNotFoundException, IOException {
+    public void testRemoveResourceContextTrue() throws ImClientException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
         ServiceResponse response = getImApiClient().removeResource(getInfrastructureId(), VM_DEFAULT_ID, true);
         checkServiceResponse(response);
     }
 
     @Test
-    public void testRemoveResourceContextFalse() throws AuthFileNotFoundException, IOException {
+    public void testRemoveResourceContextFalse() throws ImClientException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
         ServiceResponse response = getImApiClient().removeResource(getInfrastructureId(), VM_DEFAULT_ID, false);
         checkServiceResponse(response);
     }
 
     @Test
-    public void testStopInfrastructure() throws AuthFileNotFoundException, IOException {
+    public void testStopInfrastructure() throws ImClientException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
         ServiceResponse response = getImApiClient().stopInfrastructure(getInfrastructureId());
         checkServiceResponse(response);
@@ -325,7 +313,7 @@ public class InfrastructureManagerApiClientTest {
     }
 
     @Test
-    public void testStartInfrastructure() throws AuthFileNotFoundException, IOException {
+    public void testStartInfrastructure() throws ImClientException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
         ServiceResponse response = getImApiClient().stopInfrastructure(getInfrastructureId());
         checkServiceResponse(response);
@@ -336,7 +324,7 @@ public class InfrastructureManagerApiClientTest {
     }
 
     @Test
-    public void testStopVM() throws AuthFileNotFoundException, IOException {
+    public void testStopVM() throws ImClientException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
         ServiceResponse response = getImApiClient().stopVM(getInfrastructureId(), VM_DEFAULT_ID);
         checkServiceResponse(response);
@@ -344,7 +332,7 @@ public class InfrastructureManagerApiClientTest {
     }
 
     @Test
-    public void testStartVM() throws AuthFileNotFoundException, IOException {
+    public void testStartVM() throws ImClientException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
         ServiceResponse response = getImApiClient().stopVM(getInfrastructureId(), VM_DEFAULT_ID);
         checkServiceResponse(response);
@@ -354,25 +342,8 @@ public class InfrastructureManagerApiClientTest {
         checkVMState(VM_DEFAULT_ID, VmStates.RUNNING);
     }
 
-    @Test
-    public void testAlterVM() throws AuthFileNotFoundException, IOException, InterruptedException {
-        waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
-        // Wait for the machine to be properly configured
-        getImApiClient().alterVM(getInfrastructureId(), VM_DEFAULT_ID,
-                FileIO.readUTF8File(RADL_JSON_ALTER_VM_FILE_PATH));
-        ServiceResponse response = getImApiClient().getVMProperty(getInfrastructureId(), VM_DEFAULT_ID,
-                VmProperties.CPU_COUNT);
-        checkServiceResponse(response);
-        // Check that the alteration of the VM has been successful
-        String cpuCount = response.getResult();
-        if (cpuCount == null || cpuCount.isEmpty() || !cpuCount.equals("2")) {
-            Assert.fail();
-        }
-    }
-
-    @Test(expected = NotValidRestApiBodyContentType.class)
-    public void testAlterVMToscaContent()
-            throws IOException, InterruptedException, InfrastructureManagerApiClientException {
+    @Test(expected = ToscaContentTypeNotSupportedException.class)
+    public void testAlterVMToscaContent() throws ImClientException, IOException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
         // Wait for the machine to be properly configured
         getImApiClient().alterVM(getInfrastructureId(), VM_DEFAULT_ID, FileIO.readUTF8File(RADL_ALTER_VM_FILE_PATH),
@@ -389,8 +360,7 @@ public class InfrastructureManagerApiClientTest {
     }
 
     @Test
-    public void testAlterVMSimpleRadlNoJsonRequest()
-            throws IOException, InterruptedException, InfrastructureManagerApiClientException {
+    public void testAlterVMSimpleRadlNoJsonRequest() throws ImClientException, IOException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
         // Wait for the machine to be properly configured
         getImApiClient().alterVM(getInfrastructureId(), VM_DEFAULT_ID, FileIO.readUTF8File(RADL_ALTER_VM_FILE_PATH),
@@ -406,8 +376,7 @@ public class InfrastructureManagerApiClientTest {
     }
 
     @Test
-    public void testAlterVMJsonRadlNoJsonRequest()
-            throws IOException, InterruptedException, InfrastructureManagerApiClientException {
+    public void testAlterVMJsonRadlNoJsonRequest() throws ImClientException, IOException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
         // Wait for the machine to be properly configured
         getImApiClient().alterVM(getInfrastructureId(), VM_DEFAULT_ID,
@@ -423,8 +392,7 @@ public class InfrastructureManagerApiClientTest {
     }
 
     @Test
-    public void testAlterVMSimpleRadlJsonRequest()
-            throws IOException, InterruptedException, InfrastructureManagerApiClientException {
+    public void testAlterVMSimpleRadlJsonRequest() throws ImClientException, IOException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
         // Wait for the machine to be properly configured
         getImApiClient().alterVM(getInfrastructureId(), VM_DEFAULT_ID, FileIO.readUTF8File(RADL_ALTER_VM_FILE_PATH),
@@ -440,8 +408,7 @@ public class InfrastructureManagerApiClientTest {
     }
 
     @Test
-    public void testAlterVMJsonRadlJsonRequest()
-            throws IOException, InterruptedException, InfrastructureManagerApiClientException {
+    public void testAlterVMJsonRadlJsonRequest() throws ImClientException, IOException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
         // Wait for the machine to be properly configured
         getImApiClient().alterVM(getInfrastructureId(), VM_DEFAULT_ID,
@@ -457,26 +424,14 @@ public class InfrastructureManagerApiClientTest {
     }
 
     @Test
-    public void testReconfigure() throws AuthFileNotFoundException, IOException, InterruptedException {
+    public void testReconfigure() throws ImClientException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
         ServiceResponse response = getImApiClient().reconfigure(getInfrastructureId());
         checkServiceResponse(response);
     }
 
     @Test
-    public void testReconfigureAllVms() throws AuthFileNotFoundException, IOException, InterruptedException {
-        waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
-        ServiceResponse response = getImApiClient().addResource(getInfrastructureId(),
-                FileIO.readUTF8File(TOSCA_FILE_PATH));
-        checkServiceResponse(response);
-        waitUntilRunningOrUncofiguredState(VM_ID_ONE);
-        response = getImApiClient().reconfigure(getInfrastructureId(), FileIO.readUTF8File(RADL_ALTER_VM_FILE_PATH));
-        checkServiceResponse(response);
-    }
-
-    @Test
-    public void testReconfigureAllVmsRadl()
-            throws IOException, InterruptedException, InfrastructureManagerApiClientException {
+    public void testReconfigureAllVmsRadl() throws ImClientException, IOException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
         ServiceResponse response = addToscaResource(TOSCA_FILE_PATH);
         checkServiceResponse(response);
@@ -487,8 +442,7 @@ public class InfrastructureManagerApiClientTest {
     }
 
     @Test
-    public void testReconfigureAllVmsRadlJson()
-            throws IOException, InterruptedException, InfrastructureManagerApiClientException {
+    public void testReconfigureAllVmsRadlJson() throws ImClientException, IOException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
         ServiceResponse response = addToscaResource(TOSCA_FILE_PATH);
         checkServiceResponse(response);
@@ -499,43 +453,30 @@ public class InfrastructureManagerApiClientTest {
     }
 
     @Test
-    public void testReconfigureSomeVms() throws AuthFileNotFoundException, IOException, InterruptedException {
-        waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
-        ServiceResponse response = getImApiClient().addResource(getInfrastructureId(),
-                FileIO.readUTF8File(TOSCA_FILE_PATH));
-        checkServiceResponse(response);
-        waitUntilRunningOrUncofiguredState(VM_ID_ONE);
-        response = getImApiClient().reconfigure(getInfrastructureId(), FileIO.readUTF8File(RADL_ALTER_VM_FILE_PATH), 0,
-                1);
-        checkServiceResponse(response);
-    }
-
-    @Test
-    public void testReconfigureSomeVmsRadl()
-            throws IOException, InterruptedException, InfrastructureManagerApiClientException {
+    public void testReconfigureSomeVmsRadl() throws ImClientException, IOException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
         ServiceResponse response = addToscaResource(TOSCA_FILE_PATH);
         checkServiceResponse(response);
         waitUntilRunningOrUncofiguredState(VM_ID_ONE);
         response = getImApiClient().reconfigure(getInfrastructureId(), FileIO.readUTF8File(RADL_ALTER_VM_FILE_PATH),
-                RestApiBodyContentType.RADL, 0, 1);
+                RestApiBodyContentType.RADL, Arrays.asList(0, 1));
         checkServiceResponse(response);
     }
 
     @Test
-    public void testReconfigureSomeVmsRadlJson()
-            throws IOException, InterruptedException, InfrastructureManagerApiClientException {
+    public void testReconfigureSomeVmsRadlJson() throws ImClientException, IOException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
         ServiceResponse response = addToscaResource(TOSCA_FILE_PATH);
         checkServiceResponse(response);
         waitUntilRunningOrUncofiguredState(VM_ID_ONE);
         response = getImApiClient().reconfigure(getInfrastructureId(),
-                FileIO.readUTF8File(RADL_JSON_ALTER_VM_FILE_PATH), RestApiBodyContentType.RADL_JSON, 0, 1);
+                FileIO.readUTF8File(RADL_JSON_ALTER_VM_FILE_PATH), RestApiBodyContentType.RADL_JSON,
+                Arrays.asList(0, 1));
         checkServiceResponse(response);
     }
 
     @Test
-    public void testServiceResponse() throws AuthFileNotFoundException {
+    public void testServiceResponse() throws ImClientException {
         ServiceResponse response = getImApiClient().getInfrastructureList();
         Assert.assertFalse(response.toString().isEmpty());
         Assert.assertFalse(response.getResult().isEmpty());
@@ -546,19 +487,19 @@ public class InfrastructureManagerApiClientTest {
     }
 
     @Test
-    public void testServiceResponseUnsuccessfulRequestJson() throws AuthFileNotFoundException {
+    public void testServiceResponseUnsuccessfulRequestJson() throws ImClientException {
         ServiceResponse response = getImApiClient().getVMInfo("", VM_DEFAULT_ID, true);
         Assert.assertEquals(response.isReponseSuccessful(), false);
     }
 
     @Test
-    public void testServiceResponseUnsuccessfulRequestString() throws AuthFileNotFoundException {
+    public void testServiceResponseUnsuccessfulRequestString() throws ImClientException {
         ServiceResponse response = getImApiClient().getVMInfo("", VM_DEFAULT_ID, false);
         Assert.assertEquals(response.isReponseSuccessful(), false);
     }
 
     @Test
-    public void testEnums() throws AuthFileNotFoundException {
+    public void testEnums() throws ImClientException {
         if (!VmStates.PENDING.equals(VmStates.getEnumFromValue("pending"))) {
             Assert.fail();
         }
@@ -582,9 +523,9 @@ public class InfrastructureManagerApiClientTest {
     }
 
     @Test
-    public void testInfrastructureOutputs() throws AuthFileNotFoundException {
-        ServiceResponse response = getImApiClient().getInfrastructureOutputs(getInfrastructureId());
-        checkServiceResponse(response);
-        Assert.assertTrue(response.getResult().equals(EXPECTED_INFRASTRUCTURE_OUTPUT));
+    public void testInfrastructureOutputs() throws ImClientException {
+        InfrastructureStatus result = getImApiClient().getInfrastructureOutputs(getInfrastructureId());
+        Assert.assertTrue(result.getProperties().get(EXPECTED_INFRASTRUCTURE_OUTPUT_PRIVATE_IP_KEY)
+                .equals(EXPECTED_INFRASTRUCTURE_OUTPUT_PRIVATE_IP_VALUE));
     }
 }

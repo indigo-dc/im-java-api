@@ -15,11 +15,15 @@
  */
 package es.upv.i3m.grycap.im.exceptions;
 
-public class NotValidRestApiBodyContentType extends InfrastructureManagerApiClientException {
+public class ImClientException extends Exception {
 
-    private static final long serialVersionUID = -7217747611188930564L;
+    private static final long serialVersionUID = -6282342599838768683L;
 
-    public NotValidRestApiBodyContentType(String message) {
+    public ImClientException() {
+        super();
+    }
+
+    public ImClientException(String message) {
         super(message);
     }
 }

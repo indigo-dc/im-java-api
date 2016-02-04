@@ -17,7 +17,7 @@ package es.upv.i3m.grycap;
 
 import org.junit.Test;
 
-import es.upv.i3m.grycap.im.exceptions.AuthFileNotFoundException;
+import es.upv.i3m.grycap.im.exceptions.AuthorizationFileException;
 import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
 public class LoggerTest {
@@ -41,7 +41,7 @@ public class LoggerTest {
 
     @Test
     public void testLoggerSevereException() {
-        ImJavaApiLogger.severe(this.getClass(), new AuthFileNotFoundException(TEST_MESSAGE));
+        ImJavaApiLogger.severe(this.getClass(), new AuthorizationFileException(TEST_MESSAGE));
     }
 
     @Test
