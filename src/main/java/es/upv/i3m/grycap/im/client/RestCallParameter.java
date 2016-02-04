@@ -77,11 +77,12 @@ public class RestCallParameter {
     }
 
     private void setParameterValues(List<?> parameterValues) {
-        if (parameterValues == null || parameterValues.isEmpty()) {
+        if (parameterValues != null && !parameterValues.isEmpty()) {
+            for (Object parameterValue : parameterValues) {
+                addValue(parameterValue);
+            }
+        } else {
             ImJavaApiLogger.warning(this.getClass(), ImMessages.WARNING_NULL_OR_EMPTY_PARAMETER_VALUES);
-        }
-        for (Object parameterValue : parameterValues) {
-            addValue(parameterValue);
         }
     }
 }
