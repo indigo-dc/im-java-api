@@ -1,77 +1,40 @@
-Infrastructure Manager Java API
-===============
-This project offers an API that allows to connect to the Infrastructure Manager REST API.
-For more information about the IM capabilities check: [IM Web](http://www.grycap.upv.es/im).
+# Intro 
 
-The javadoc for this project can be found here: [Javadoc](http://indigo-dc.github.io/im-java-api/apidocs/)
+VizGrimoireJS aims at providing a framework for software metrics visualization using HTML, 
+CSS and JavaScript as main technologies.
 
-1. INSTALLATION
-===============
+It was born as a complement to the outcomes of VizGrimoireR project (now GrimoireLib), 
+whose main focus is to parse information from any of the tools found in Metrics Grimoire 
+project.
 
-1.1 REQUISITES
---------------
-This project has been created with maven.
-To compile it you will need at least **Apache Maven 3.0.5** and **Java 1.7**.
-Maven will take care of downloading all the extra dependencies needed for the project.
+## Q. What libraries are used by this front-end?
 
-1.2 INSTALLING
---------------
-To compile the project you need to be in the same folder as the **pom.xml** file and type:
-```
-mvn clean install
-```
-this command compiles the code and executes the tests. If you want to compile the code without the tests you can use:
-```
-mvn clean install -DskipTests
-```
-When the compilation finishes you will have a **target** folder. Inside you can find the compiled java classes and the packaged jars. The jar **im-java-api-0.0.1-jar-with-dependencies.jar** includes all the libraries needed by the im-java-api and can be used independently. The jar **im-java-api-0.0.1.jar** contains only the im-java-api compiled code and needs external libraries to work. The external libraries needed by the project are specified in the pom.xml
+- Bootstrap 3.1.1
+- Jasny Boostrap 3.1.3
+- JQuery 1.11.1
+- VizGrimoireJS-lib
 
-1.3 CONFIGURATION
------------------
-This project does not need any configuration files to work.
-If you want you can define a **log4j.properties** to log the REST service calls.
-To configure the logger you have to create a **log4j.properties** file and set the logger properties.
-The log4j.properties file of the tests can help you with the logger configuration.
+## Q. How do I generate the HTML?
 
-1.4 USAGE
------------------
-The tests defined in the class **InfrastructureManagerApiClientTest** show how to use the im-java-api.
-Also check the following lines to see some examples of use:
+make
 
-### 1.4.1 Create the API client
-```
-InfrastructureManagerApiClient imClient = new InfrastructureManagerApiClient("IM_ENDPOINT", "AUTH_FILE_PATH");
-```
-When creating a new client you have to specify a valid IM URL, and an authorization file path with the credentials required for the infrastrcture deployment.
-More information about the authorization file can be found here: [Auth file](http://www.grycap.upv.es/im/doc/client.html#auth-file).
-You can also check the authorization file used for the tests that is available in 'src/test/resources/'.
+## Q. How do I clean the generated HTML?
 
-### 1.4.2 Create and destroy an infrastructure
-```
-// Infrastructure creation based on a TOSCA file
-ServiceResponse response = getImApiClient().createInfrastructure(FileIO.readUTF8File(TOSCA_FILE_PATH));
-... USE THE INFRASTRUCTURE ...
-// Infrastructure destruction
-imClient.destroyInfrastructure(getInfrastructureId());
-```
-The **ServiceResponse** class returned by the **createInfrastructure** method contains all the information of the web service response. Check the **ServiceResponse** class methods for more information.
+make clean
 
-### 1.4.3 Get VM property
-The enum class **VmProperties.java** stores the main properties of the virtual machines. The **getVMProperty** method of the API admits the enum class VmProperties or a String if the user wants an specific property not listed in the class.
-```
-getImApiClient().getVMProperty(getInfrastructureId(), VM_DEFAULT_ID, VmProperties.STATE);
-```
-is equivalent to 
-```
-getImApiClient().getVMProperty(getInfrastructureId(), VM_DEFAULT_ID, "state");
-```
+## Q. Where do I include the JSON files?
 
-### 1.4.4 Stop the infrastructure
-```
-getImApiClient().stopInfrastructure(getInfrastructureId());
-```
+Copy them to the directory browser/data/json
 
-2. LICENSE
-===============
+## Q. Where is the famous metrics.json file located?
 
-See [LICENSE](https://github.com/indigo-dc/im-java-api/blob/gh-pages/LICENSE)
+It is located at browser/data/metrics.json
+
+## Q. What if I don't want project support?
+
+The project hierarchy is provided by the file browser/data/json/projects_hierarchy.json, if
+the file is not present the dash works with no subprojects support.
+
+## Q. What if I don't want to generate all the HTML files?
+
+Easy, comment the proper lines in the shell script at templates/gen.sh
