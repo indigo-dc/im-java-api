@@ -16,7 +16,9 @@
 package es.upv.i3m.grycap.client;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 import javax.ws.rs.core.Response.Status;
 
@@ -52,6 +54,7 @@ public class InfrastructureManagerApiClientTest {
     private static final String RADL_JSON_ALTER_VM_FILE_PATH = "./src/test/resources/radls/alter-vm.json";
     // IM TOSCA files
     private static final String TOSCA_FILE_PATH = "./src/test/resources/tosca/galaxy_tosca.yaml";
+    private static final String TOSCA_EXTRA_NODE_FILE_PATH = "./src/test/resources/tosca/galaxy_tosca_2_nodes.yaml";
     // VM identifiers
     private static final String VM_DEFAULT_ID = "0";
     private static final String VM_ID_ONE = "1";
@@ -230,10 +233,10 @@ public class InfrastructureManagerApiClientTest {
     public void testAddResourceNoContext() throws ImClientException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
         // Add a new resource
-        ServiceResponse response = addToscaResource(TOSCA_FILE_PATH);
+        ServiceResponse response = addToscaResource(TOSCA_EXTRA_NODE_FILE_PATH);
         int retry;
         for (retry = 0; retry < MAX_RETRY; retry++) {
-            response = addToscaResource(TOSCA_FILE_PATH);
+            response = addToscaResource(TOSCA_EXTRA_NODE_FILE_PATH);
             if (response.isReponseSuccessful()) {
                 waitUntilRunningOrUncofiguredState(VM_ID_ONE);
                 break;
@@ -252,7 +255,7 @@ public class InfrastructureManagerApiClientTest {
         ServiceResponse response = addToscaResource(TOSCA_FILE_PATH);
         int retry;
         for (retry = 0; retry < MAX_RETRY; retry++) {
-            response = addToscaResource(TOSCA_FILE_PATH);
+            response = addToscaResource(TOSCA_EXTRA_NODE_FILE_PATH);
             if (response.isReponseSuccessful()) {
                 waitUntilRunningOrUncofiguredState(VM_ID_ONE);
                 break;
@@ -271,7 +274,7 @@ public class InfrastructureManagerApiClientTest {
         ServiceResponse response = addToscaResource(TOSCA_FILE_PATH);
         int retry;
         for (retry = 0; retry < MAX_RETRY; retry++) {
-            response = addToscaResource(TOSCA_FILE_PATH);
+            response = addToscaResource(TOSCA_EXTRA_NODE_FILE_PATH);
             if (response.isReponseSuccessful()) {
                 waitUntilRunningOrUncofiguredState(VM_ID_ONE);
                 break;
@@ -433,7 +436,7 @@ public class InfrastructureManagerApiClientTest {
     @Test
     public void testReconfigureAllVmsRadl() throws ImClientException, IOException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
-        ServiceResponse response = addToscaResource(TOSCA_FILE_PATH);
+        ServiceResponse response = addToscaResource(TOSCA_EXTRA_NODE_FILE_PATH);
         checkServiceResponse(response);
         waitUntilRunningOrUncofiguredState(VM_ID_ONE);
         response = getImApiClient().reconfigure(getInfrastructureId(), FileIO.readUTF8File(RADL_ALTER_VM_FILE_PATH),
@@ -444,7 +447,7 @@ public class InfrastructureManagerApiClientTest {
     @Test
     public void testReconfigureAllVmsRadlJson() throws ImClientException, IOException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
-        ServiceResponse response = addToscaResource(TOSCA_FILE_PATH);
+        ServiceResponse response = addToscaResource(TOSCA_EXTRA_NODE_FILE_PATH);
         checkServiceResponse(response);
         waitUntilRunningOrUncofiguredState(VM_ID_ONE);
         response = getImApiClient().reconfigure(getInfrastructureId(),
@@ -455,7 +458,7 @@ public class InfrastructureManagerApiClientTest {
     @Test
     public void testReconfigureSomeVmsRadl() throws ImClientException, IOException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
-        ServiceResponse response = addToscaResource(TOSCA_FILE_PATH);
+        ServiceResponse response = addToscaResource(TOSCA_EXTRA_NODE_FILE_PATH);
         checkServiceResponse(response);
         waitUntilRunningOrUncofiguredState(VM_ID_ONE);
         response = getImApiClient().reconfigure(getInfrastructureId(), FileIO.readUTF8File(RADL_ALTER_VM_FILE_PATH),
@@ -466,7 +469,7 @@ public class InfrastructureManagerApiClientTest {
     @Test
     public void testReconfigureSomeVmsRadlJson() throws ImClientException, IOException {
         waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
-        ServiceResponse response = addToscaResource(TOSCA_FILE_PATH);
+        ServiceResponse response = addToscaResource(TOSCA_EXTRA_NODE_FILE_PATH);
         checkServiceResponse(response);
         waitUntilRunningOrUncofiguredState(VM_ID_ONE);
         response = getImApiClient().reconfigure(getInfrastructureId(),
@@ -522,10 +525,16 @@ public class InfrastructureManagerApiClientTest {
         Assert.assertNull(RestApiBodyContentType.getEnumFromValue("not_valid"));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testInfrastructureOutputs() throws ImClientException {
-        InfrastructureStatus result = getImApiClient().getInfrastructureOutputs(getInfrastructureId());
-        Assert.assertTrue(result.getProperties().get(EXPECTED_INFRASTRUCTURE_OUTPUT_PRIVATE_IP_KEY)
-                .equals(EXPECTED_INFRASTRUCTURE_OUTPUT_PRIVATE_IP_VALUE));
+        InfrastructureManagerApiClient client = getImApiClient();
+        String infId = getInfrastructureId();
+        InfrastructureStatus result = client.getInfrastructureOutputs(infId);
+        Map<String, Object> properties = result.getProperties();
+        System.out.println(properties.get(EXPECTED_INFRASTRUCTURE_OUTPUT_PRIVATE_IP_KEY));
+        ArrayList<String> privateIps = (ArrayList<String>) properties
+                .get(EXPECTED_INFRASTRUCTURE_OUTPUT_PRIVATE_IP_KEY);
+        Assert.assertEquals(EXPECTED_INFRASTRUCTURE_OUTPUT_PRIVATE_IP_VALUE, privateIps.get(0));
     }
 }
