@@ -14,17 +14,29 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.im.exceptions;
+package es.upv.i3m.grycap.file;
 
-public class AuthorizationFileException extends FileException {
+import es.upv.i3m.grycap.im.exceptions.FileException;
 
-  private static final long serialVersionUID = -6678679656451108306L;
+public final class EscapedNewLinesFile implements File {
 
-  public AuthorizationFileException(String message) {
-    super(message);
+  private final File file;
+
+  public EscapedNewLinesFile(final File file) {
+    this.file = file;
   }
 
-  public AuthorizationFileException(String message, Exception ex) {
-    super(message, ex);
+  /**
+   * Read the file specified and escapes all the new lines (i.e. replace all the
+   * '\n' with '\\n').
+   *
+   * @return : String with the newlines replaced
+   * @throws FileException
+   *           : file related exception
+   */
+  @Override
+  public String read() throws FileException {
+    return this.file.read().replace("\n", "\\n");
   }
+
 }

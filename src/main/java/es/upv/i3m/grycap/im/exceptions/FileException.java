@@ -16,15 +16,15 @@
 
 package es.upv.i3m.grycap.im.exceptions;
 
-public class AuthorizationFileException extends FileException {
+public class FileException extends InfrastructureManagerRestClientException {
 
-  private static final long serialVersionUID = -6678679656451108306L;
+  private static final long serialVersionUID = 8674543449947528363L;
 
-  public AuthorizationFileException(String message) {
+  public FileException(String message) {
     super(message);
   }
 
-  public AuthorizationFileException(String message, Exception ex) {
+  public FileException(String message, Exception ex) {
     super(message, ex);
   }
 }

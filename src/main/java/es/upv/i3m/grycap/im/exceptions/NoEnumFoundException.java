@@ -16,15 +16,19 @@
 
 package es.upv.i3m.grycap.im.exceptions;
 
-public class AuthorizationFileException extends FileException {
+public class NoEnumFoundException extends ImClientException {
 
-  private static final long serialVersionUID = -6678679656451108306L;
+  private static final long serialVersionUID = -1418837501975744151L;
 
-  public AuthorizationFileException(String message) {
+  public NoEnumFoundException(String message) {
     super(message);
   }
 
-  public AuthorizationFileException(String message, Exception ex) {
+  public NoEnumFoundException(String message, Exception ex) {
     super(message, ex);
+  }
+
+  public NoEnumFoundException(Exception ex) {
+    super(ex);
   }
 }
