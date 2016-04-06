@@ -213,7 +213,7 @@ public class InfrastructureManagerRestClient {
       RestCallParameter... parameters)
           throws InfrastructureManagerRestClientException {
     checkPath(path);
-    boolean ssl = path.startsWith(SSL_URL);
+    boolean ssl = getTarget().startsWith(SSL_URL);
 
     WebTarget webtarget = new RestClient(ssl).createClient()
         .target(UriBuilder.fromUri(getTarget()).build()).path(path);
