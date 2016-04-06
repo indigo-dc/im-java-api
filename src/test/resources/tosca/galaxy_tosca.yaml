@@ -13,7 +13,6 @@ imports:
 description: >
   TOSCA test for launching a Galaxy Server also configuring the bowtie2
   tool using Galaxy Tool Shed.
-
 topology_template:
  
   node_templates:
@@ -30,19 +29,24 @@ topology_template:
     galaxy:
       type: tosca.nodes.indigo.GalaxyPortal
       requirements:
+        - lrms: local_lrms
+
+    # type to describe a Galaxy not using any LRMS but using the local system
+    local_lrms:
+      type: tosca.nodes.indigo.LRMS.FrontEnd.Local
+      requirements:
         - host: galaxy_server
  
     galaxy_server:
       type: tosca.nodes.indigo.Compute
+      properties:
+         public_ip: yes
       capabilities:
-        scalable:
-          properties:
-            count: 1
         # Host container properties
         host:
-         properties:
-           num_cpus: 1
-           mem_size: 1 GB           
+          properties:
+            num_cpus: 1
+            mem_size: 1 GB
         # Guest Operating System properties
         os:
           properties:
@@ -50,7 +54,7 @@ topology_template:
             type: linux 
             #distribution: scientific 
             #version: 6.6
+
   outputs:
-    private_ip:
-      description: The private IP address of the deployed server instance.
-      value: { get_attribute: [galaxy_server, private_address] }
+    galaxy_url:
+      value: { concat: [ 'http://', get_attribute: [ galaxy_server, public_address, 0 ], ':8080' ] }

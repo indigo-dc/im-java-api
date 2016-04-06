@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.im.exceptions;
+package es.upv.i3m.grycap.file;
 
-public class AuthorizationFileException extends FileException {
+import es.upv.i3m.grycap.im.exceptions.FileException;
 
-  private static final long serialVersionUID = -6678679656451108306L;
+public interface File {
 
-  public AuthorizationFileException(String message) {
-    super(message);
-  }
+  public String read() throws FileException;
 
-  public AuthorizationFileException(String message, Exception ex) {
-    super(message, ex);
-  }
 }

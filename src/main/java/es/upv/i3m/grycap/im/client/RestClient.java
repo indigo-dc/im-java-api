@@ -14,17 +14,30 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.im.exceptions;
+package es.upv.i3m.grycap.im.client;
 
-public class AuthorizationFileException extends FileException {
+import org.glassfish.jersey.SslConfigurator;
 
-  private static final long serialVersionUID = -6678679656451108306L;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 
-  public AuthorizationFileException(String message) {
-    super(message);
+public class RestClient {
+
+  // Sets the support to SSL or not
+  private boolean ssl;
+
+  public RestClient(boolean ssl) {
+    this.ssl = ssl;
   }
 
-  public AuthorizationFileException(String message, Exception ex) {
-    super(message, ex);
+  /**
+   * Build a new Rest client.
+   * 
+   * @return : new REST client
+   */
+  public Client createClient() {
+    return this.ssl ? ClientBuilder.newBuilder()
+        .sslContext(SslConfigurator.newInstance(true).createSSLContext())
+        .build() : ClientBuilder.newBuilder().build();
   }
 }
