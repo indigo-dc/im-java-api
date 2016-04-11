@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>es.upv.i3m.grycap</groupId>
   <artifactId>im-java-api</artifactId>
-  <version>0.3.1</version>
+  <version>0.3.2</version>
   <name>IM Java API</name>
   <description>Java client for the REST API of the IM</description>
 

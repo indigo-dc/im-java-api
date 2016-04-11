@@ -49,6 +49,7 @@ public class InfrastructureManagerApiClientTest {
   // IM connection urls
   private static final String IM_DUMMY_PROVIDER_URL =
       "http://servproject.i3m.upv.es:8811";
+
   // Authorization file path
   private static final String AUTH_FILE_PATH = "./src/test/resources/auth.dat";
   // IM RADLs
