@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.im.exceptions;
+package es.upv.i3m.grycap.im.client;
 
-public class InfrastructureManagerRestClientException
-    extends ImClientException {
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 
-  private static final long serialVersionUID = 5895451467400071373L;
+public class NoSslRestClient implements RestClient {
 
-  public InfrastructureManagerRestClientException() {
-    super();
-  }
-
-  public InfrastructureManagerRestClientException(String message) {
-    super(message);
-  }
-
-  public InfrastructureManagerRestClientException(String message,
-      Exception ex) {
-    super(message, ex);
+  /**
+   * Build a new Rest client.
+   * 
+   * @return : new REST client
+   */
+  @Override
+  public Client createClient() {
+    return ClientBuilder.newBuilder().build();
   }
 }

@@ -20,7 +20,7 @@ import es.upv.i3m.grycap.file.EscapedNewLinesFile;
 import es.upv.i3m.grycap.file.NoNullOrEmptyFile;
 import es.upv.i3m.grycap.file.Utf8File;
 import es.upv.i3m.grycap.im.exceptions.FileException;
-import es.upv.i3m.grycap.im.exceptions.InfrastructureManagerRestClientException;
+import es.upv.i3m.grycap.im.exceptions.ImClientException;
 import es.upv.i3m.grycap.im.lang.ImMessages;
 import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
@@ -28,6 +28,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriBuilderException;
 
 /**
  * Manage the REST methods to communicate with the IM infrastructure.
@@ -73,8 +74,8 @@ public class InfrastructureManagerRestClient {
   }
 
   private void setAuthFile(String authFilePath) throws FileException {
-    this.authFile = new NoNullOrEmptyFile(
-        new EscapedNewLinesFile(new Utf8File(authFilePath))).read();
+    this.authFile = new EscapedNewLinesFile(
+        new NoNullOrEmptyFile(new Utf8File(authFilePath))).read();
   }
 
   /**
@@ -87,12 +88,11 @@ public class InfrastructureManagerRestClient {
    * @param parameters
    *          : extra parameters for the call (if needed)
    * @return : ServiceResponse wrapper class
-   * @throws InfrastructureManagerRestClientException
+   * @throws ImClientException
    *           : exception in the rest client
    */
   public ServiceResponse get(String path, String requestType,
-      RestCallParameter... parameters)
-          throws InfrastructureManagerRestClientException {
+      RestCallParameter... parameters) throws ImClientException {
     ImJavaApiLogger.info(this.getClass(),
         "Calling REST service: GET '" + getTarget() + "/" + path + "'");
     return new ServiceResponse(
@@ -113,12 +113,12 @@ public class InfrastructureManagerRestClient {
    * @param parameters
    *          : extra parameters for the call (if needed)
    * @return : ServiceResponse wrapper class
-   * @throws InfrastructureManagerRestClientException
+   * @throws ImClientException
    *           : exception in the rest client
    */
   public ServiceResponse post(String path, String requestType, String content,
       String postType, RestCallParameter... parameters)
-          throws InfrastructureManagerRestClientException {
+          throws ImClientException {
     ImJavaApiLogger.info(this.getClass(),
         "Calling REST service: POST '" + getTarget() + "/" + path + "'");
     // Normalize the content in case of null
@@ -150,12 +150,12 @@ public class InfrastructureManagerRestClient {
    *          : extra parameters for the call (if needed)
    * 
    * @return : ServiceResponse wrapper class
-   * @throws InfrastructureManagerRestClientException
+   * @throws ImClientException
    *           : exception in the rest client
    */
   public ServiceResponse put(String path, String requestType, String content,
       String putType, RestCallParameter... parameters)
-          throws InfrastructureManagerRestClientException {
+          throws ImClientException {
     ImJavaApiLogger.info(this.getClass(),
         "Calling REST service: PUT '" + getTarget() + "/" + path + "'");
 
@@ -184,12 +184,11 @@ public class InfrastructureManagerRestClient {
    * @param parameters
    *          : extra parameters for the call (if needed)
    * @return : ServiceResponse wrapper class
-   * @throws InfrastructureManagerRestClientException
+   * @throws ImClientException
    *           : exception in the rest client
    */
   public ServiceResponse delete(String path, String requestType,
-      RestCallParameter... parameters)
-          throws InfrastructureManagerRestClientException {
+      RestCallParameter... parameters) throws ImClientException {
     ImJavaApiLogger.info(this.getClass(),
         "Calling REST service: DELETE '" + getTarget() + "/" + path + "'");
     return new ServiceResponse(
@@ -210,21 +209,30 @@ public class InfrastructureManagerRestClient {
    *           : exception in the rest client
    */
   private Builder getRestClient(String path, String requestType,
-      RestCallParameter... parameters)
-          throws InfrastructureManagerRestClientException {
+      RestCallParameter... parameters) throws ImClientException {
     checkPath(path);
-    boolean ssl = getTarget().startsWith(SSL_URL);
+    RestClient client = getTarget().startsWith(SSL_URL)
+        ? new SslTrustAllRestClient() : new NoSslRestClient();
 
-    WebTarget webtarget = new RestClient(ssl).createClient()
-        .target(UriBuilder.fromUri(getTarget()).build()).path(path);
-    if (parameters != null && parameters.length > 0 && parameters[0] != null) {
-      for (RestCallParameter parameter : parameters) {
-        webtarget.queryParam(parameter.getParameterName(),
-            parameter.getParameterValues());
+    try {
+      WebTarget webtarget = client.createClient()
+          .target(UriBuilder.fromUri(getTarget()).build()).path(path);
+
+      if (parameters != null && parameters.length > 0
+          && parameters[0] != null) {
+        for (RestCallParameter parameter : parameters) {
+          webtarget.queryParam(parameter.getParameterName(),
+              parameter.getParameterValues());
+        }
       }
+      return webtarget.request(requestType).header(AUTH_HEADER_TAG,
+          getAuthFile());
+    } catch (IllegalArgumentException | UriBuilderException
+        | ImClientException exception) {
+      ImJavaApiLogger.severe(this.getClass(), exception);
+      throw exception;
     }
-    return webtarget.request(requestType).header(AUTH_HEADER_TAG,
-        getAuthFile());
+
   }
 
   /**
@@ -235,12 +243,10 @@ public class InfrastructureManagerRestClient {
    * @throws InfrastructureManagerRestClientException
    *           : exception in the rest client
    */
-  private void checkPath(String path)
-      throws InfrastructureManagerRestClientException {
+  private void checkPath(String path) throws ImClientException {
     if (path == null || path.isEmpty()) {
       ImJavaApiLogger.severe(this.getClass(), ImMessages.EXCEPTION_PATH_VALUE);
-      throw new InfrastructureManagerRestClientException(
-          ImMessages.EXCEPTION_PATH_VALUE);
+      throw new ImClientException(ImMessages.EXCEPTION_PATH_VALUE);
     }
   }
 

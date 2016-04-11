@@ -16,7 +16,7 @@
 
 package es.upv.i3m.grycap.im.exceptions;
 
-public class FileException extends InfrastructureManagerRestClientException {
+public class FileException extends ImClientException {
 
   private static final long serialVersionUID = 8674543449947528363L;
 
