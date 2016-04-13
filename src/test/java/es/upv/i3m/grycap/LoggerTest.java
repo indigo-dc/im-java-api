@@ -21,7 +21,7 @@ import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
 import org.junit.Test;
 
-public class LoggerTest {
+public class LoggerTest extends GenericTestWatcher {
 
   private static final String TEST_MESSAGE = "Test Message";
 

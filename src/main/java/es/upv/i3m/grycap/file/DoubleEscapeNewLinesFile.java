@@ -17,40 +17,27 @@
 package es.upv.i3m.grycap.file;
 
 import es.upv.i3m.grycap.im.exceptions.FileException;
-import es.upv.i3m.grycap.im.lang.ImMessages;
-import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+public final class DoubleEscapeNewLinesFile implements File {
 
-public final class Utf8File implements File {
+  private final File file;
 
-  private String filePath;
-
-  public Utf8File(final String filePath) {
-    this.filePath = filePath;
+  public DoubleEscapeNewLinesFile(final File file) {
+    this.file = file;
   }
 
   /**
-   * Read the file specified by the path parameter using the standard charset
-   * UTF8.
+   * Read the file specified and escapes all the new lines (i.e. replace all the
+   * '\n' with '\\n').
    *
-   * @return : String with the loaded file
+   * @return : String with the newlines replaced
    * @throws FileException
    *           : file related exception
    */
   @Override
   public String read() throws FileException {
-    try {
-      return new String(Files.readAllBytes(Paths.get(this.filePath)),
-          StandardCharsets.UTF_8);
-    } catch (IOException ex) {
-      ImJavaApiLogger.severe(this.getClass(),
-          ImMessages.EXCEPTION_READING_FILE + ": " + this.filePath);
-      throw new FileException(ImMessages.EXCEPTION_READING_FILE, ex);
-    }
+
+    return this.file.read().replace("\n", "\\\\n");
   }
 
 }

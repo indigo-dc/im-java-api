@@ -26,6 +26,8 @@ public final class ImMessages {
       "TOSCA content type not supported";
   public static final String EXCEPTION_READING_AUTHORIZATION_FILE =
       "Error while reading authorization file";
+  public static final String EXCEPTION_READING_FILE =
+      "Error while reading the file";
   public static final String EXCEPTION_AUTHORIZATION_NULL_OR_EMPTY =
       "The authorization file is invalid or empty";
   public static final String EXCEPTION_PATH_VALUE =

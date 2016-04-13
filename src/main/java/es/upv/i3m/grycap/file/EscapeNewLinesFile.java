@@ -18,11 +18,11 @@ package es.upv.i3m.grycap.file;
 
 import es.upv.i3m.grycap.im.exceptions.FileException;
 
-public final class EscapedNewLinesFile implements File {
+public final class EscapeNewLinesFile implements File {
 
   private final File file;
 
-  public EscapedNewLinesFile(final File file) {
+  public EscapeNewLinesFile(final File file) {
     this.file = file;
   }
 

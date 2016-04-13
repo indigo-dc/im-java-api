@@ -1,0 +1,3 @@
+type = InfrastructureManager; proxy = file(./src/test/resources/files/nested_file_path_content_several_lines); username = imuser01; password = invitado
+id = dummy; type = Dummy; proxy = file(./src/test/resources/files/nested_file_path_content_one_line)
+proxy = file(./src/test/resources/files/nested_file_path_content_one_line); type = VMRC; host = http://servproject.i3m.upv.es:8080/vmrc/vmrc; username = demo; password = demo;

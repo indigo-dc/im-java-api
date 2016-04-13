@@ -81,6 +81,5 @@ public class SslTrustAllRestClient implements RestClient {
       ImJavaApiLogger.severe(this.getClass(), exception);
       throw new ImClientException(exception);
     }
-
   }
 }

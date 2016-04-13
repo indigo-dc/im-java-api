@@ -16,6 +16,8 @@
 
 package es.upv.i3m.grycap.client;
 
+import es.upv.i3m.grycap.GenericTestWatcher;
+import es.upv.i3m.grycap.file.NoNullOrEmptyFile;
 import es.upv.i3m.grycap.file.Utf8File;
 import es.upv.i3m.grycap.im.api.ImValues;
 import es.upv.i3m.grycap.im.api.InfrastructureManagerApiClient;
@@ -42,7 +44,7 @@ import java.util.Map;
 
 import javax.ws.rs.core.Response.Status;
 
-public class InfrastructureManagerApiClientTest {
+public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
 
   // Client needed to connect to the java api
   private static InfrastructureManagerApiClient imApiClient;
@@ -52,6 +54,9 @@ public class InfrastructureManagerApiClientTest {
 
   // Authorization file path
   private static final String AUTH_FILE_PATH = "./src/test/resources/auth.dat";
+
+  private static final String AUTH_FILE_PATH_WITH_INTERNAL_PATHS =
+      "./src/test/resources/files/auth_several_different_internal_path.dat";
   // IM RADLs
   private static final String RADL_ALTER_VM_FILE_PATH =
       "./src/test/resources/radls/alter-vm.radl";
@@ -183,7 +188,8 @@ public class InfrastructureManagerApiClientTest {
   public void createInfrastructure() throws ImClientException {
     try {
       ServiceResponse response = getImApiClient().createInfrastructure(
-          new Utf8File(TOSCA_FILE_PATH).read(), RestApiBodyContentType.TOSCA);
+          new NoNullOrEmptyFile(new Utf8File(TOSCA_FILE_PATH)).read(),
+          RestApiBodyContentType.TOSCA);
 
       checkServiceResponse(response);
       String[] parsedUri = response.getResult().split("/");
@@ -612,5 +618,23 @@ public class InfrastructureManagerApiClientTest {
         (String) properties.get(EXPECTED_INFRASTRUCTURE_OUTPUT_GALAXY_URL_KEY);
     Assert.assertEquals(EXPECTED_INFRASTRUCTURE_OUTPUT_GALAXY_URL_VALUE,
         galaxyUrl);
+  }
+
+  @Test
+  public void testAuthorizationFileWithInternalPaths()
+      throws ImClientException {
+    InfrastructureManagerApiClient imApiClient =
+        new InfrastructureManagerApiClient(IM_DUMMY_PROVIDER_URL,
+            AUTH_FILE_PATH_WITH_INTERNAL_PATHS);
+
+    ServiceResponse response = imApiClient.createInfrastructure(
+        new NoNullOrEmptyFile(new Utf8File(TOSCA_FILE_PATH)).read(),
+        RestApiBodyContentType.TOSCA);
+
+    checkServiceResponse(response);
+    String[] parsedUri = response.getResult().split("/");
+    // Get the last element which is the infId
+    String infrastructureId = parsedUri[parsedUri.length - 1];
+    checkServiceResponse(imApiClient.destroyInfrastructure(infrastructureId));
   }
 }

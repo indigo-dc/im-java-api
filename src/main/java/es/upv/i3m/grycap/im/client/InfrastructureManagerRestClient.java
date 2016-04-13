@@ -16,7 +16,8 @@
 
 package es.upv.i3m.grycap.im.client;
 
-import es.upv.i3m.grycap.file.EscapedNewLinesFile;
+import es.upv.i3m.grycap.file.EscapeNewLinesFile;
+import es.upv.i3m.grycap.file.FileWithInternalPath;
 import es.upv.i3m.grycap.file.NoNullOrEmptyFile;
 import es.upv.i3m.grycap.file.Utf8File;
 import es.upv.i3m.grycap.im.exceptions.FileException;
@@ -36,9 +37,9 @@ import javax.ws.rs.core.UriBuilderException;
 public class InfrastructureManagerRestClient {
 
   // URL of the REST Service
-  private String target;
+  private final String target;
   // Authorization file
-  private String authFile;
+  private final String authFile;
   // Header tag used to pass the authorization information
   private static final String AUTH_HEADER_TAG = "AUTHORIZATION";
   // Identifier of an ssl url
@@ -57,25 +58,17 @@ public class InfrastructureManagerRestClient {
    */
   public InfrastructureManagerRestClient(String targetUrl, String authFilePath)
       throws FileException {
-    setTarget(targetUrl);
-    setAuthFile(authFilePath);
+    this.target = targetUrl;
+    this.authFile = new FileWithInternalPath(new EscapeNewLinesFile(
+        new NoNullOrEmptyFile(new Utf8File(authFilePath)))).read();
   }
 
   private String getTarget() {
     return target;
   }
 
-  private void setTarget(String target) {
-    this.target = target;
-  }
-
   private String getAuthFile() {
     return authFile;
-  }
-
-  private void setAuthFile(String authFilePath) throws FileException {
-    this.authFile = new EscapedNewLinesFile(
-        new NoNullOrEmptyFile(new Utf8File(authFilePath))).read();
   }
 
   /**
