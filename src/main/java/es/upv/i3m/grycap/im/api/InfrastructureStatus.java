@@ -1,5 +1,5 @@
 /**
- * Copyright (C) GRyCAP - I3M - UPV 
+ * Copyright (C) GRyCAP - I3M - UPV
  *
  * <p>Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package es.upv.i3m.grycap.im.api;
 
-import org.codehaus.jackson.annotate.JsonAnyGetter;
-import org.codehaus.jackson.annotate.JsonAnySetter;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  * Pojo class used to store the JSON values returned by the IM.
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class InfrastructureStatus {
 
   @JsonIgnore

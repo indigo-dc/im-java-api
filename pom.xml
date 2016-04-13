@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>es.upv.i3m.grycap</groupId>
   <artifactId>im-java-api</artifactId>
-  <version>0.3.2</version>
+  <version>0.3.3</version>
   <name>IM Java API</name>
   <description>Java client for the REST API of the IM</description>
 
@@ -12,7 +12,8 @@
     <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
     <maven-assembly-plugin.version>2.6</maven-assembly-plugin.version>
     <jersey-client.version>2.22.2</jersey-client.version>
-    <jackson-mapper>1.9.13</jackson-mapper>
+    <jackson.version>2.7.3</jackson.version>
+    <apache-commons.version>3.4</apache-commons.version>
     <junit.version>4.12</junit.version>
     <log4j.version>1.2.17</log4j.version>
     <java.version>7</java.version>
@@ -28,9 +29,26 @@
     </dependency>
    <!-- Jackson libraries -->
     <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-mapper-asl</artifactId>
-      <version>${jackson-mapper}</version>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+     </dependency>
+
+   <!-- Apache -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>${apache-commons.version}</version>
     </dependency>
   <!-- Logger -->
     <dependency>
