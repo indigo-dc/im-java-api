@@ -1,5 +1,5 @@
 /**
- * Copyright (C) GRyCAP - I3M - UPV 
+ * Copyright (C) GRyCAP - I3M - UPV
  *
  * <p>Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import es.upv.i3m.grycap.im.exceptions.ToscaContentTypeNotSupportedException;
 import es.upv.i3m.grycap.im.lang.ImMessages;
 import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.List;
@@ -90,14 +90,16 @@ public class InfrastructureManagerApiClient {
    * 
    * @param infId
    *          : infrastructure id
+   * @param requestJson
+   *          : specifies the format of the result in the ServiceResponse
    * @return : list of URIs
    * @throws ImClientException
    *           : exception in the IM client
    */
-  public ServiceResponse getInfrastructureInfo(String infId)
+  public ServiceResponse getInfrastructureInfo(String infId, boolean requestJson)
       throws ImClientException {
     return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId,
-        MediaType.TEXT_PLAIN);
+        requestJson ? MediaType.APPLICATION_JSON : MediaType.TEXT_PLAIN);
   }
 
   /**
@@ -119,7 +121,7 @@ public class InfrastructureManagerApiClient {
    *           : exception in the IM client
    */
   public ServiceResponse getVmInfo(String infId, String vmId,
-      boolean requestJson) throws ImClientException {
+     boolean requestJson) throws ImClientException {
     return getImClient().get(
         PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
             + PATH_VMS + PATH_SEPARATOR + vmId,
@@ -158,14 +160,17 @@ public class InfrastructureManagerApiClient {
    * 
    * @param infId
    *          : infrastructure id
+   * @param requestJson
+   *          : specifies the format of the result in the ServiceResponse
    * @return : contextualization log
    * @throws ImClientException
    *           : exception in the IM client
    */
-  public ServiceResponse getInfrastructureContMsg(String infId)
+  public ServiceResponse getInfrastructureContMsg(String infId, boolean requestJson)
       throws ImClientException {
     return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId
-        + PATH_SEPARATOR + ImValues.CONTMSG, MediaType.TEXT_PLAIN);
+        + PATH_SEPARATOR + ImValues.CONTMSG,
+        requestJson ? MediaType.APPLICATION_JSON : MediaType.TEXT_PLAIN);
   }
 
   /**
@@ -193,14 +198,17 @@ public class InfrastructureManagerApiClient {
    * 
    * @param infId
    *          : infrastructure id
+   * @param requestJson
+   *          : specifies the format of the result in the ServiceResponse
    * @return : string with the infrastructure state
    * @throws ImClientException
    *           : exception in the IM client
    */
-  public ServiceResponse getInfrastructureState(String infId)
+  public ServiceResponse getInfrastructureState(String infId, boolean requestJson)
       throws ImClientException {
     return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId
-        + PATH_SEPARATOR + ImValues.STATE, MediaType.TEXT_PLAIN);
+        + PATH_SEPARATOR + ImValues.STATE,
+        requestJson ? MediaType.APPLICATION_JSON : MediaType.TEXT_PLAIN);
   }
 
   /**
@@ -209,14 +217,16 @@ public class InfrastructureManagerApiClient {
    * 
    * @param infId
    *          : infrastructure id
+   * @param requestJson
+   *          : specifies the format of the result in the ServiceResponse
    * @return : True if undeploy successful, false otherwise
    * @throws ImClientException
    *           : exception in the IM client
    */
-  public ServiceResponse destroyInfrastructure(String infId)
+  public ServiceResponse destroyInfrastructure(String infId, boolean requestJson)
       throws ImClientException {
     return getImClient().delete(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId,
-        MediaType.TEXT_PLAIN);
+        requestJson ? MediaType.APPLICATION_JSON : MediaType.TEXT_PLAIN);
   }
 
   /**
@@ -228,13 +238,16 @@ public class InfrastructureManagerApiClient {
    *          : file with the virtual machine properties and configuration
    * @param bodyContentType
    *          : set the body content type. Can be RADL, RADL_JSON or TOSCA.
+   * @param requestJson
+   *          : specifies the format of the result in the ServiceResponse
    * @return : URI of the new infrastructure
    * @throws ImClientException
    *           : exception in the IM client
    */
   public ServiceResponse createInfrastructure(String radlFile,
-      RestApiBodyContentType bodyContentType) throws ImClientException {
-    return getImClient().post(PATH_INFRASTRUCTURES, MediaType.TEXT_PLAIN,
+      RestApiBodyContentType bodyContentType, boolean requestJson) throws ImClientException {
+    return getImClient().post(PATH_INFRASTRUCTURES,
+        requestJson ? MediaType.APPLICATION_JSON : MediaType.TEXT_PLAIN,
         radlFile, bodyContentType.getValue());
   }
 
@@ -254,6 +267,8 @@ public class InfrastructureManagerApiClient {
    *          : file with the virtual machine properties and configuration
    * @param bodyContentType
    *          : set the body content type. Can be RADL, RADL_JSON or TOSCA.
+   * @param requestJson
+   *          : specifies the format of the result in the ServiceResponse
    * @param context
    *          : flag to specify if the contextualization step will be launched
    *          just after the VM addition
@@ -262,14 +277,15 @@ public class InfrastructureManagerApiClient {
    *           : exception in the IM client
    */
   public ServiceResponse addResource(String infId, String radlFile,
-      RestApiBodyContentType bodyContentType, boolean... context)
+      RestApiBodyContentType bodyContentType, boolean requestJson, boolean... context)
           throws ImClientException {
 
     RestCallParameter parameters = (context != null && context.length > 0)
-        ? new RestCallParameter(REST_PARAMETER_NAME_CONTEXT, context[0]) : null;
+            ? new RestCallParameter(REST_PARAMETER_NAME_CONTEXT, context[0]) : null;
 
     return getImClient().post(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId,
-        MediaType.TEXT_PLAIN, radlFile, bodyContentType.getValue(), parameters);
+        requestJson ? MediaType.APPLICATION_JSON : MediaType.TEXT_PLAIN, radlFile,
+        bodyContentType.getValue(), parameters);
   }
 
   /**
@@ -283,6 +299,8 @@ public class InfrastructureManagerApiClient {
    *          : infrastructure id
    * @param vmId
    *          : virtual machine id
+   * @param requestJson
+   *          : specifies the format of the result in the ServiceResponse
    * @param context
    *          : flag to specify if the contextualization step will be launched
    *          just after the VM addition
@@ -290,16 +308,16 @@ public class InfrastructureManagerApiClient {
    * @throws ImClientException
    *           : exception in the IM client
    */
-  public ServiceResponse removeResource(String infId, String vmId,
+  public ServiceResponse removeResource(String infId, String vmId, boolean requestJson,
       boolean... context) throws ImClientException {
 
     RestCallParameter parameters = (context != null && context.length > 0)
-        ? new RestCallParameter(REST_PARAMETER_NAME_CONTEXT, context[0]) : null;
+            ? new RestCallParameter(REST_PARAMETER_NAME_CONTEXT, context[0]) : null;
 
     return getImClient().delete(
         PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
             + PATH_VMS + PATH_SEPARATOR + vmId,
-        MediaType.TEXT_PLAIN, parameters);
+        requestJson ? MediaType.APPLICATION_JSON : MediaType.TEXT_PLAIN, parameters);
   }
 
   /**
@@ -320,7 +338,7 @@ public class InfrastructureManagerApiClient {
         .put(
             PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
                 + ImValues.STOP,
-            MediaType.TEXT_PLAIN, "", MediaType.TEXT_PLAIN);
+        MediaType.TEXT_PLAIN, "", MediaType.TEXT_PLAIN);
   }
 
   /**
@@ -340,7 +358,7 @@ public class InfrastructureManagerApiClient {
         .put(
             PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
                 + ImValues.START,
-            MediaType.TEXT_PLAIN, "", MediaType.TEXT_PLAIN);
+        MediaType.TEXT_PLAIN, "", MediaType.TEXT_PLAIN);
   }
 
   /**
@@ -356,7 +374,7 @@ public class InfrastructureManagerApiClient {
    *           : exception in the IM client
    */
   public ServiceResponse stopVm(String infId, String vmId)
-      throws ImClientException {
+     throws ImClientException {
     return getImClient().put(
         PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
             + PATH_VMS + PATH_SEPARATOR + vmId + PATH_SEPARATOR + ImValues.STOP,
@@ -461,7 +479,7 @@ public class InfrastructureManagerApiClient {
     ServiceResponse response = getImClient().put(
         PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
             + ImValues.RECONFIGURE,
-        MediaType.TEXT_PLAIN, radlFile, bodyContentType.getValue());
+            MediaType.TEXT_PLAIN, radlFile, bodyContentType.getValue());
     checkNullValue(response);
     return response;
   }
@@ -513,7 +531,7 @@ public class InfrastructureManagerApiClient {
    *           : exception in the IM client
    */
   public InfrastructureStatus getInfrastructureOutputs(String infId)
-      throws ImClientException {
+     throws ImClientException {
     checkNullValue(infId);
     InfrastructureStatus infrastructureStatus = null;
     try {
