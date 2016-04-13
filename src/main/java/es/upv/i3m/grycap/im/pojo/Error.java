@@ -6,12 +6,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Error {
@@ -23,21 +23,11 @@ public class Error {
   @JsonIgnore
   private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-  /**
-   * 
-   * @return
-   *         The message
-   */
   @JsonProperty("message")
   public String getMessage() {
     return message;
   }
 
-  /**
-   * 
-   * @param message
-   *          The message
-   */
   @JsonProperty("message")
   public void setMessage(String message) {
     this.message = message;
@@ -48,21 +38,11 @@ public class Error {
     return this;
   }
 
-  /**
-   * 
-   * @return
-   *         The code
-   */
   @JsonProperty("code")
   public Integer getCode() {
     return code;
   }
 
-  /**
-   * 
-   * @param code
-   *          The code
-   */
   @JsonProperty("code")
   public void setCode(Integer code) {
     this.code = code;
