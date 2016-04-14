@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.im.client;
+package es.upv.i3m.grycap.im.rest.client;
 
 import es.upv.i3m.grycap.im.lang.ImMessages;
 import es.upv.i3m.grycap.logger.ImJavaApiLogger;
@@ -24,16 +24,32 @@ import javax.ws.rs.core.Response.Status.Family;
 import javax.ws.rs.core.Response.StatusType;
 
 /**
- * Response returned by the REST service.
+ * Stores the response of the IM and simplifies some status checking.
  */
 public class ServiceResponse {
 
-  private Response response;
-  private String result;
+  private final Response response;
+  private final String result;
 
+  /**
+   * Creates a new ServiceResponse and checks that the value passed is not null.
+   * 
+   * @param response
+   *          : response of the IM REST service
+   */
   public ServiceResponse(Response response) {
-    setResponse(response);
-    setServiceResult(getResponse().readEntity(String.class));
+    this.response = response;
+    this.result = getResponse().readEntity(String.class);
+    checkNullValue(this.response);
+    checkNullValue(result);
+  }
+
+  private Response getResponse() {
+    return response;
+  }
+
+  public String getResult() {
+    return result;
   }
 
   private void checkNullValue(Object value) {
@@ -49,19 +65,6 @@ public class ServiceResponse {
    */
   public String getReasonPhrase() {
     return getServiceStatusInfo().getReasonPhrase();
-  }
-
-  private Response getResponse() {
-    checkNullValue(response);
-    return response;
-  }
-
-  /**
-   * Gets the returned string by the server.
-   */
-  public String getResult() {
-    checkNullValue(response);
-    return result;
   }
 
   /**
@@ -84,22 +87,6 @@ public class ServiceResponse {
    */
   public boolean isReponseSuccessful() {
     return getServiceStatusInfo().getFamily() == Family.SUCCESSFUL;
-  }
-
-  private void setResponse(Response response) {
-    if (response == null) {
-      ImJavaApiLogger.warning(this.getClass(),
-          ImMessages.WARNING_NULL_SERVICE_RESPONSE);
-    }
-    this.response = response;
-  }
-
-  private void setServiceResult(String serviceResult) {
-    if (serviceResult == null) {
-      ImJavaApiLogger.warning(this.getClass(),
-          ImMessages.WARNING_NULL_SERVICE_RESULT);
-    }
-    this.result = serviceResult;
   }
 
   /**

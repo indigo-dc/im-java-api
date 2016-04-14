@@ -20,6 +20,8 @@ import es.upv.i3m.grycap.im.exceptions.FileException;
 
 public interface File {
 
+  public String getFilePath();
+
   public String read() throws FileException;
 
 }

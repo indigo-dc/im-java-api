@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.im.client;
+package es.upv.i3m.grycap.im.rest.client.ssl;
 
 import es.upv.i3m.grycap.im.exceptions.ImClientException;
+import es.upv.i3m.grycap.im.rest.client.RestClient;
 import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
 import java.security.GeneralSecurityException;
@@ -31,7 +32,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.ws.rs.client.Client;
 
-public class SslTrustAllRestClient implements RestClient {
+public class SslTrustAllClient implements RestClient {
 
   private TrustManager[] getCerts() {
     return new TrustManager[] { new X509TrustManager() {
@@ -75,7 +76,7 @@ public class SslTrustAllRestClient implements RestClient {
         }
       };
 
-      return new SslRestClient(ctx, verifier).createClient();
+      return new SslClient(ctx, verifier).createClient();
 
     } catch (GeneralSecurityException exception) {
       ImJavaApiLogger.severe(this.getClass(), exception);

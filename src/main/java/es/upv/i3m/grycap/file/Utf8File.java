@@ -53,4 +53,9 @@ public final class Utf8File implements File {
     }
   }
 
+  @Override
+  public String getFilePath() {
+    return this.filePath;
+  }
+
 }

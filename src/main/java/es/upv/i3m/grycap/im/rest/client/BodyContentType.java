@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.im.api;
+package es.upv.i3m.grycap.im.rest.client;
 
 import es.upv.i3m.grycap.im.exceptions.NoEnumFoundException;
 import es.upv.i3m.grycap.im.lang.ImMessages;
 
 /**
- * Enumerates static values related with the Infrastructure.<br>
+ * Types to be used in the REST calls to specify the body content type.
  */
-public enum RestApiBodyContentType {
+public enum BodyContentType {
 
   RADL("text/plain"),
   RADL_JSON("application/json"),
@@ -30,7 +30,7 @@ public enum RestApiBodyContentType {
 
   private final String value;
 
-  RestApiBodyContentType(String value) {
+  BodyContentType(String value) {
     this.value = value;
   }
 
@@ -53,10 +53,10 @@ public enum RestApiBodyContentType {
    * @throws NoEnumFoundException
    *           : No enumerator found
    */
-  public static RestApiBodyContentType getEnumFromValue(String value)
+  public static BodyContentType getEnumFromValue(String value)
       throws NoEnumFoundException {
     if (value != null) {
-      for (RestApiBodyContentType imValue : RestApiBodyContentType.values()) {
+      for (BodyContentType imValue : BodyContentType.values()) {
         if (value.equalsIgnoreCase(imValue.getValue())) {
           return imValue;
         }

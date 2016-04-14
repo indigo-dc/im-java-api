@@ -20,16 +20,16 @@ import es.upv.i3m.grycap.GenericTestWatcher;
 import es.upv.i3m.grycap.file.NoNullOrEmptyFile;
 import es.upv.i3m.grycap.file.Utf8File;
 import es.upv.i3m.grycap.im.api.ImValues;
-import es.upv.i3m.grycap.im.api.InfrastructureManagerApiClient;
-import es.upv.i3m.grycap.im.api.InfrastructureStatus;
-import es.upv.i3m.grycap.im.api.RestApiBodyContentType;
+import es.upv.i3m.grycap.im.api.InfrastructureManagerApi;
 import es.upv.i3m.grycap.im.api.VmProperties;
 import es.upv.i3m.grycap.im.api.VmStates;
-import es.upv.i3m.grycap.im.client.ServiceResponse;
 import es.upv.i3m.grycap.im.exceptions.FileException;
 import es.upv.i3m.grycap.im.exceptions.ImClientException;
 import es.upv.i3m.grycap.im.exceptions.NoEnumFoundException;
 import es.upv.i3m.grycap.im.exceptions.ToscaContentTypeNotSupportedException;
+import es.upv.i3m.grycap.im.pojo.ImOutputValues;
+import es.upv.i3m.grycap.im.rest.client.BodyContentType;
+import es.upv.i3m.grycap.im.rest.client.ServiceResponse;
 import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
 import org.junit.After;
@@ -44,10 +44,10 @@ import java.util.Map;
 
 import javax.ws.rs.core.Response.Status;
 
-public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
+public class InfrastructureManagerApiTest extends GenericTestWatcher {
 
   // Client needed to connect to the java api
-  private static InfrastructureManagerApiClient imApiClient;
+  private static InfrastructureManagerApi imApiClient;
   // IM connection urls
   private static final String IM_DUMMY_PROVIDER_URL =
       "http://servproject.i3m.upv.es:8811";
@@ -89,7 +89,7 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
     this.infrastructureId = infrastructureId;
   }
 
-  private InfrastructureManagerApiClient getImApiClient() {
+  private InfrastructureManagerApi getImApiClient() {
     return imApiClient;
   }
 
@@ -156,7 +156,7 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
     ServiceResponse response = null;
     try {
       response = getImApiClient().addResource(getInfrastructureId(),
-          new Utf8File(toscaFilePath).read(), RestApiBodyContentType.TOSCA,
+          new Utf8File(toscaFilePath).read(), BodyContentType.TOSCA,
           false);
     } catch (FileException exception) {
       Assert.fail();
@@ -170,10 +170,10 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
   @BeforeClass
   public static void setRestClient() {
     try {
-      imApiClient = new InfrastructureManagerApiClient(IM_DUMMY_PROVIDER_URL,
+      imApiClient = new InfrastructureManagerApi(IM_DUMMY_PROVIDER_URL,
           AUTH_FILE_PATH);
     } catch (ImClientException exception) {
-      ImJavaApiLogger.severe(InfrastructureManagerApiClientTest.class,
+      ImJavaApiLogger.severe(InfrastructureManagerApiTest.class,
           exception.getMessage());
       Assert.fail();
     }
@@ -190,14 +190,14 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
     try {
       ServiceResponse response = getImApiClient().createInfrastructure(
           new NoNullOrEmptyFile(new Utf8File(TOSCA_FILE_PATH)).read(),
-          RestApiBodyContentType.TOSCA, false);
+          BodyContentType.TOSCA, false);
 
       checkServiceResponse(response);
       String[] parsedUri = response.getResult().split("/");
       // Get the last element which is the infId
       setInfrastructureId(parsedUri[parsedUri.length - 1]);
     } catch (FileException exception) {
-      ImJavaApiLogger.severe(InfrastructureManagerApiClientTest.class,
+      ImJavaApiLogger.severe(InfrastructureManagerApiTest.class,
           exception.getMessage());
       Assert.fail();
     }
@@ -404,7 +404,7 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
     // Wait for the machine to be properly configured
     getImApiClient().alterVm(getInfrastructureId(), VM_DEFAULT_ID,
         new Utf8File(RADL_ALTER_VM_FILE_PATH).read(),
-        RestApiBodyContentType.TOSCA, false);
+        BodyContentType.TOSCA, false);
 
     ServiceResponse response = getImApiClient().getVmProperty(
         getInfrastructureId(), VM_DEFAULT_ID, VmProperties.CPU_COUNT, false);
@@ -423,7 +423,7 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
     // Wait for the machine to be properly configured
     getImApiClient().alterVm(getInfrastructureId(), VM_DEFAULT_ID,
         new Utf8File(RADL_ALTER_VM_FILE_PATH).read(),
-        RestApiBodyContentType.RADL, false);
+        BodyContentType.RADL, false);
     ServiceResponse response = getImApiClient().getVmProperty(
         getInfrastructureId(), VM_DEFAULT_ID, VmProperties.CPU_COUNT, false);
     checkServiceResponse(response);
@@ -441,7 +441,7 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
     // Wait for the machine to be properly configured
     getImApiClient().alterVm(getInfrastructureId(), VM_DEFAULT_ID,
         new Utf8File(RADL_JSON_ALTER_VM_FILE_PATH).read(),
-        RestApiBodyContentType.RADL_JSON, false);
+        BodyContentType.RADL_JSON, false);
     ServiceResponse response = getImApiClient().getVmProperty(
         getInfrastructureId(), VM_DEFAULT_ID, VmProperties.CPU_COUNT, false);
     checkServiceResponse(response);
@@ -459,7 +459,7 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
     // Wait for the machine to be properly configured
     getImApiClient().alterVm(getInfrastructureId(), VM_DEFAULT_ID,
         new Utf8File(RADL_ALTER_VM_FILE_PATH).read(),
-        RestApiBodyContentType.RADL, true);
+        BodyContentType.RADL, true);
     ServiceResponse response = getImApiClient().getVmProperty(
         getInfrastructureId(), VM_DEFAULT_ID, VmProperties.CPU_COUNT, true);
     checkServiceResponse(response);
@@ -477,7 +477,7 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
     // Wait for the machine to be properly configured
     getImApiClient().alterVm(getInfrastructureId(), VM_DEFAULT_ID,
         new Utf8File(RADL_JSON_ALTER_VM_FILE_PATH).read(),
-        RestApiBodyContentType.RADL_JSON, false);
+        BodyContentType.RADL_JSON, false);
     ServiceResponse response = getImApiClient().getVmProperty(
         getInfrastructureId(), VM_DEFAULT_ID, VmProperties.CPU_COUNT, true);
     checkServiceResponse(response);
@@ -505,7 +505,7 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
     waitUntilRunningOrUncofiguredState(VM_ID_ONE);
     response = getImApiClient().reconfigure(getInfrastructureId(),
         new Utf8File(RADL_ALTER_VM_FILE_PATH).read(),
-        RestApiBodyContentType.RADL);
+        BodyContentType.RADL);
     checkServiceResponse(response);
   }
 
@@ -518,7 +518,7 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
     waitUntilRunningOrUncofiguredState(VM_ID_ONE);
     response = getImApiClient().reconfigure(getInfrastructureId(),
         new Utf8File(RADL_JSON_ALTER_VM_FILE_PATH).read(),
-        RestApiBodyContentType.RADL_JSON);
+        BodyContentType.RADL_JSON);
     checkServiceResponse(response);
   }
 
@@ -531,7 +531,7 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
     waitUntilRunningOrUncofiguredState(VM_ID_ONE);
     response = getImApiClient().reconfigure(getInfrastructureId(),
         new Utf8File(RADL_ALTER_VM_FILE_PATH).read(),
-        RestApiBodyContentType.RADL, Arrays.asList(0, 1));
+        BodyContentType.RADL, Arrays.asList(0, 1));
     checkServiceResponse(response);
   }
 
@@ -544,7 +544,7 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
     waitUntilRunningOrUncofiguredState(VM_ID_ONE);
     response = getImApiClient().reconfigure(getInfrastructureId(),
         new Utf8File(RADL_JSON_ALTER_VM_FILE_PATH).read(),
-        RestApiBodyContentType.RADL_JSON, Arrays.asList(0, 1));
+        BodyContentType.RADL_JSON, Arrays.asList(0, 1));
     checkServiceResponse(response);
   }
 
@@ -602,18 +602,18 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
 
   @Test(expected = NoEnumFoundException.class)
   public void testRestApiBodyContentType() throws ImClientException {
-    if (!RestApiBodyContentType.TOSCA.equals(RestApiBodyContentType
-        .getEnumFromValue(RestApiBodyContentType.TOSCA.toString()))) {
+    if (!BodyContentType.TOSCA.equals(BodyContentType
+        .getEnumFromValue(BodyContentType.TOSCA.toString()))) {
       Assert.fail();
     }
-    Assert.assertNull(RestApiBodyContentType.getEnumFromValue("not_valid"));
+    Assert.assertNull(BodyContentType.getEnumFromValue("not_valid"));
   }
 
   @Test
   public void testInfrastructureOutputs() throws ImClientException {
-    InfrastructureManagerApiClient client = getImApiClient();
+    InfrastructureManagerApi client = getImApiClient();
     String infId = getInfrastructureId();
-    InfrastructureStatus result = client.getInfrastructureOutputs(infId);
+    ImOutputValues result = client.getInfrastructureOutputs(infId);
     Map<String, Object> properties = result.getProperties();
     String galaxyUrl =
         (String) properties.get(EXPECTED_INFRASTRUCTURE_OUTPUT_GALAXY_URL_KEY);
@@ -624,13 +624,13 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
   @Test
   public void testAuthorizationFileWithInternalPaths()
       throws ImClientException {
-    InfrastructureManagerApiClient imApiClient =
-        new InfrastructureManagerApiClient(IM_DUMMY_PROVIDER_URL,
+    InfrastructureManagerApi imApiClient =
+        new InfrastructureManagerApi(IM_DUMMY_PROVIDER_URL,
             AUTH_FILE_PATH_WITH_INTERNAL_PATHS);
 
     ServiceResponse response = imApiClient.createInfrastructure(
         new NoNullOrEmptyFile(new Utf8File(TOSCA_FILE_PATH)).read(),
-        RestApiBodyContentType.TOSCA, false);
+        BodyContentType.TOSCA, false);
 
     checkServiceResponse(response);
     String[] parsedUri = response.getResult().split("/");

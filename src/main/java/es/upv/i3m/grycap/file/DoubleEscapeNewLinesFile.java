@@ -28,16 +28,20 @@ public final class DoubleEscapeNewLinesFile implements File {
 
   /**
    * Read the file specified and escapes all the new lines (i.e. replace all the
-   * '\n' with '\\n').
+   * '\n' with '\\\\n').<br>
+   * Implemented to provide compatibility with the IM.
    *
-   * @return : String with the newlines replaced
-   * @throws FileException
-   *           : file related exception
+   * @return : String with the content of the file and the new lines replaced
    */
   @Override
   public String read() throws FileException {
 
     return this.file.read().replace("\n", "\\\\n");
+  }
+
+  @Override
+  public String getFilePath() {
+    return file.getFilePath();
   }
 
 }

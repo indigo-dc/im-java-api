@@ -20,7 +20,7 @@ import es.upv.i3m.grycap.im.exceptions.NoEnumFoundException;
 import es.upv.i3m.grycap.im.lang.ImMessages;
 
 /**
- * Stores the possible VM states.
+ * Stores the virtual machine states.
  */
 public enum VmStates {
 
@@ -50,13 +50,11 @@ public enum VmStates {
 
   /**
    * Returns a VmState if the String passed is the same as one of the states of
-   * the enum<br>
+   * the enumerator.<br>
    * 
    * @param value
    *          : string of the value to retrieve
-   * @return A VmState, null if not found.
-   * @throws NoEnumFoundException
-   *           : No enumerator found
+   * @return A VmProperty
    */
   public static VmStates getEnumFromValue(String value)
       throws NoEnumFoundException {

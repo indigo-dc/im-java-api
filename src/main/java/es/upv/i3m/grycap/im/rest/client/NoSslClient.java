@@ -14,25 +14,20 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.im.exceptions;
+package es.upv.i3m.grycap.im.rest.client;
 
-/**
- * Exception launched when a enumerator is not found between the predefined
- * ones.
- */
-public class NoEnumFoundException extends ImClientException {
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 
-  private static final long serialVersionUID = -1418837501975744151L;
+public class NoSslClient implements RestClient {
 
-  public NoEnumFoundException(String message) {
-    super(message);
-  }
-
-  public NoEnumFoundException(String message, Exception ex) {
-    super(message, ex);
-  }
-
-  public NoEnumFoundException(Exception ex) {
-    super(ex);
+  /**
+   * Build a new Rest client.
+   * 
+   * @return : new REST client
+   */
+  @Override
+  public Client createClient() {
+    return ClientBuilder.newBuilder().build();
   }
 }

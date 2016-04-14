@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.im.api;
+package es.upv.i3m.grycap.im.pojo;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +32,7 @@ import java.util.Map;
  * Pojo class used to store the JSON values returned by the IM.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class InfrastructureStatus {
+public class ImOutputValues {
 
   @JsonIgnore
   private Map<String, Object> properties = new HashMap<String, Object>();
@@ -52,5 +56,27 @@ public class InfrastructureStatus {
   @JsonAnySetter
   public void setProperty(String name, Object value) {
     this.properties.put(name, value);
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this);
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder().append(properties).toHashCode();
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other == this) {
+      return true;
+    }
+    if (other instanceof ImOutputValues) {
+      ImOutputValues rhs = (ImOutputValues) other;
+      return new EqualsBuilder().append(properties, rhs.properties).isEquals();
+    }
+    return false;
   }
 }

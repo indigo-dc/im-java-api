@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.im.client;
+package es.upv.i3m.grycap.im.rest.client;
 
 import es.upv.i3m.grycap.file.EscapeNewLinesFile;
 import es.upv.i3m.grycap.file.FileWithInternalPath;
@@ -23,52 +23,97 @@ import es.upv.i3m.grycap.file.Utf8File;
 import es.upv.i3m.grycap.im.exceptions.FileException;
 import es.upv.i3m.grycap.im.exceptions.ImClientException;
 import es.upv.i3m.grycap.im.lang.ImMessages;
+import es.upv.i3m.grycap.im.rest.client.parameters.RestParameter;
+import es.upv.i3m.grycap.im.rest.client.ssl.SslTrustAllClient;
 import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriBuilderException;
 
 /**
  * Manage the REST methods to communicate with the IM infrastructure.
  */
-public class InfrastructureManagerRestClient {
+public class InfrastructureManagerClient {
 
-  // URL of the REST Service
-  private final String target;
-  // Authorization file
-  private final String authFile;
-  // Header tag used to pass the authorization information
+  private final String imServiceUrl;
+  // Authorization file modified to be sent as value of the Authorization header
+  private final String parsedAuthFile;
   private static final String AUTH_HEADER_TAG = "AUTHORIZATION";
-  // Identifier of an ssl url
-  private static final String SSL_URL = "https";
+  private static final String SSL_URL_ID = "https";
 
   /**
-   * Creates a new client using the 'targetUrl' as endpoint<br>
+   * Creates a new client using the 'imServiceUrl' as endpoint.<br>
    * Loads the authorization file from the parameter 'authFilePath'.
    * 
-   * @param targetUrl
+   * @param imServiceUrl
    *          : url of the IM rest service
    * @param authFilePath
    *          : path of the authorization file
-   * @throws FileException
-   *           : file related exception
    */
-  public InfrastructureManagerRestClient(String targetUrl, String authFilePath)
-      throws FileException {
-    this.target = targetUrl;
-    this.authFile = new FileWithInternalPath(new EscapeNewLinesFile(
+  public InfrastructureManagerClient(final String imServiceUrl,
+      final String authFilePath) throws FileException {
+    this.imServiceUrl = imServiceUrl;
+    this.parsedAuthFile = new FileWithInternalPath(new EscapeNewLinesFile(
         new NoNullOrEmptyFile(new Utf8File(authFilePath)))).read();
   }
 
-  private String getTarget() {
-    return target;
+  private String getImServiceUrl() {
+    return imServiceUrl;
   }
 
-  private String getAuthFile() {
-    return authFile;
+  private String getParsedAuthFile() {
+    return parsedAuthFile;
+  }
+
+  private void logCallInfo(final HttpMethods httpMethodUsed,
+      final String pathUsed) {
+    ImJavaApiLogger.debug(this.getClass(),
+        "Calling REST service: " + httpMethodUsed.getValue() + " '"
+            + getImServiceUrl() + "/" + pathUsed + "'");
+  }
+
+  private void logCallContent(final HttpMethods httpMethodUsed,
+      final String bodyContent) {
+    ImJavaApiLogger.debug(this.getClass(),
+        httpMethodUsed.getValue() + " content '" + bodyContent + "'");
+  }
+
+  /**
+   * Avoid sending a null content in the body of the REST call.<br>
+   * 
+   * @param bodyContent
+   *          : content of the call body
+   * @return : the same body content if not null and an empty string if null
+   */
+  private String normalizeBodyContent(final String bodyContent) {
+    if (bodyContent != null) {
+      return bodyContent;
+    } else {
+      ImJavaApiLogger.info(InfrastructureManagerClient.class,
+          ImMessages.INFO_EMPTY_BODY_CONTENT);
+    }
+    return "";
+  }
+
+  private ServiceResponse genericPostOrPutCall(final HttpMethods httpMethodUsed,
+      final String path, final String requestType, final String bodyContent,
+      final String contentType, final RestParameter... parameters)
+          throws ImClientException {
+
+    // Avoid sending null as body content
+    String normalizedBodyContent = normalizeBodyContent(bodyContent);
+
+    logCallInfo(httpMethodUsed, path);
+    logCallContent(httpMethodUsed, normalizedBodyContent);
+
+    Builder client = createRestClient(path, requestType, parameters);
+    Entity<String> content = Entity.entity(normalizedBodyContent, contentType);
+    Response clientResponse = client.put(content);
+    return new ServiceResponse(clientResponse);
   }
 
   /**
@@ -81,15 +126,12 @@ public class InfrastructureManagerRestClient {
    * @param parameters
    *          : extra parameters for the call (if needed)
    * @return : ServiceResponse wrapper class
-   * @throws ImClientException
-   *           : exception in the rest client
    */
-  public ServiceResponse get(String path, String requestType,
-      RestCallParameter... parameters) throws ImClientException {
-    ImJavaApiLogger.info(this.getClass(),
-        "Calling REST service: GET '" + getTarget() + "/" + path + "'");
+  public ServiceResponse get(final String path, final String requestType,
+      final RestParameter... parameters) throws ImClientException {
+    logCallInfo(HttpMethods.GET, path);
     return new ServiceResponse(
-        getRestClient(path, requestType, parameters).get());
+        createRestClient(path, requestType, parameters).get());
   }
 
   /**
@@ -99,33 +141,20 @@ public class InfrastructureManagerRestClient {
    *          : specific path for the call (e.g. infrastructures/02154-659a)
    * @param requestType
    *          : accepted response media types
-   * @param content
+   * @param bodyContent
    *          : content of the POST call
-   * @param postType
+   * @param contentType
    *          : content type
    * @param parameters
    *          : extra parameters for the call (if needed)
    * @return : ServiceResponse wrapper class
-   * @throws ImClientException
-   *           : exception in the rest client
    */
-  public ServiceResponse post(String path, String requestType, String content,
-      String postType, RestCallParameter... parameters)
-          throws ImClientException {
-    ImJavaApiLogger.info(this.getClass(),
-        "Calling REST service: POST '" + getTarget() + "/" + path + "'");
-    // Normalize the content in case of null
-    String postContent;
-    if (content == null) {
-      ImJavaApiLogger.info(InfrastructureManagerRestClient.class,
-          ImMessages.INFO_EMPTY_POST_CONTENT);
-      postContent = "";
-    } else {
-      postContent = content;
-    }
-    ImJavaApiLogger.debug(this.getClass(), "POST content '" + content + "'");
-    return new ServiceResponse(getRestClient(path, requestType, parameters)
-        .post(Entity.entity(postContent, postType)));
+  public ServiceResponse post(final String path, final String requestType,
+      final String bodyContent, final String contentType,
+      final RestParameter... parameters) throws ImClientException {
+
+    return genericPostOrPutCall(HttpMethods.POST, path, requestType,
+        bodyContent, contentType, parameters);
   }
 
   /**
@@ -135,9 +164,9 @@ public class InfrastructureManagerRestClient {
    *          : specific path for the call (e.g. infrastructures/02154-659a)
    * @param requestType
    *          : accepted response media types
-   * @param content
+   * @param bodyContent
    *          : content of the PUT call
-   * @param putType
+   * @param contentType
    *          : content type
    * @param parameters
    *          : extra parameters for the call (if needed)
@@ -146,25 +175,12 @@ public class InfrastructureManagerRestClient {
    * @throws ImClientException
    *           : exception in the rest client
    */
-  public ServiceResponse put(String path, String requestType, String content,
-      String putType, RestCallParameter... parameters)
-          throws ImClientException {
-    ImJavaApiLogger.info(this.getClass(),
-        "Calling REST service: PUT '" + getTarget() + "/" + path + "'");
+  public ServiceResponse put(final String path, final String requestType,
+      final String bodyContent, final String contentType,
+      final RestParameter... parameters) throws ImClientException {
 
-    // Normalize the content in case of null
-    String putContent;
-    if (content == null) {
-      ImJavaApiLogger.info(InfrastructureManagerRestClient.class,
-          ImMessages.INFO_EMPTY_PUT_CONTENT);
-      putContent = "";
-    } else {
-      putContent = content;
-    }
-
-    ImJavaApiLogger.debug(this.getClass(), "PUT content '" + putContent + "'");
-    return new ServiceResponse(getRestClient(path, requestType, parameters)
-        .put(Entity.entity(putContent, putType)));
+    return genericPostOrPutCall(HttpMethods.PUT, path, requestType, bodyContent,
+        contentType, parameters);
   }
 
   /**
@@ -180,12 +196,12 @@ public class InfrastructureManagerRestClient {
    * @throws ImClientException
    *           : exception in the rest client
    */
-  public ServiceResponse delete(String path, String requestType,
-      RestCallParameter... parameters) throws ImClientException {
-    ImJavaApiLogger.info(this.getClass(),
-        "Calling REST service: DELETE '" + getTarget() + "/" + path + "'");
-    return new ServiceResponse(
-        getRestClient(path, requestType, parameters).delete());
+  public ServiceResponse delete(final String path, final String requestType,
+      final RestParameter... parameters) throws ImClientException {
+    logCallInfo(HttpMethods.DELETE, path);
+    Builder client = createRestClient(path, requestType, parameters);
+    Response clientResponse = client.delete();
+    return new ServiceResponse(clientResponse);
   }
 
   /**
@@ -201,25 +217,24 @@ public class InfrastructureManagerRestClient {
    * @throws InfrastructureManagerRestClientException
    *           : exception in the rest client
    */
-  private Builder getRestClient(String path, String requestType,
-      RestCallParameter... parameters) throws ImClientException {
+  private Builder createRestClient(final String path, final String requestType,
+      final RestParameter... parameters) throws ImClientException {
     checkPath(path);
-    RestClient client = getTarget().startsWith(SSL_URL)
-        ? new SslTrustAllRestClient() : new NoSslRestClient();
+    RestClient client = getImServiceUrl().startsWith(SSL_URL_ID)
+        ? new SslTrustAllClient() : new NoSslClient();
 
     try {
       WebTarget webtarget = client.createClient()
-          .target(UriBuilder.fromUri(getTarget()).build()).path(path);
+          .target(UriBuilder.fromUri(getImServiceUrl()).build()).path(path);
 
       if (parameters != null && parameters.length > 0
           && parameters[0] != null) {
-        for (RestCallParameter parameter : parameters) {
-          webtarget.queryParam(parameter.getParameterName(),
-              parameter.getParameterValues());
+        for (RestParameter parameter : parameters) {
+          webtarget.queryParam(parameter.getName(), parameter.getValues());
         }
       }
       return webtarget.request(requestType).header(AUTH_HEADER_TAG,
-          getAuthFile());
+          getParsedAuthFile());
     } catch (IllegalArgumentException | UriBuilderException
         | ImClientException exception) {
       ImJavaApiLogger.severe(this.getClass(), exception);
@@ -236,7 +251,7 @@ public class InfrastructureManagerRestClient {
    * @throws InfrastructureManagerRestClientException
    *           : exception in the rest client
    */
-  private void checkPath(String path) throws ImClientException {
+  private void checkPath(final String path) throws ImClientException {
     if (path == null || path.isEmpty()) {
       ImJavaApiLogger.severe(this.getClass(), ImMessages.EXCEPTION_PATH_VALUE);
       throw new ImClientException(ImMessages.EXCEPTION_PATH_VALUE);

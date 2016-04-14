@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.im.client;
+package es.upv.i3m.grycap.im.rest.client.ssl;
+
+import es.upv.i3m.grycap.im.rest.client.RestClient;
 
 import org.glassfish.jersey.SslConfigurator;
 
@@ -23,20 +25,20 @@ import javax.net.ssl.SSLContext;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 
-public class SslRestClient implements RestClient {
+public class SslClient implements RestClient {
 
   private SSLContext ctx;
   private HostnameVerifier verifier;
 
-  public SslRestClient() {
+  public SslClient() {
     this.ctx = SslConfigurator.newInstance(true).createSSLContext();
   }
 
-  public SslRestClient(final SSLContext ctx) {
+  public SslClient(final SSLContext ctx) {
     this.ctx = ctx;
   }
 
-  public SslRestClient(final SSLContext ctx, final HostnameVerifier verifier) {
+  public SslClient(final SSLContext ctx, final HostnameVerifier verifier) {
     this.ctx = ctx;
     this.verifier = verifier;
   }

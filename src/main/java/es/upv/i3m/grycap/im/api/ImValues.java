@@ -20,7 +20,7 @@ import es.upv.i3m.grycap.im.exceptions.NoEnumFoundException;
 import es.upv.i3m.grycap.im.lang.ImMessages;
 
 /**
- * Enumerates static values related with the Infrastructure.<br>
+ * Values used in the infrastructure management.
  */
 public enum ImValues {
 
@@ -48,13 +48,11 @@ public enum ImValues {
 
   /**
    * Returns a ImValue if the String passed is the same as one of the states of
-   * the enum<br>
+   * the enumerator.<br>
    * 
    * @param value
    *          : string of the value to retrieve
-   * @return A ImValue, null if not found.
-   * @throws NoEnumFoundException
-   *           : No enumerator found
+   * @return a ImValue
    */
   public static ImValues getEnumFromValue(String value)
       throws NoEnumFoundException {
@@ -65,6 +63,7 @@ public enum ImValues {
         }
       }
     }
-    throw new NoEnumFoundException(ImMessages.EXCEPTION_NO_IM_VALUE_ENUM_FOUND);
+    throw new NoEnumFoundException(
+        ImMessages.EXCEPTION_NO_IM_VALUE_ENUM_FOUND + ": " + value);
   }
 }

@@ -1,4 +1,4 @@
-package es.upv.i3m.grycap.im.client;
+package es.upv.i3m.grycap.im.rest.client;
 
 import es.upv.i3m.grycap.im.exceptions.ImClientException;
 

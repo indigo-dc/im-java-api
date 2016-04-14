@@ -28,6 +28,8 @@ public final class ImMessages {
       "Error while reading authorization file";
   public static final String EXCEPTION_READING_FILE =
       "Error while reading the file";
+  public static final String EXCEPTION_FILE_NULL_OR_EMPTY =
+      "Invalid or empty file";
   public static final String EXCEPTION_AUTHORIZATION_NULL_OR_EMPTY =
       "The authorization file is invalid or empty";
   public static final String EXCEPTION_PATH_VALUE =
@@ -54,9 +56,8 @@ public final class ImMessages {
       "Null result set in the service response";
 
   // Info
-  public static final String INFO_EMPTY_PUT_CONTENT = "Empty PUT body content";
-  public static final String INFO_EMPTY_POST_CONTENT =
-      "Empty POST body content";
+  public static final String INFO_EMPTY_BODY_CONTENT =
+      "REST call with empty body content";
 
   private ImMessages() {
   }

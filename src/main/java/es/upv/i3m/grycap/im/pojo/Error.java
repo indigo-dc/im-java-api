@@ -21,7 +21,8 @@ public class Error {
   @JsonProperty("code")
   private Integer code;
   @JsonIgnore
-  private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+  private Map<String, Object> additionalProperties =
+      new HashMap<String, Object>();
 
   @JsonProperty("message")
   public String getMessage() {
@@ -75,8 +76,8 @@ public class Error {
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder().append(message).append(code).append(additionalProperties)
-        .toHashCode();
+    return new HashCodeBuilder().append(message).append(code)
+        .append(additionalProperties).toHashCode();
   }
 
   @Override
@@ -84,12 +85,13 @@ public class Error {
     if (other == this) {
       return true;
     }
-    if ((other instanceof Error) == false) {
-      return false;
+    if (other instanceof Error) {
+      Error rhs = (Error) other;
+      return new EqualsBuilder().append(message, rhs.message)
+          .append(code, rhs.code)
+          .append(additionalProperties, rhs.additionalProperties).isEquals();
     }
-    Error rhs = ((Error) other);
-    return new EqualsBuilder().append(message, rhs.message).append(code, rhs.code)
-        .append(additionalProperties, rhs.additionalProperties).isEquals();
+    return false;
   }
 
 }

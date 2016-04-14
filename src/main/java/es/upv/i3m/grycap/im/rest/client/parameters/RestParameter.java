@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.im.client;
+package es.upv.i3m.grycap.im.rest.client.parameters;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
+public interface RestParameter {
 
-public class NoSslRestClient implements RestClient {
+  public void addValue(Object value);
 
-  /**
-   * Build a new Rest client.
-   * 
-   * @return : new REST client
-   */
-  @Override
-  public Client createClient() {
-    return ClientBuilder.newBuilder().build();
-  }
+  public String getName();
+
+  public Object[] getValues();
 }

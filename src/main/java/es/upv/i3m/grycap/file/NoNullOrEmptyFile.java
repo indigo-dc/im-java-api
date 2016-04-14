@@ -16,7 +16,6 @@
 
 package es.upv.i3m.grycap.file;
 
-import es.upv.i3m.grycap.im.exceptions.AuthorizationFileException;
 import es.upv.i3m.grycap.im.exceptions.FileException;
 import es.upv.i3m.grycap.im.lang.ImMessages;
 import es.upv.i3m.grycap.logger.ImJavaApiLogger;
@@ -41,11 +40,16 @@ public final class NoNullOrEmptyFile implements File {
     String fileContent = this.file.read();
     if (fileContent == null || fileContent.isEmpty()) {
       ImJavaApiLogger.severe(this.getClass(),
-          ImMessages.EXCEPTION_AUTHORIZATION_NULL_OR_EMPTY);
-      throw new AuthorizationFileException(
-          ImMessages.EXCEPTION_AUTHORIZATION_NULL_OR_EMPTY);
+          ImMessages.EXCEPTION_FILE_NULL_OR_EMPTY + ": "
+              + this.file.getFilePath());
+      throw new FileException(ImMessages.EXCEPTION_FILE_NULL_OR_EMPTY);
     }
     return fileContent;
+  }
+
+  @Override
+  public String getFilePath() {
+    return this.file.getFilePath();
   }
 
 }

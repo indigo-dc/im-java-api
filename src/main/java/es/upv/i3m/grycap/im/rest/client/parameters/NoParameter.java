@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.im.exceptions;
+package es.upv.i3m.grycap.im.rest.client.parameters;
 
 /**
- * Exception launched when a enumerator is not found between the predefined
- * ones.
+ * Defined to avoid sending null as parameter to the REST call.
  */
-public class NoEnumFoundException extends ImClientException {
+public class NoParameter implements RestParameter {
 
-  private static final long serialVersionUID = -1418837501975744151L;
-
-  public NoEnumFoundException(String message) {
-    super(message);
+  @Override
+  public void addValue(Object value) {
+    // No need to add anything
   }
 
-  public NoEnumFoundException(String message, Exception ex) {
-    super(message, ex);
+  @Override
+  public String getName() {
+    return "";
   }
 
-  public NoEnumFoundException(Exception ex) {
-    super(ex);
+  @Override
+  public Object[] getValues() {
+    return new Object[0];
   }
 }

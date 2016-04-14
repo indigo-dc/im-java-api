@@ -20,7 +20,7 @@ import es.upv.i3m.grycap.im.exceptions.NoEnumFoundException;
 import es.upv.i3m.grycap.im.lang.ImMessages;
 
 /**
- * Enumerates the most common properties of the VM.<br>
+ * Stores the most common properties of the virtual machines deployed by the IM.
  */
 public enum VmProperties {
 
@@ -60,13 +60,11 @@ public enum VmProperties {
 
   /**
    * Returns a VmProperty if the String passed is the same as one of the states
-   * of the enum<br>
+   * of the enumerator.<br>
    * 
    * @param value
    *          : string of the value to retrieve
-   * @return A VmProperty, null if not found.
-   * @throws NoEnumFoundException
-   *           : No enumerator found
+   * @return a VmProperty
    */
   public static VmProperties getEnumFromValue(String value)
       throws NoEnumFoundException {
@@ -78,6 +76,6 @@ public enum VmProperties {
       }
     }
     throw new NoEnumFoundException(
-        ImMessages.EXCEPTION_NO_VM_PROPERTY_ENUM_FOUND);
+        ImMessages.EXCEPTION_NO_VM_PROPERTY_ENUM_FOUND + ": " + value);
   }
 }

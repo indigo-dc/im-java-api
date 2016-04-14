@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.im.client;
+package es.upv.i3m.grycap.im.rest.client.parameters;
 
 import es.upv.i3m.grycap.im.lang.ImMessages;
 import es.upv.i3m.grycap.logger.ImJavaApiLogger;
@@ -26,23 +26,42 @@ import java.util.List;
  * Stores the parameters passed to the REST calls in a (name, ...values)
  * structure
  */
-public class RestCallParameter {
+public class Parameter implements RestParameter {
 
-  private String parameterName;
-  private List<Object> parameterValues;
+  private final String name;
+  private final List<Object> values;
 
-  public RestCallParameter(String parameterName) {
-    setParameterName(parameterName);
+  public Parameter(String name) {
+    this.name = name;
+    this.values = new ArrayList<>();
   }
 
-  public RestCallParameter(String parameterName, Object parameterValue) {
-    setParameterName(parameterName);
-    addValue(parameterValue);
+  /**
+   * Create a REST parameter.
+   * 
+   * @param name
+   *          : name of the parameter
+   * @param values
+   *          : value of the parameter
+   */
+  public Parameter(String name, Object values) {
+    this.name = name;
+    this.values = new ArrayList<>();
+    addValue(values);
   }
 
-  public RestCallParameter(String parameterName, List<?> parameterValue) {
-    setParameterName(parameterName);
-    setParameterValues(parameterValue);
+  /**
+   * Create a REST parameter.
+   * 
+   * @param name
+   *          : name of the parameter
+   * @param values
+   *          : list of values of the parameter
+   */
+  public Parameter(String name, List<?> values) {
+    this.name = name;
+    this.values = new ArrayList<>();
+    setParameterValues(values);
   }
 
   /**
@@ -51,37 +70,19 @@ public class RestCallParameter {
    * @param value
    *          : generic value to add
    */
+  @Override
   public void addValue(Object value) {
-    if (parameterValues == null) {
-      parameterValues = new ArrayList<>();
-    }
-    parameterValues.add(value);
+    values.add(value);
   }
 
-  private void checkNullValue(Object value) {
-    // Runtime exception if returns a null value
-    if (value == null) {
-      ImJavaApiLogger.severe(this.getClass(), ImMessages.EXCEPTION_NULL_VALUE);
-      throw new NullPointerException();
-    }
+  @Override
+  public String getName() {
+    return name;
   }
 
-  public String getParameterName() {
-    checkNullValue(parameterName);
-    return parameterName;
-  }
-
-  public Object[] getParameterValues() {
-    checkNullValue(parameterValues);
-    return parameterValues.toArray();
-  }
-
-  private void setParameterName(String parameterName) {
-    if (parameterName == null) {
-      ImJavaApiLogger.warning(this.getClass(),
-          ImMessages.WARNING_NULL_PARAMETER_NAME);
-    }
-    this.parameterName = parameterName;
+  @Override
+  public Object[] getValues() {
+    return values.toArray();
   }
 
   private void setParameterValues(List<?> parameterValues) {
