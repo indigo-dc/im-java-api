@@ -151,7 +151,8 @@ public class InfrastructureManagerApiClientTest {
     ServiceResponse response = null;
     try {
       response = getImApiClient().addResource(getInfrastructureId(),
-          new Utf8File(toscaFilePath).read(), RestApiBodyContentType.TOSCA, false);
+          new Utf8File(toscaFilePath).read(), RestApiBodyContentType.TOSCA,
+          false);
     } catch (FileException exception) {
       Assert.fail();
     }
@@ -183,7 +184,8 @@ public class InfrastructureManagerApiClientTest {
   public void createInfrastructure() throws ImClientException {
     try {
       ServiceResponse response = getImApiClient().createInfrastructure(
-          new Utf8File(TOSCA_FILE_PATH).read(), RestApiBodyContentType.TOSCA, false);
+          new Utf8File(TOSCA_FILE_PATH).read(), RestApiBodyContentType.TOSCA,
+          false);
 
       checkServiceResponse(response);
       String[] parsedUri = response.getResult().split("/");
@@ -263,7 +265,7 @@ public class InfrastructureManagerApiClientTest {
   @Test
   public void testGetInfrastructureState() throws ImClientException {
     ServiceResponse response =
-        getImApiClient().getInfrastructureState(getInfrastructureId(), false);
+        getImApiClient().getInfrastructureState(getInfrastructureId());
     checkServiceResponse(response);
     checkStringHasContent(response.getResult());
   }
@@ -328,8 +330,8 @@ public class InfrastructureManagerApiClientTest {
   @Test
   public void testRemoveResourceNoContext() throws ImClientException {
     waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
-    ServiceResponse response =
-        getImApiClient().removeResource(getInfrastructureId(), VM_DEFAULT_ID, false);
+    ServiceResponse response = getImApiClient()
+        .removeResource(getInfrastructureId(), VM_DEFAULT_ID, false);
     checkServiceResponse(response);
   }
 
