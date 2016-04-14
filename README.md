@@ -26,7 +26,7 @@ this command compiles the code and executes the tests. If you want to compile th
 ```
 mvn clean install -DskipTests
 ```
-When the compilation finishes you will have a **target** folder. Inside you can find the compiled java classes and the packaged jars. The jar **im-java-api-0.0.1-jar-with-dependencies.jar** includes all the libraries needed by the im-java-api and can be used independently. The jar **im-java-api-0.0.1.jar** contains only the im-java-api compiled code and needs external libraries to work. The external libraries needed by the project are specified in the pom.xml
+When the compilation finishes you will have a **target** folder. Inside you can find the compiled java classes and the packaged jars. The jar **im-java-api-x.x.x-jar-with-dependencies.jar** includes all the libraries needed by the im-java-api and can be used independently. The jar **im-java-api-x.x.x.jar** contains only the im-java-api compiled code and needs external libraries to work. The external libraries needed by the project are specified in the pom.xml
 
 1.3 CONFIGURATION
 -----------------
@@ -57,18 +57,3 @@ ServiceResponse response = getImApiClient().createInfrastructure(FileIO.readUTF8
 imClient.destroyInfrastructure(getInfrastructureId());
 ```
 The **ServiceResponse** class returned by the **createInfrastructure** method contains all the information of the web service response. Check the **ServiceResponse** class methods for more information.
-
-### 1.4.3 Get VM property
-The enum class **VmProperties.java** stores the main properties of the virtual machines. The **getVMProperty** method of the API admits the enum class VmProperties or a String if the user wants an specific property not listed in the class.
-```
-getImApiClient().getVMProperty(getInfrastructureId(), VM_DEFAULT_ID, VmProperties.STATE);
-```
-is equivalent to 
-```
-getImApiClient().getVMProperty(getInfrastructureId(), VM_DEFAULT_ID, "state");
-```
-
-### 1.4.4 Stop the infrastructure
-```
-getImApiClient().stopInfrastructure(getInfrastructureId());
-```

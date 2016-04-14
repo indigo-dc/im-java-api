@@ -156,7 +156,8 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
     ServiceResponse response = null;
     try {
       response = getImApiClient().addResource(getInfrastructureId(),
-          new Utf8File(toscaFilePath).read(), RestApiBodyContentType.TOSCA);
+          new Utf8File(toscaFilePath).read(), RestApiBodyContentType.TOSCA,
+          false);
     } catch (FileException exception) {
       Assert.fail();
     }
@@ -189,7 +190,7 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
     try {
       ServiceResponse response = getImApiClient().createInfrastructure(
           new NoNullOrEmptyFile(new Utf8File(TOSCA_FILE_PATH)).read(),
-          RestApiBodyContentType.TOSCA);
+          RestApiBodyContentType.TOSCA, false);
 
       checkServiceResponse(response);
       String[] parsedUri = response.getResult().split("/");
@@ -205,7 +206,7 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
   @After
   public void destroyInfrastructure() throws ImClientException {
     checkServiceResponse(
-        getImApiClient().destroyInfrastructure(getInfrastructureId()));
+        getImApiClient().destroyInfrastructure(getInfrastructureId(), false));
   }
 
   @Test
@@ -223,7 +224,7 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
     String test = IM_DUMMY_PROVIDER_URL + "/infrastructures/"
         + getInfrastructureId() + "/vms/0";
     ServiceResponse response =
-        getImApiClient().getInfrastructureInfo(getInfrastructureId());
+        getImApiClient().getInfrastructureInfo(getInfrastructureId(), false);
     checkServiceResponse(response);
     if (!response.getResult().equals(test)) {
       Assert.fail();
@@ -254,7 +255,7 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
   @Test
   public void testGetInfrastructureContMsg() throws ImClientException {
     ServiceResponse response =
-        getImApiClient().getInfrastructureContMsg(getInfrastructureId());
+        getImApiClient().getInfrastructureContMsg(getInfrastructureId(), false);
     checkServiceResponse(response);
   }
 
@@ -269,7 +270,7 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
   @Test
   public void testGetInfrastructureState() throws ImClientException {
     ServiceResponse response =
-        getImApiClient().getInfrastructureState(getInfrastructureId());
+        getImApiClient().getInfrastructureState(getInfrastructureId(), false);
     checkServiceResponse(response);
     checkStringHasContent(response.getResult());
   }
@@ -334,8 +335,8 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
   @Test
   public void testRemoveResourceNoContext() throws ImClientException {
     waitUntilRunningOrUncofiguredState(VM_DEFAULT_ID);
-    ServiceResponse response =
-        getImApiClient().removeResource(getInfrastructureId(), VM_DEFAULT_ID);
+    ServiceResponse response = getImApiClient()
+        .removeResource(getInfrastructureId(), VM_DEFAULT_ID, false);
     checkServiceResponse(response);
   }
 
@@ -629,12 +630,13 @@ public class InfrastructureManagerApiClientTest extends GenericTestWatcher {
 
     ServiceResponse response = imApiClient.createInfrastructure(
         new NoNullOrEmptyFile(new Utf8File(TOSCA_FILE_PATH)).read(),
-        RestApiBodyContentType.TOSCA);
+        RestApiBodyContentType.TOSCA, false);
 
     checkServiceResponse(response);
     String[] parsedUri = response.getResult().split("/");
     // Get the last element which is the infId
     String infrastructureId = parsedUri[parsedUri.length - 1];
-    checkServiceResponse(imApiClient.destroyInfrastructure(infrastructureId));
+    checkServiceResponse(
+        imApiClient.destroyInfrastructure(infrastructureId, false));
   }
 }
