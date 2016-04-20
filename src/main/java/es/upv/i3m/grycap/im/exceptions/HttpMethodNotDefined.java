@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.im.rest.client;
+package es.upv.i3m.grycap.im.exceptions;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
+public class HttpMethodNotDefined extends ImClientException {
 
-public class NoSslClient implements RestClient {
+  private static final long serialVersionUID = 5601812724411282787L;
 
-  /**
-   * Build a new Rest client.
-   * 
-   * @return : new REST client
-   */
-  @Override
-  public Client createClient() {
-    return ClientBuilder.newBuilder().register(ImResponsesReader.class).build();
+  public HttpMethodNotDefined(String message) {
+    super(message);
+  }
+
+  public HttpMethodNotDefined(String message, Exception ex) {
+    super(message, ex);
   }
 }

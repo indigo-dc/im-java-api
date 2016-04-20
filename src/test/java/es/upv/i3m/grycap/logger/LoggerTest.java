@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap;
+package es.upv.i3m.grycap.logger;
 
+import es.upv.i3m.grycap.GenericTestWatcher;
 import es.upv.i3m.grycap.im.exceptions.AuthorizationFileException;
 import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 

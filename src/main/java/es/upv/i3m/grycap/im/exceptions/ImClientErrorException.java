@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.im.rest.client;
+package es.upv.i3m.grycap.im.exceptions;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
+import es.upv.i3m.grycap.im.pojo.ResponseError;
 
-public class NoSslClient implements RestClient {
+public class ImClientErrorException extends ImClientException {
 
-  /**
-   * Build a new Rest client.
-   * 
-   * @return : new REST client
-   */
-  @Override
-  public Client createClient() {
-    return ClientBuilder.newBuilder().register(ImResponsesReader.class).build();
+  private static final long serialVersionUID = 6007438931649254821L;
+  private final ResponseError responseError;
+
+  public ImClientErrorException(ResponseError responseError) {
+    this.responseError = responseError;
   }
+
+  public ResponseError getResponseError() {
+    return responseError;
+  }
+
 }

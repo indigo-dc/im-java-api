@@ -1,5 +1,5 @@
 /**
- * Copyright (C) GRyCAP - I3M - UPV 
+ * Copyright (C) GRyCAP - I3M - UPV
  *
  * <p>Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.im.rest.client;
+package es.upv.i3m.grycap.im.pojo;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
+import java.util.Map;
 
-public class NoSslClient implements RestClient {
+public class VirtualMachineInfo extends GenericPojo<Map<String, Object>> {
 
-  /**
-   * Build a new Rest client.
-   * 
-   * @return : new REST client
-   */
-  @Override
-  public Client createClient() {
-    return ClientBuilder.newBuilder().register(ImResponsesReader.class).build();
+  public VirtualMachineInfo(Map<String, Object> property) {
+    super(property);
   }
+
 }

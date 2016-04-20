@@ -14,28 +14,26 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.im.api;
+package es.upv.i3m.grycap.im;
 
 import es.upv.i3m.grycap.im.exceptions.NoEnumFoundException;
 import es.upv.i3m.grycap.im.lang.ImMessages;
 
 /**
- * Stores the virtual machine states.
+ * Values used in the infrastructure management.
  */
-public enum VmStates {
+public enum ImValues {
 
-  PENDING("pending"),
-  RUNNING("running"),
-  UNCONFIGURED("unconfigured"),
-  CONFIGURED("configured"),
-  STOPPED("stopped"),
-  OFF("off"),
-  FAILED("failed"),
-  UNKNOWN("unknown");
+  START("start"),
+  STOP("stop"),
+  CONTMSG("contmsg"),
+  RADL("radl"),
+  STATE("state"),
+  RECONFIGURE("reconfigure");
 
   private final String value;
 
-  VmStates(String value) {
+  ImValues(String value) {
     this.value = value;
   }
 
@@ -49,23 +47,23 @@ public enum VmStates {
   }
 
   /**
-   * Returns a VmState if the String passed is the same as one of the states of
+   * Returns a ImValue if the String passed is the same as one of the states of
    * the enumerator.<br>
    * 
    * @param value
    *          : string of the value to retrieve
-   * @return A VmProperty
+   * @return a ImValue
    */
-  public static VmStates getEnumFromValue(String value)
+  public static ImValues getEnumFromValue(String value)
       throws NoEnumFoundException {
     if (value != null) {
-      for (VmStates property : VmStates.values()) {
-        if (value.equalsIgnoreCase(property.getValue())) {
-          return property;
+      for (ImValues imValue : ImValues.values()) {
+        if (value.equalsIgnoreCase(imValue.getValue())) {
+          return imValue;
         }
       }
     }
-    throw new NoEnumFoundException(ImMessages.EXCEPTION_NO_VM_STATE_ENUM_FOUND);
+    throw new NoEnumFoundException(
+        ImMessages.EXCEPTION_NO_IM_VALUE_ENUM_FOUND + ": " + value);
   }
-
 }

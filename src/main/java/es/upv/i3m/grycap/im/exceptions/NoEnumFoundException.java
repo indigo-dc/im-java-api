@@ -16,10 +16,6 @@
 
 package es.upv.i3m.grycap.im.exceptions;
 
-/**
- * Exception launched when a enumerator is not found between the predefined
- * ones.
- */
 public class NoEnumFoundException extends ImClientException {
 
   private static final long serialVersionUID = -1418837501975744151L;

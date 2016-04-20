@@ -16,6 +16,7 @@
 
 package es.upv.i3m.grycap.im.rest.client.ssl;
 
+import es.upv.i3m.grycap.im.rest.client.ImResponsesReader;
 import es.upv.i3m.grycap.im.rest.client.RestClient;
 
 import org.glassfish.jersey.SslConfigurator;
@@ -54,8 +55,10 @@ public class SslClient implements RestClient {
       // Generate generic SSL context
       ctx = SslConfigurator.newInstance(true).createSSLContext();
     }
-    return verifier == null ? ClientBuilder.newBuilder().sslContext(ctx).build()
+    return verifier == null
+        ? ClientBuilder.newBuilder().sslContext(ctx)
+            .register(ImResponsesReader.class).build()
         : ClientBuilder.newBuilder().sslContext(ctx).hostnameVerifier(verifier)
-            .build();
+            .register(ImResponsesReader.class).build();
   }
 }

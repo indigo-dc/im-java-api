@@ -16,9 +16,6 @@
 
 package es.upv.i3m.grycap.im.exceptions;
 
-/**
- * Generic exception launched when an error occurs in the ImClient.
- */
 public class ImClientException extends Exception {
 
   private static final long serialVersionUID = -6282342599838768683L;

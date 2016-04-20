@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.im.api;
+package es.upv.i3m.grycap.im;
 
 import es.upv.i3m.grycap.im.exceptions.NoEnumFoundException;
 import es.upv.i3m.grycap.im.lang.ImMessages;

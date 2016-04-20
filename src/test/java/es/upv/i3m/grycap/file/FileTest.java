@@ -1,5 +1,6 @@
-package es.upv.i3m.grycap;
+package es.upv.i3m.grycap.file;
 
+import es.upv.i3m.grycap.GenericTestWatcher;
 import es.upv.i3m.grycap.file.EscapeNewLinesFile;
 import es.upv.i3m.grycap.file.FileWithInternalPath;
 import es.upv.i3m.grycap.file.NoNullOrEmptyFile;
