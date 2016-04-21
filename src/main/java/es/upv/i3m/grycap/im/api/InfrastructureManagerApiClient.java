@@ -27,6 +27,8 @@ import es.upv.i3m.grycap.im.exceptions.ToscaContentTypeNotSupportedException;
 import es.upv.i3m.grycap.im.lang.ImMessages;
 import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -201,8 +203,6 @@ public class InfrastructureManagerApiClient {
    * 
    * @param infId
    *          : infrastructure id
-   * @param requestJson
-   *          : specifies the format of the result in the ServiceResponse
    * @return : string with the infrastructure state
    * @throws ImClientException
    *           : exception in the IM client
@@ -322,6 +322,31 @@ public class InfrastructureManagerApiClient {
             + PATH_VMS + PATH_SEPARATOR + vmId,
         requestJson ? MediaType.APPLICATION_JSON : MEDIA_TYPE_TEXT_WILDCARD,
         parameters);
+  }
+
+  /**
+   * Undeploy the virtual machine with ID vmId associated to the infrastructure with ID 'infId'.<br>
+   * The context parameter is optional and is a flag to specify if the contextualization step will
+   * be launched just after the VM addition.<br>
+   * As default the contextualization flag is set to True.
+   * 
+   * @param infId
+   *          : infrastructure id
+   * @param vmIds
+   *          : list of virtual machine id
+   * @param requestJson
+   *          : specifies the format of the result in the ServiceResponse
+   * @param context
+   *          : flag to specify if the contextualization step will be launched just after the VM
+   *          addition
+   * @return : True if undeploy successful, false otherwise
+   * @throws ImClientException
+   *           : exception in the IM client
+   */
+  public ServiceResponse removeResource(String infId, List<String> vmIds, boolean requestJson,
+      boolean... context) throws ImClientException {
+    String ids = StringUtils.join(vmIds, ",");
+    return removeResource(infId, ids, requestJson, context);
   }
 
   /**
@@ -589,3 +614,4 @@ public class InfrastructureManagerApiClient {
     }
   }
 }
+
