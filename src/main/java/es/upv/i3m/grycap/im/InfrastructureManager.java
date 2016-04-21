@@ -109,19 +109,17 @@ public class InfrastructureManager {
 
   /**
    * Return information about the virtual machine with ID vmId associated to the
-   * infrastructure with ID infId.<br>
+   * infrastructure with ID infId.
    * 
    * @param infId
    *          : infrastructure id
    * @param vmId
    *          : virtual machine id
-   * @return : Json RADL file.
+   * @return : POJO with the vm info.
    */
-  @SuppressWarnings("unchecked")
-  public List<VirtualMachineInfo> getVmInfo(String infId, String vmId)
-      throws ImClientException {
+  public VirtualMachineInfo getVmInfo(String infId, String vmId) throws ImClientException {
     return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId
-        + PATH_SEPARATOR + PATH_VMS + PATH_SEPARATOR + vmId, List.class);
+        + PATH_SEPARATOR + PATH_VMS + PATH_SEPARATOR + vmId, VirtualMachineInfo.class);
   }
 
   /**
@@ -204,7 +202,7 @@ public class InfrastructureManager {
    * If success, it is returned a list of URIs of the new virtual machines. <br>
    * The context parameter is optional and is a flag to specify if the
    * contextualization step will be launched just after the VM addition.<br>
-   * As default the contextualization flag is set to True.
+   * If not specified the contextualization flag is set to True.
    * 
    * @param infId
    *          : infrastructure id
@@ -333,18 +331,16 @@ public class InfrastructureManager {
    * @param bodyContentType
    *          : set the body content type. Can be RADL or RADL_JSON
    * 
-   * @return : Json RADL with information about the virtual machine modified
+   * @return : POJO with information about the virtual machine modified
    */
-  @SuppressWarnings("unchecked")
-  public List<VirtualMachineInfo> alterVm(String infId, String vmId,
-      String radlFile, BodyContentType bodyContentType)
-      throws ImClientException {
+  public VirtualMachineInfo alterVm(String infId, String vmId, String radlFile,
+      BodyContentType bodyContentType) throws ImClientException {
     // The content type must not be TOSCA
     failIfToscaContentType(bodyContentType);
     String path = PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
         + PATH_VMS + PATH_SEPARATOR + vmId;
     return getImClient().put(path, radlFile, bodyContentType.getValue(),
-        List.class);
+        VirtualMachineInfo.class);
   }
 
   /**

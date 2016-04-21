@@ -151,19 +151,16 @@ public class InfrastructureManagerTest extends ImTestWatcher {
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public void testGetVmInfo() throws ImClientException {
-    List<VirtualMachineInfo> vmInfo =
-        getIm().getVmInfo(getInfrastructureId(), VM_DEFAULT_ID);
-
-    Assert.assertEquals(3, vmInfo.size());
+    VirtualMachineInfo vmInfo = getIm().getVmInfo(getInfrastructureId(), VM_DEFAULT_ID);
+    List<Map<String, Object>> vmProperties = vmInfo.getVmProperties();
 
     // Check the value of the first map
-    Map<?, ?> info = (Map<String, Object>) vmInfo.get(0);
+    Map<?, ?> info = (Map<String, Object>) vmProperties.get(0);
     Assert.assertEquals("yes", info.get("outbound"));
 
     // Check an internal map inside the map
-    Map<?, ?> internalInfo = (Map<String, Object>) vmInfo.get(2);
+    Map<?, ?> internalInfo = (Map<String, Object>) vmProperties.get(2);
     List<?> applications = (List<?>) internalInfo.get("disk.0.applications");
     Map<?, ?> applicationsInfo = (Map<?, ?>) applications.get(0);
     Assert.assertEquals("ansible.modules.indigo-dc.zabbix-agent",
@@ -301,22 +298,27 @@ public class InfrastructureManagerTest extends ImTestWatcher {
 
   @Test
   public void testAlterVmRadlContent() throws ImClientException, IOException {
-    getIm().alterVm(getInfrastructureId(), VM_DEFAULT_ID,
+    VirtualMachineInfo vmInfo = getIm().alterVm(getInfrastructureId(), VM_DEFAULT_ID,
         new NoNullOrEmptyFile(new Utf8File(RADL_ALTER_VM_FILE_PATH)).read(),
         BodyContentType.RADL);
+    Assert.assertEquals(false, vmInfo.getVmProperties().isEmpty());
+
     Property cpuCount = getIm().getVmProperty(getInfrastructureId(),
         VM_DEFAULT_ID, VmProperties.CPU_COUNT);
-
     Assert.assertEquals("2", cpuCount.getValue());
   }
 
   @Test
   public void testAlterVmJsonRadlContent()
       throws ImClientException, IOException {
-    getIm().alterVm(getInfrastructureId(), VM_DEFAULT_ID,
-        new NoNullOrEmptyFile(new Utf8File(RADL_JSON_ALTER_VM_FILE_PATH))
-            .read(),
-        BodyContentType.RADL_JSON);
+    VirtualMachineInfo vmInfo =
+        getIm()
+            .alterVm(getInfrastructureId(), VM_DEFAULT_ID,
+                new NoNullOrEmptyFile(
+                    new Utf8File(RADL_JSON_ALTER_VM_FILE_PATH)).read(),
+                BodyContentType.RADL_JSON);
+    Assert.assertEquals(false, vmInfo.getVmProperties().isEmpty());
+
     Property cpuCount = getIm().getVmProperty(getInfrastructureId(),
         VM_DEFAULT_ID, VmProperties.CPU_COUNT);
 

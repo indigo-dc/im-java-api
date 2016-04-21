@@ -31,6 +31,8 @@ public class ImClientTest extends ImTestWatcher {
   private static ImClient imClient;
   private static final String IM_DUMMY_PROVIDER_URL = "http://127.0.0.1:8800";
   private static final String AUTH_FILE_PATH = "./src/test/resources/auth.dat";
+  private static final Integer EXPECTED_ERROR_CODE = 404;
+  private static final String EXPECTED_ERROR_MESSAGE = "Not found: '/'";
 
   private ImClient getImClient() {
     return imClient;
@@ -55,9 +57,7 @@ public class ImClientTest extends ImTestWatcher {
       // Force an error
       getImClient().delete("", String.class);
     } catch (ImClientErrorException exception) {
-      ResponseError error = exception.getResponseError();
-      Assert.assertEquals((Integer) 404, error.getCode());
-      Assert.assertEquals("Not Found", error.getMessage());
+      checkError(exception);
     }
   }
 
@@ -67,9 +67,7 @@ public class ImClientTest extends ImTestWatcher {
       // Force an error
       getImClient().get("", String.class);
     } catch (ImClientErrorException exception) {
-      ResponseError error = exception.getResponseError();
-      Assert.assertEquals((Integer) 404, error.getCode());
-      Assert.assertEquals("Not Found", error.getMessage());
+      checkError(exception);
     }
   }
 
@@ -79,9 +77,7 @@ public class ImClientTest extends ImTestWatcher {
       // Force an error
       getImClient().post("", String.class);
     } catch (ImClientErrorException exception) {
-      ResponseError error = exception.getResponseError();
-      Assert.assertEquals((Integer) 404, error.getCode());
-      Assert.assertEquals("Not Found", error.getMessage());
+      checkError(exception);
     }
   }
 
@@ -91,9 +87,13 @@ public class ImClientTest extends ImTestWatcher {
       // Force an error
       getImClient().put("", String.class);
     } catch (ImClientErrorException exception) {
-      ResponseError error = exception.getResponseError();
-      Assert.assertEquals((Integer) 404, error.getCode());
-      Assert.assertEquals("Not Found", error.getMessage());
+      checkError(exception);
     }
+  }
+
+  private void checkError(ImClientErrorException exception) {
+    ResponseError error = exception.getResponseError();
+    Assert.assertEquals(EXPECTED_ERROR_CODE, error.getCode());
+    Assert.assertEquals(EXPECTED_ERROR_MESSAGE, error.getMessage());
   }
 }

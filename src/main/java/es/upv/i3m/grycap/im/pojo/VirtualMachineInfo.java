@@ -16,12 +16,53 @@
 
 package es.upv.i3m.grycap.im.pojo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import java.util.List;
 import java.util.Map;
 
-public class VirtualMachineInfo extends GenericPojo<Map<String, Object>> {
+/**
+ * This class stores all the information related to the virtual machines.
+ * Depending on the deployment definition of the machines this information can
+ * vary. A generic structure is used to cope with all the possible cases.
+ */
+public class VirtualMachineInfo {
 
-  public VirtualMachineInfo(Map<String, Object> property) {
-    super(property);
+  private final List<Map<String, Object>> vmProperties;
+
+  public VirtualMachineInfo(@JsonProperty("radl") List<Map<String, Object>> vmProperties) {
+    this.vmProperties = vmProperties;
+  }
+
+  public List<Map<String, Object>> getVmProperties() {
+    return vmProperties;
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this);
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder().append(vmProperties).toHashCode();
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other == this) {
+      return true;
+    }
+    if (other instanceof VirtualMachineInfo) {
+      VirtualMachineInfo vmInfo = (VirtualMachineInfo) other;
+      return new EqualsBuilder().append(vmProperties, vmInfo.vmProperties)
+          .isEquals();
+    }
+    return false;
   }
 
 }

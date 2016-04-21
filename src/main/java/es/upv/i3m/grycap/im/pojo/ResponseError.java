@@ -1,5 +1,7 @@
 package es.upv.i3m.grycap.im.pojo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -9,7 +11,8 @@ public class ResponseError {
   private final String message;
   private final Integer code;
 
-  public ResponseError(String message, Integer code) {
+  public ResponseError(@JsonProperty("message") String message,
+      @JsonProperty("code") Integer code) {
     this.message = message;
     this.code = code;
   }

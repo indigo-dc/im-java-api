@@ -128,9 +128,7 @@ public class ImClient {
   private static ResponseError
       createReponseError(WebApplicationException exception) {
     Response clientReponse = exception.getResponse();
-    String reason = clientReponse.getStatusInfo().getReasonPhrase();
-    Integer status = clientReponse.getStatus();
-    return new ResponseError(reason, status);
+    return clientReponse.readEntity(ResponseError.class);
   }
 
   /**
