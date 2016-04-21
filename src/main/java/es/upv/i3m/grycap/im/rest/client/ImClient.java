@@ -101,8 +101,13 @@ public class ImClient {
 
   public <T> T get(final String path, final Class<T> type,
       final RestParameter... parameters) throws ImClientException {
-    logCallInfo(HttpMethods.GET, path);
-    return configureClient(path, parameters).get(type);
+    try {
+      logCallInfo(HttpMethods.GET, path);
+      return configureClient(path, parameters).get(type);
+
+    } catch (WebApplicationException exception) {
+      throw new ImClientErrorException(createReponseError(exception));
+    }
   }
 
   /**
@@ -110,7 +115,6 @@ public class ImClient {
    */
   public <T> T delete(final String path, final Class<T> type,
       final RestParameter... parameters) throws ImClientException {
-
     try {
       logCallInfo(HttpMethods.DELETE, path);
       Builder clientConfigured = configureClient(path, parameters);
@@ -135,18 +139,25 @@ public class ImClient {
   public <T> T post(final String path, final String bodyContent,
       final String contentType, final Class<T> type,
       final RestParameter... parameters) throws ImClientException {
+    try {
+      // Avoid sending null as body content
+      String normalizedBodyContent = normalizeBodyContent(bodyContent);
 
-    // Avoid sending null as body content
-    String normalizedBodyContent = normalizeBodyContent(bodyContent);
+      logCallInfo(HttpMethods.POST, path);
+      logCallContent(HttpMethods.POST, normalizedBodyContent);
 
-    logCallInfo(HttpMethods.POST, path);
-    logCallContent(HttpMethods.POST, normalizedBodyContent);
-
-    Builder clientConfigured = configureClient(path, parameters);
-    Entity<String> content = Entity.entity(normalizedBodyContent, contentType);
-    return clientConfigured.post(content, type);
+      Entity<String> content =
+          Entity.entity(normalizedBodyContent, contentType);
+      Builder clientConfigured = configureClient(path, parameters);
+      return clientConfigured.post(content, type);
+    } catch (WebApplicationException exception) {
+      throw new ImClientErrorException(createReponseError(exception));
+    }
   }
 
+  /**
+   * Simplified PUT call.
+   */
   public <T> T put(final String path, final Class<T> type,
       final RestParameter... parameters) throws ImClientException {
     return put(path, "", MediaType.TEXT_PLAIN, type, parameters);
@@ -158,16 +169,20 @@ public class ImClient {
   public <T> T put(final String path, final String bodyContent,
       final String contentType, final Class<T> type,
       final RestParameter... parameters) throws ImClientException {
+    try {
+      // Avoid sending null as body content
+      String normalizedBodyContent = normalizeBodyContent(bodyContent);
 
-    // Avoid sending null as body content
-    String normalizedBodyContent = normalizeBodyContent(bodyContent);
+      logCallInfo(HttpMethods.PUT, path);
+      logCallContent(HttpMethods.PUT, normalizedBodyContent);
 
-    logCallInfo(HttpMethods.PUT, path);
-    logCallContent(HttpMethods.PUT, normalizedBodyContent);
-
-    Builder clientConfigured = configureClient(path, parameters);
-    Entity<String> content = Entity.entity(normalizedBodyContent, contentType);
-    return clientConfigured.put(content, type);
+      Entity<String> content =
+          Entity.entity(normalizedBodyContent, contentType);
+      Builder clientConfigured = configureClient(path, parameters);
+      return clientConfigured.put(content, type);
+    } catch (WebApplicationException exception) {
+      throw new ImClientErrorException(createReponseError(exception));
+    }
   }
 
   private void logCallInfo(final HttpMethods httpMethodUsed,
