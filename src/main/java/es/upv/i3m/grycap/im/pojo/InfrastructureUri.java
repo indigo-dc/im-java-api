@@ -15,10 +15,10 @@ public class InfrastructureUri {
 
   private final String uri;
   private String infrastructureId;
-  private static final String URI_PATTERN = "([^/]+)$";
+  private static final String URI_PATTERN = "([^/]+)";
+  private static final int GROUP_WITH_ID_INFO = 4;
 
-  public InfrastructureUri(@JsonProperty("uri")
-  String uri) {
+  public InfrastructureUri(@JsonProperty("uri") String uri) {
     this.uri = uri;
   }
 
@@ -39,8 +39,11 @@ public class InfrastructureUri {
   private String extractInfrastructureId() {
     Pattern ptrn = Pattern.compile(URI_PATTERN);
     Matcher matcher = ptrn.matcher(uri);
-    // Get the matching group
-    matcher.find();
+    // The fourth match has the id info
+    // Not using reverse search because the string can have
+    for (int i = 0; i < GROUP_WITH_ID_INFO; i++) {
+      matcher.find();
+    }
     return matcher.group(0);
   }
 

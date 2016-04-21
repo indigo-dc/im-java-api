@@ -219,7 +219,7 @@ public class InfrastructureManager {
    */
   public InfrastructureUris addResource(String infId, String radlFile,
       BodyContentType bodyContentType, boolean... context)
-          throws ImClientException {
+      throws ImClientException {
 
     RestParameter restParameter = createCallParameters(context);
     return getImClient().post(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId,
@@ -338,7 +338,7 @@ public class InfrastructureManager {
   @SuppressWarnings("unchecked")
   public List<VirtualMachineInfo> alterVm(String infId, String vmId,
       String radlFile, BodyContentType bodyContentType)
-          throws ImClientException {
+      throws ImClientException {
     // The content type must not be TOSCA
     failIfToscaContentType(bodyContentType);
     String path = PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
@@ -424,7 +424,7 @@ public class InfrastructureManager {
    */
   public void reconfigure(String infId, String radlFile,
       BodyContentType bodyContentType, List<Integer> vmList)
-          throws ImClientException {
+      throws ImClientException {
     // The content type must not be TOSCA
     failIfToscaContentType(bodyContentType);
     RestParameter parameters =

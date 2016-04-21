@@ -13,7 +13,7 @@ public class ImTestWatcher {
   public TestRule watcher = new TestWatcher() {
     protected void starting(Description description) {
       ImJavaApiLogger.debug(ImTestWatcher.class,
-          "Starting test: " + description.getMethodName());
+          "Starting test '" + description.getMethodName() + "'");
     }
   };
 }

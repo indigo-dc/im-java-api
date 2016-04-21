@@ -19,7 +19,6 @@ package es.upv.i3m.grycap.im;
 import es.upv.i3m.grycap.ImTestWatcher;
 import es.upv.i3m.grycap.file.NoNullOrEmptyFile;
 import es.upv.i3m.grycap.file.Utf8File;
-import es.upv.i3m.grycap.im.exceptions.ImClientErrorException;
 import es.upv.i3m.grycap.im.exceptions.ImClientException;
 import es.upv.i3m.grycap.im.exceptions.ToscaContentTypeNotSupportedException;
 import es.upv.i3m.grycap.im.pojo.InfOutputValues;
@@ -27,7 +26,6 @@ import es.upv.i3m.grycap.im.pojo.InfrastructureState;
 import es.upv.i3m.grycap.im.pojo.InfrastructureUri;
 import es.upv.i3m.grycap.im.pojo.InfrastructureUris;
 import es.upv.i3m.grycap.im.pojo.Property;
-import es.upv.i3m.grycap.im.pojo.ResponseError;
 import es.upv.i3m.grycap.im.pojo.VirtualMachineInfo;
 import es.upv.i3m.grycap.im.rest.client.BodyContentType;
 import es.upv.i3m.grycap.logger.ImJavaApiLogger;
@@ -376,53 +374,5 @@ public class InfrastructureManagerTest extends ImTestWatcher {
     getIm().reconfigure(getInfrastructureId(),
         new Utf8File(RADL_JSON_ALTER_VM_FILE_PATH).read(),
         BodyContentType.RADL_JSON, Arrays.asList(0, 1));
-  }
-
-  @Test
-  public void testDeleteError() throws ImClientException {
-    try {
-      // Force an error
-      getIm().destroyInfrastructure("");
-    } catch (ImClientErrorException exception) {
-      ResponseError error = exception.getResponseError();
-      Assert.assertEquals((Integer) 404, error.getCode());
-      Assert.assertEquals("Not Found", error.getMessage());
-    }
-  }
-
-  @Test
-  public void testGetError() throws ImClientException {
-    try {
-      // Force an error
-      getIm().getInfrastructureInfo("");
-    } catch (ImClientErrorException exception) {
-      ResponseError error = exception.getResponseError();
-      Assert.assertEquals((Integer) 404, error.getCode());
-      Assert.assertEquals("Not Found", error.getMessage());
-    }
-  }
-
-  @Test
-  public void testPostError() throws ImClientException {
-    try {
-      // Force an error
-      getIm().createInfrastructure("", BodyContentType.RADL_JSON);
-    } catch (ImClientErrorException exception) {
-      ResponseError error = exception.getResponseError();
-      Assert.assertEquals((Integer) 404, error.getCode());
-      Assert.assertEquals("Not Found", error.getMessage());
-    }
-  }
-
-  @Test
-  public void testPutError() throws ImClientException {
-    try {
-      // Force an error
-      getIm().createInfrastructure("", BodyContentType.RADL_JSON);
-    } catch (ImClientErrorException exception) {
-      ResponseError error = exception.getResponseError();
-      Assert.assertEquals((Integer) 404, error.getCode());
-      Assert.assertEquals("Not Found", error.getMessage());
-    }
   }
 }

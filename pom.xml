@@ -18,6 +18,7 @@
     <log4j.version>1.2.17</log4j.version>
     <java.version>7</java.version>
     <maven-javadoc-plugin.version>2.10.3</maven-javadoc-plugin.version>
+    <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
   </properties>
 
   <dependencies>
@@ -42,7 +43,7 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
       <version>${jackson.version}</version>
-     </dependency>
+    </dependency>
 
    <!-- Apache -->
     <dependency>
@@ -146,6 +147,28 @@
                 </rule>
               </rules>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${maven-checkstyle-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>validate</id>
+            <phase>validate</phase>
+            <configuration>
+              <configLocation>google_checks.xml</configLocation>
+              <encoding>UTF-8</encoding>
+              <consoleOutput>true</consoleOutput>
+              <violationSeverity>warning</violationSeverity>
+              <failOnViolation>true</failOnViolation>
+              <linkXRef>false</linkXRef>
+            </configuration>
+            <goals>
+              <goal>check</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>

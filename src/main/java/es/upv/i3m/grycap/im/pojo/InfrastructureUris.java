@@ -14,8 +14,8 @@ public class InfrastructureUris {
 
   private final List<InfrastructureUri> uris;
 
-  public InfrastructureUris(@JsonProperty("uri-list")
-  List<InfrastructureUri> uris) {
+  public InfrastructureUris(
+      @JsonProperty("uri-list") List<InfrastructureUri> uris) {
     this.uris = uris;
   }
 

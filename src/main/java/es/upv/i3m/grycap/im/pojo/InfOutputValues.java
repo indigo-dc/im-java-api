@@ -29,8 +29,7 @@ public class InfOutputValues {
   @JsonProperty("outputs")
   private Map<String, String> outputs;
 
-  public InfOutputValues(@JsonProperty("outputs")
-  Map<String, String> outputs) {
+  public InfOutputValues(@JsonProperty("outputs") Map<String, String> outputs) {
     this.outputs = outputs;
   }
 
