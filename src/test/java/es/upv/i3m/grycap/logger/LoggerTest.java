@@ -16,13 +16,13 @@
 
 package es.upv.i3m.grycap.logger;
 
-import es.upv.i3m.grycap.GenericTestWatcher;
+import es.upv.i3m.grycap.ImTestWatcher;
 import es.upv.i3m.grycap.im.exceptions.AuthorizationFileException;
 import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
 import org.junit.Test;
 
-public class LoggerTest extends GenericTestWatcher {
+public class LoggerTest extends ImTestWatcher {
 
   private static final String TEST_MESSAGE = "Test Message";
 

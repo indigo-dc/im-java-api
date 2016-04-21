@@ -1,6 +1,6 @@
 package es.upv.i3m.grycap.file;
 
-import es.upv.i3m.grycap.GenericTestWatcher;
+import es.upv.i3m.grycap.ImTestWatcher;
 import es.upv.i3m.grycap.file.EscapeNewLinesFile;
 import es.upv.i3m.grycap.file.FileWithInternalPath;
 import es.upv.i3m.grycap.file.NoNullOrEmptyFile;
@@ -10,7 +10,7 @@ import es.upv.i3m.grycap.im.exceptions.FileException;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class FileTest extends GenericTestWatcher {
+public class FileTest extends ImTestWatcher {
 
   private static final String AUTH_FILE_PATH_NO_INTERNAL_PATH =
       "./src/test/resources/files/auth_no_internal_path.dat";

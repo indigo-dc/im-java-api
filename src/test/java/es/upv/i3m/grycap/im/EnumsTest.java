@@ -16,9 +16,7 @@
 
 package es.upv.i3m.grycap.im;
 
-import es.upv.i3m.grycap.im.ImValues;
-import es.upv.i3m.grycap.im.VmProperties;
-import es.upv.i3m.grycap.im.VmStates;
+import es.upv.i3m.grycap.ImTestWatcher;
 import es.upv.i3m.grycap.im.exceptions.ImClientException;
 import es.upv.i3m.grycap.im.exceptions.NoEnumFoundException;
 import es.upv.i3m.grycap.im.rest.client.BodyContentType;
@@ -26,7 +24,7 @@ import es.upv.i3m.grycap.im.rest.client.BodyContentType;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class EnumsTest {
+public class EnumsTest extends ImTestWatcher {
 
   @Test(expected = NoEnumFoundException.class)
   public void testVmStates() throws ImClientException {

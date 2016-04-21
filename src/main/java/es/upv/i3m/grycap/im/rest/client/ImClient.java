@@ -134,6 +134,14 @@ public class ImClient {
   }
 
   /**
+   * Simplified POST call.
+   */
+  public <T> T post(final String path, final Class<T> type,
+      final RestParameter... parameters) throws ImClientException {
+    return post(path, "", MediaType.TEXT_PLAIN, type, parameters);
+  }
+
+  /**
    * Generic POST call.
    */
   public <T> T post(final String path, final String bodyContent,
