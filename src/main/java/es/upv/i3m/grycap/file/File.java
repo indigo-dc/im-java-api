@@ -18,9 +18,11 @@ package es.upv.i3m.grycap.file;
 
 import es.upv.i3m.grycap.im.exceptions.FileException;
 
+import java.nio.file.Path;
+
 public interface File {
 
-  public String getFilePath();
+  public Path getFilePath();
 
   public String read() throws FileException;
 

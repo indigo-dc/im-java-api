@@ -18,6 +18,8 @@ package es.upv.i3m.grycap.file;
 
 import es.upv.i3m.grycap.im.exceptions.FileException;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,7 +36,7 @@ public final class FileWithInternalPath implements File {
   }
 
   @Override
-  public String getFilePath() {
+  public Path getFilePath() {
     return this.file.getFilePath();
   }
 
@@ -88,7 +90,7 @@ public final class FileWithInternalPath implements File {
   private static String getNestedFileContent(final String filePath)
       throws FileException {
     return new DoubleEscapeNewLinesFile(
-        new NoNullOrEmptyFile(new Utf8File(filePath))).read();
+        new NoNullOrEmptyFile(new Utf8File(Paths.get(filePath)))).read();
   }
 
 }

@@ -20,6 +20,8 @@ import es.upv.i3m.grycap.im.exceptions.FileException;
 import es.upv.i3m.grycap.im.lang.ImMessages;
 import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
+import java.nio.file.Path;
+
 public final class NoNullOrEmptyFile implements File {
 
   private final File file;
@@ -48,7 +50,7 @@ public final class NoNullOrEmptyFile implements File {
   }
 
   @Override
-  public String getFilePath() {
+  public Path getFilePath() {
     return this.file.getFilePath();
   }
 

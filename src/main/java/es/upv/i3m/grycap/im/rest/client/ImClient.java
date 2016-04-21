@@ -28,6 +28,8 @@ import es.upv.i3m.grycap.im.rest.client.parameters.RestParameter;
 import es.upv.i3m.grycap.im.rest.client.ssl.SslTrustAllClient;
 import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
+import java.nio.file.Path;
+
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -43,11 +45,11 @@ import javax.ws.rs.core.UriBuilderException;
  */
 public class ImClient {
 
-  private final String targetUrl;
-  // Authorization file modified to be sent as value of the Authorization header
-  private final String parsedAuthFile;
   private static final String AUTH_HEADER_TAG = "AUTHORIZATION";
   private static final String SSL_URL_ID = "https";
+
+  private final String targetUrl;
+  private final String authorizationHeader;
   private final Client client;
 
   /**
@@ -57,13 +59,30 @@ public class ImClient {
    * @param targetUrl
    *          : url of the IM rest service
    * @param authFilePath
-   *          : path of the authorization file
+   *          : path to the authorization file
    */
-  public ImClient(final String targetUrl, final String authFilePath)
+  public ImClient(final String targetUrl, final Path authFilePath)
       throws ImClientException {
     this.targetUrl = targetUrl;
-    this.parsedAuthFile = new FileWithInternalPath(new EscapeNewLinesFile(
+    this.authorizationHeader = new FileWithInternalPath(new EscapeNewLinesFile(
         new NoNullOrEmptyFile(new Utf8File(authFilePath)))).read();
+    this.client = createRestClient();
+  }
+
+  /**
+   * Creates a new client using the 'imServiceUrl' as endpoint.<br>
+   * Loads the authorization credentials from the 'authorizationHeader'
+   * parameter.
+   * 
+   * @param targetUrl
+   *          : url of the IM rest service
+   * @param authorizationHeader
+   *          : string with the authorization content
+   */
+  public ImClient(final String targetUrl, final String authorizationHeader)
+      throws ImClientException {
+    this.targetUrl = targetUrl;
+    this.authorizationHeader = authorizationHeader;
     this.client = createRestClient();
   }
 
@@ -85,7 +104,7 @@ public class ImClient {
   }
 
   private String getParsedAuthFile() {
-    return parsedAuthFile;
+    return authorizationHeader;
   }
 
   /**

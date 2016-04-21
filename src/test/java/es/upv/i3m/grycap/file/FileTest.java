@@ -1,14 +1,12 @@
 package es.upv.i3m.grycap.file;
 
 import es.upv.i3m.grycap.ImTestWatcher;
-import es.upv.i3m.grycap.file.EscapeNewLinesFile;
-import es.upv.i3m.grycap.file.FileWithInternalPath;
-import es.upv.i3m.grycap.file.NoNullOrEmptyFile;
-import es.upv.i3m.grycap.file.Utf8File;
 import es.upv.i3m.grycap.im.exceptions.FileException;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.nio.file.Paths;
 
 public class FileTest extends ImTestWatcher {
 
@@ -29,22 +27,22 @@ public class FileTest extends ImTestWatcher {
 
   @Test
   public void testNoInternalPaths() throws FileException {
-    String fileContent = new FileWithInternalPath(new EscapeNewLinesFile(
-        new NoNullOrEmptyFile(new Utf8File(AUTH_FILE_PATH_NO_INTERNAL_PATH))))
+    String fileContent = new FileWithInternalPath(
+        new EscapeNewLinesFile(getFile(AUTH_FILE_PATH_NO_INTERNAL_PATH)))
             .read();
     String expectedContent =
-        new Utf8File(AUTH_FILE_PATH_NO_INTERNAL_PATH_RESULT_FILE).read();
+        readFile(AUTH_FILE_PATH_NO_INTERNAL_PATH_RESULT_FILE);
     Assert.assertArrayEquals(expectedContent.toCharArray(),
         fileContent.toCharArray());
   }
 
   @Test
   public void testInternalPath() throws FileException {
-    String fileContent = new FileWithInternalPath(new EscapeNewLinesFile(
-        new NoNullOrEmptyFile(new Utf8File(AUTH_FILE_PATH_ONE_INTERNAL_PATH))))
+    String fileContent = new FileWithInternalPath(
+        new EscapeNewLinesFile(getFile(AUTH_FILE_PATH_ONE_INTERNAL_PATH)))
             .read();
     String expectedContent =
-        new Utf8File(AUTH_FILE_PATH_ONE_INTERNAL_PATH_RESULT_FILE).read();
+        readFile(AUTH_FILE_PATH_ONE_INTERNAL_PATH_RESULT_FILE);
     Assert.assertArrayEquals(expectedContent.toCharArray(),
         fileContent.toCharArray());
   }
@@ -55,34 +53,36 @@ public class FileTest extends ImTestWatcher {
    */
   @Test(expected = FileException.class)
   public void testEmptyFileInInternalPath() throws FileException {
-    new FileWithInternalPath(new EscapeNewLinesFile(
-        new NoNullOrEmptyFile(new Utf8File(AUTH_FILE_PATH_TWO_INTERNAL_PATH))))
+    new FileWithInternalPath(
+        new EscapeNewLinesFile(getFile(AUTH_FILE_PATH_TWO_INTERNAL_PATH)))
             .read();
   }
 
   @Test
   public void testSeveralDifferentInternalPaths() throws FileException {
-    String fileContent =
-        new FileWithInternalPath(new EscapeNewLinesFile(new NoNullOrEmptyFile(
-            new Utf8File(AUTH_FILE_PATH_SEVERAL_DIFFERENT_INTERNAL_PATH))))
-                .read();
+    String fileContent = new FileWithInternalPath(new EscapeNewLinesFile(
+        getFile(AUTH_FILE_PATH_SEVERAL_DIFFERENT_INTERNAL_PATH))).read();
     String expectedContent =
-        new Utf8File(AUTH_FILE_PATH_SEVERAL_DIFFERENT_INTERNAL_PATH_RESULT_FILE)
-            .read();
+        readFile(AUTH_FILE_PATH_SEVERAL_DIFFERENT_INTERNAL_PATH_RESULT_FILE);
     Assert.assertArrayEquals(expectedContent.toCharArray(),
         fileContent.toCharArray());
   }
 
   @Test
   public void testDifferentDecoratorOrder() throws FileException {
-    String fileContent =
-        new EscapeNewLinesFile(new FileWithInternalPath(new NoNullOrEmptyFile(
-            new Utf8File(AUTH_FILE_PATH_SEVERAL_DIFFERENT_INTERNAL_PATH))))
-                .read();
+    String fileContent = new EscapeNewLinesFile(new FileWithInternalPath(
+        getFile(AUTH_FILE_PATH_SEVERAL_DIFFERENT_INTERNAL_PATH))).read();
     String expectedContent =
-        new Utf8File(AUTH_FILE_PATH_SEVERAL_DIFFERENT_INTERNAL_PATH_RESULT_FILE)
-            .read();
+        readFile(AUTH_FILE_PATH_SEVERAL_DIFFERENT_INTERNAL_PATH_RESULT_FILE);
     Assert.assertArrayEquals(expectedContent.toCharArray(),
         fileContent.toCharArray());
+  }
+
+  private File getFile(String filePath) throws FileException {
+    return new NoNullOrEmptyFile(new Utf8File(Paths.get(filePath)));
+  }
+
+  private String readFile(String filePath) throws FileException {
+    return new NoNullOrEmptyFile(new Utf8File(Paths.get(filePath))).read();
   }
 }

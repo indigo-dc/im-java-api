@@ -32,6 +32,7 @@ import es.upv.i3m.grycap.im.rest.client.parameters.Parameter;
 import es.upv.i3m.grycap.im.rest.client.parameters.RestParameter;
 import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -56,12 +57,25 @@ public class InfrastructureManager {
    * 
    * @param targetUrl
    *          : the URL where the REST API of the IM is defined
-   * @param authFilePath
-   *          : the path where the authorization file is defined
+   * @param authFile
+   *          : the authorization file
    */
-  public InfrastructureManager(String targetUrl, String authFilePath)
+  public InfrastructureManager(final String targetUrl, final Path authFile)
       throws ImClientException {
-    imClient = new ImClient(targetUrl, authFilePath);
+    imClient = new ImClient(targetUrl, authFile);
+  }
+
+  /**
+   * Create a new IM client.
+   * 
+   * @param targetUrl
+   *          : the URL where the REST API of the IM is defined
+   * @param authorizationHeader
+   *          : string with the authorization content
+   */
+  public InfrastructureManager(final String targetUrl,
+      final String authorizationHeader) throws ImClientException {
+    imClient = new ImClient(targetUrl, authorizationHeader);
   }
 
   private ImClient getImClient() {
@@ -117,9 +131,11 @@ public class InfrastructureManager {
    *          : virtual machine id
    * @return : POJO with the vm info.
    */
-  public VirtualMachineInfo getVmInfo(String infId, String vmId) throws ImClientException {
+  public VirtualMachineInfo getVmInfo(String infId, String vmId)
+      throws ImClientException {
     return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId
-        + PATH_SEPARATOR + PATH_VMS + PATH_SEPARATOR + vmId, VirtualMachineInfo.class);
+        + PATH_SEPARATOR + PATH_VMS + PATH_SEPARATOR + vmId,
+        VirtualMachineInfo.class);
   }
 
   /**

@@ -18,6 +18,8 @@ package es.upv.i3m.grycap.file;
 
 import es.upv.i3m.grycap.im.exceptions.FileException;
 
+import java.nio.file.Path;
+
 public final class EscapeNewLinesFile implements File {
 
   private final File file;
@@ -39,7 +41,7 @@ public final class EscapeNewLinesFile implements File {
   }
 
   @Override
-  public String getFilePath() {
+  public Path getFilePath() {
     return this.file.getFilePath();
   }
 
