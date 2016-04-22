@@ -1,7 +1,10 @@
 es.upv.i3m.grycap.file
-es.upv.i3m.grycap.im.api
-es.upv.i3m.grycap.im.client
+es.upv.i3m.grycap.im
 es.upv.i3m.grycap.im.exceptions
 es.upv.i3m.grycap.im.lang
 es.upv.i3m.grycap.im.pojo
+es.upv.i3m.grycap.im.pojo.deserializer
+es.upv.i3m.grycap.im.rest.client
+es.upv.i3m.grycap.im.rest.client.parameters
+es.upv.i3m.grycap.im.rest.client.ssl
 es.upv.i3m.grycap.logger
