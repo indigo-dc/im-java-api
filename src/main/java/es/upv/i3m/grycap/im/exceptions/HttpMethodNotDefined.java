@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.file;
+package es.upv.i3m.grycap.im.exceptions;
 
-import es.upv.i3m.grycap.im.exceptions.FileException;
+public class HttpMethodNotDefined extends ImClientException {
 
-import java.nio.file.Path;
+  private static final long serialVersionUID = 5601812724411282787L;
 
-public interface File {
+  public HttpMethodNotDefined(String message) {
+    super(message);
+  }
 
-  public Path getFilePath();
-
-  public String read() throws FileException;
-
+  public HttpMethodNotDefined(String message, Exception ex) {
+    super(message, ex);
+  }
 }

@@ -17,41 +17,33 @@
 package es.upv.i3m.grycap.file;
 
 import es.upv.i3m.grycap.im.exceptions.FileException;
-import es.upv.i3m.grycap.im.lang.ImMessages;
-import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
 import java.nio.file.Path;
 
-public final class NoNullOrEmptyFile implements File {
+public final class DoubleEscapeNewLinesFile implements File {
 
   private final File file;
 
-  public NoNullOrEmptyFile(final File file) {
+  public DoubleEscapeNewLinesFile(final File file) {
     this.file = file;
   }
 
   /**
-   * Read the file specified and checks that the file is not null or empty.
+   * Read the file specified and escapes all the new lines (i.e. replace all the
+   * '\n' with '\\\\n').<br>
+   * Implemented to provide compatibility with the IM.
    *
-   * @return : String with the content of the file
-   * @throws FileException
-   *           : file related exception
+   * @return : String with the content of the file and the new lines replaced
    */
   @Override
   public String read() throws FileException {
-    String fileContent = this.file.read();
-    if (fileContent == null || fileContent.isEmpty()) {
-      ImJavaApiLogger.severe(this.getClass(),
-          ImMessages.EXCEPTION_FILE_NULL_OR_EMPTY + ": "
-              + this.file.getFilePath());
-      throw new FileException(ImMessages.EXCEPTION_FILE_NULL_OR_EMPTY);
-    }
-    return fileContent;
+
+    return this.file.read().replace("\n", "\\\\n");
   }
 
   @Override
   public Path getFilePath() {
-    return this.file.getFilePath();
+    return file.getFilePath();
   }
 
 }

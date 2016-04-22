@@ -23,13 +23,13 @@ import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 public final class Utf8File implements File {
 
-  private String filePath;
+  private Path filePath;
 
-  public Utf8File(final String filePath) {
+  public Utf8File(final Path filePath) {
     this.filePath = filePath;
   }
 
@@ -44,14 +44,18 @@ public final class Utf8File implements File {
   @Override
   public String read() throws FileException {
     try {
-      return new String(Files.readAllBytes(Paths.get(this.filePath)),
+      return new String(Files.readAllBytes(this.filePath),
           StandardCharsets.UTF_8);
     } catch (IOException ex) {
       ImJavaApiLogger.severe(this.getClass(),
-          ImMessages.EXCEPTION_READING_AUTHORIZATION_FILE);
-      throw new FileException(ImMessages.EXCEPTION_READING_AUTHORIZATION_FILE,
-          ex);
+          ImMessages.EXCEPTION_READING_FILE + ": " + this.filePath);
+      throw new FileException(ImMessages.EXCEPTION_READING_FILE, ex);
     }
+  }
+
+  @Override
+  public Path getFilePath() {
+    return this.filePath;
   }
 
 }

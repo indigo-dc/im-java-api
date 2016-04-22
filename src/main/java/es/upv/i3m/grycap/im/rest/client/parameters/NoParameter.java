@@ -14,16 +14,25 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.file;
+package es.upv.i3m.grycap.im.rest.client.parameters;
 
-import es.upv.i3m.grycap.im.exceptions.FileException;
+/**
+ * Defined to avoid sending null as parameter to the REST call.
+ */
+public class NoParameter implements RestParameter {
 
-import java.nio.file.Path;
+  @Override
+  public void addValue(Object value) {
+    // No need to add anything
+  }
 
-public interface File {
+  @Override
+  public String getName() {
+    return "";
+  }
 
-  public Path getFilePath();
-
-  public String read() throws FileException;
-
+  @Override
+  public Object[] getValues() {
+    return new Object[0];
+  }
 }

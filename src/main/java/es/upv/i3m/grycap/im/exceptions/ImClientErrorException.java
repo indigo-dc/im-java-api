@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.file;
+package es.upv.i3m.grycap.im.exceptions;
 
-import es.upv.i3m.grycap.im.exceptions.FileException;
+import es.upv.i3m.grycap.im.pojo.ResponseError;
 
-import java.nio.file.Path;
+public class ImClientErrorException extends ImClientException {
 
-public interface File {
+  private static final long serialVersionUID = 6007438931649254821L;
+  private final ResponseError responseError;
 
-  public Path getFilePath();
+  public ImClientErrorException(ResponseError responseError) {
+    this.responseError = responseError;
+  }
 
-  public String read() throws FileException;
+  public ResponseError getResponseError() {
+    return responseError;
+  }
 
 }

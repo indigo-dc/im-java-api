@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.file;
+package es.upv.i3m.grycap.im.rest.client;
 
-import es.upv.i3m.grycap.im.exceptions.FileException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 
-import java.nio.file.Path;
+public class NoSslClient implements RestClient {
 
-public interface File {
-
-  public Path getFilePath();
-
-  public String read() throws FileException;
-
+  /**
+   * Build a new Rest client.
+   * 
+   * @return : new REST client
+   */
+  @Override
+  public Client createClient() {
+    return ClientBuilder.newBuilder().register(ImResponsesReader.class).build();
+  }
 }

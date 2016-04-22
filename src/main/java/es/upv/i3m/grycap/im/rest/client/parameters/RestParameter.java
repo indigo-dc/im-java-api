@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.file;
+package es.upv.i3m.grycap.im.rest.client.parameters;
 
-import es.upv.i3m.grycap.im.exceptions.FileException;
+public interface RestParameter {
 
-import java.nio.file.Path;
+  public void addValue(Object value);
 
-public interface File {
+  public String getName();
 
-  public Path getFilePath();
-
-  public String read() throws FileException;
-
+  public Object[] getValues();
 }
