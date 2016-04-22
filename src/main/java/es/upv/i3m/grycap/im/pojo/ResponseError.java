@@ -47,4 +47,8 @@ public class ResponseError {
     }
     return false;
   }
+
+  public String getFormattedErrorMessage() {
+    return "Error " + getCode() + ": " + getMessage();
+  }
 }

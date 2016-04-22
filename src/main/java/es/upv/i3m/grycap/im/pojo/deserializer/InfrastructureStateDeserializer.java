@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class StateDeserializer extends JsonDeserializer<InfrastructureState> {
+public class InfrastructureStateDeserializer extends JsonDeserializer<InfrastructureState> {
 
   private static final String INF_STATE_NODE_ID = "state";
   private static final String VM_STATE_NODES_ID = "vm_states";

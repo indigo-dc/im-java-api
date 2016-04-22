@@ -40,7 +40,8 @@ public class InfrastructureUri {
     Pattern ptrn = Pattern.compile(URI_PATTERN);
     Matcher matcher = ptrn.matcher(uri);
     // The fourth match has the id info
-    // Not using reverse search because the string can have
+    // Not using reverse search because the string can have more content
+    // afterwards
     for (int i = 0; i < GROUP_WITH_ID_INFO; i++) {
       matcher.find();
     }

@@ -42,8 +42,8 @@ public final class ImMessages {
       "No valid content type found";
   public static final String EXCEPTION_NO_VM_PROPERTY_ENUM_FOUND =
       "No valid vm property found";
-  public static final String EXCEPTION_NO_VM_STATE_ENUM_FOUND =
-      "No valid vm state found";
+  public static final String EXCEPTION_NO_STATE_ENUM_FOUND =
+      "No valid state found";
 
   // Warning
   public static final String WARNING_NULL_OR_EMPTY_PARAMETER_VALUES =

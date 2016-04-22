@@ -89,7 +89,7 @@ public class InfrastructureManagerTest extends ImTestWatcher {
    * @throws ImClientException
    *           : exception in the IM client
    */
-  private void checkVmState(String vmId, VmStates vmState)
+  private void checkVmState(String vmId, States vmState)
       throws ImClientException {
     Property vmProperty =
         getIm().getVmProperty(getInfrastructureId(), vmId, VmProperties.STATE);
@@ -177,7 +177,7 @@ public class InfrastructureManagerTest extends ImTestWatcher {
   public void testGetVmProperty() throws ImClientException {
     // Check for running state because the dummy provider never reaches the
     // 'configured' state
-    checkVmState(VM_DEFAULT_ID, VmStates.RUNNING);
+    checkVmState(VM_DEFAULT_ID, States.RUNNING);
   }
 
   @Test
@@ -272,23 +272,23 @@ public class InfrastructureManagerTest extends ImTestWatcher {
   @Test
   public void testStartInfrastructure() throws ImClientException {
     getIm().stopInfrastructure(getInfrastructureId());
-    checkVmState(VM_DEFAULT_ID, VmStates.STOPPED);
+    checkVmState(VM_DEFAULT_ID, States.STOPPED);
     getIm().startInfrastructure(getInfrastructureId());
-    checkVmState(VM_DEFAULT_ID, VmStates.RUNNING);
+    checkVmState(VM_DEFAULT_ID, States.RUNNING);
   }
 
   @Test
   public void testStopVm() throws ImClientException {
     getIm().stopVm(getInfrastructureId(), VM_DEFAULT_ID);
-    checkVmState(VM_DEFAULT_ID, VmStates.STOPPED);
+    checkVmState(VM_DEFAULT_ID, States.STOPPED);
   }
 
   @Test
   public void testStartVm() throws ImClientException {
     getIm().stopVm(getInfrastructureId(), VM_DEFAULT_ID);
-    checkVmState(VM_DEFAULT_ID, VmStates.STOPPED);
+    checkVmState(VM_DEFAULT_ID, States.STOPPED);
     getIm().startVm(getInfrastructureId(), VM_DEFAULT_ID);
-    checkVmState(VM_DEFAULT_ID, VmStates.RUNNING);
+    checkVmState(VM_DEFAULT_ID, States.RUNNING);
   }
 
   @Test(expected = ToscaContentTypeNotSupportedException.class)

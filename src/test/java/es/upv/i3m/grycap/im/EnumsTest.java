@@ -28,10 +28,10 @@ public class EnumsTest extends ImTestWatcher {
 
   @Test(expected = NoEnumFoundException.class)
   public void testVmStates() throws ImClientException {
-    if (!VmStates.PENDING.equals(VmStates.getEnumFromValue("pending"))) {
+    if (!States.PENDING.equals(States.getEnumFromValue("pending"))) {
       Assert.fail();
     }
-    VmStates.getEnumFromValue("not_valid");
+    States.getEnumFromValue("not_valid");
   }
 
   @Test(expected = NoEnumFoundException.class)

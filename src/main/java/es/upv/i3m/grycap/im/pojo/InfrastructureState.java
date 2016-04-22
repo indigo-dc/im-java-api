@@ -2,15 +2,16 @@ package es.upv.i3m.grycap.im.pojo;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import es.upv.i3m.grycap.im.pojo.deserializer.StateDeserializer;
+import es.upv.i3m.grycap.im.pojo.deserializer.InfrastructureStateDeserializer;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Map;
+import java.util.Map.Entry;
 
-@JsonDeserialize(using = StateDeserializer.class)
+@JsonDeserialize(using = InfrastructureStateDeserializer.class)
 public class InfrastructureState {
 
   private final String state;
@@ -52,4 +53,20 @@ public class InfrastructureState {
     return false;
   }
 
+  /**
+   * Returns a formatted string with the information of the infrastructure
+   * state.<br>
+   * Example return: <br>
+   * Infrastructure state 'running'<br>
+   * - Virtual machine '0' state 'running'<br>
+   * - Virtual machine '1' state 'running'
+   */
+  public String getFormattedInfrastructureStateString() {
+    String result = "Infrastructure state '" + getState() + "'\n";
+    for (Entry<String, String> vmState : vmStates.entrySet()) {
+      result += " - Virtual machine '" + vmState.getKey() + "' state ' "
+          + vmState.getValue() + "'";
+    }
+    return result;
+  }
 }
