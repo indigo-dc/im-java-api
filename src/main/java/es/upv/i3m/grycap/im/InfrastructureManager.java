@@ -32,6 +32,8 @@ import es.upv.i3m.grycap.im.rest.client.parameters.Parameter;
 import es.upv.i3m.grycap.im.rest.client.parameters.RestParameter;
 import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.nio.file.Path;
 import java.util.List;
 
@@ -245,6 +247,29 @@ public class InfrastructureManager {
     return (context != null && context.length > 0)
         ? new Parameter(REST_PARAMETER_NAME_CONTEXT, context[0])
         : new NoParameter();
+  }
+
+  /**
+   * Undeploy the virtual machine with ID 'vmId' associated to the
+   * infrastructure with ID 'infId'.<br>
+   * The context parameter is optional and is a flag to specify if the
+   * contextualization step will be launched just after the VM addition.<br>
+   * As default the contextualization flag is set to True.
+   * 
+   * @param infId
+   *          : infrastructure id
+   * @param vmIds
+   *          : list of virtual machine ids
+   * @param context
+   *          : flag to specify if the contextualization step will be launched
+   *          just after the VM addition
+   * @throws ImClientException
+   *           : exception in the IM client
+   */
+  public void removeResource(String infId, List<String> vmIds,
+      boolean... context) throws ImClientException {
+    String ids = StringUtils.join(vmIds, ",");
+    removeResource(infId, ids, context);
   }
 
   /**

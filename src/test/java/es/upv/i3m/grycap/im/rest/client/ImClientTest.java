@@ -29,7 +29,8 @@ import org.junit.Test;
 public class ImClientTest extends ImTestWatcher {
 
   private static ImClient imClient;
-  private static final String IM_DUMMY_PROVIDER_URL = "http://127.0.0.1:8800";
+  private static final String IM_DUMMY_PROVIDER_URL =
+      "http://servproject.i3m.upv.es:8811";
   private static final String AUTH_FILE_PATH = "./src/test/resources/auth.dat";
   private static final Integer EXPECTED_ERROR_CODE = 404;
   private static final String EXPECTED_ERROR_MESSAGE = "Not found: '/'";
