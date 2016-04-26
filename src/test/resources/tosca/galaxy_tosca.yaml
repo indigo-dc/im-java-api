@@ -58,3 +58,5 @@ topology_template:
   outputs:
     galaxy_url:
       value: { concat: [ 'http://', get_attribute: [ galaxy_server, public_address, 0 ], ':8080' ] }
+    cluster_creds:
+      value: { get_attribute: [ galaxy_server, credential, 0 ] }
