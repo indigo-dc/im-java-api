@@ -214,9 +214,9 @@ public class InfrastructureManagerTest extends ImTestWatcher {
   public void testInfrastructureOutputs() throws ImClientException {
     String infId = getInfrastructureId();
     InfOutputValues result = getIm().getInfrastructureOutputs(infId);
-    Map<String, String> outputs = result.getOutputs();
+    Map<String, Object> outputs = result.getOutputs();
     String galaxyUrl =
-        outputs.get(EXPECTED_INFRASTRUCTURE_OUTPUT_GALAXY_URL_KEY);
+        (String) outputs.get(EXPECTED_INFRASTRUCTURE_OUTPUT_GALAXY_URL_KEY);
     Assert.assertEquals(EXPECTED_INFRASTRUCTURE_OUTPUT_GALAXY_URL_VALUE,
         galaxyUrl);
   }
