@@ -51,4 +51,8 @@ public class ResponseError {
   public String getFormattedErrorMessage() {
     return "Error " + getCode() + ": " + getMessage();
   }
+
+  public boolean is404Error() {
+    return getCode() == 404 ? true : false;
+  }
 }

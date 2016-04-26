@@ -2,6 +2,8 @@ package es.upv.i3m.grycap.im.pojo;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import es.upv.i3m.grycap.im.States;
+import es.upv.i3m.grycap.im.exceptions.NoEnumFoundException;
 import es.upv.i3m.grycap.im.pojo.deserializer.InfrastructureStateDeserializer;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -24,6 +26,10 @@ public class InfrastructureState {
 
   public String getState() {
     return state;
+  }
+
+  public States getEnumState() throws NoEnumFoundException {
+    return States.getEnumFromValue(state);
   }
 
   public Map<String, String> getVmStates() {
