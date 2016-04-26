@@ -22,7 +22,7 @@ import es.upv.i3m.grycap.im.lang.ImMessages;
 /**
  * Stores the virtual machine states.
  */
-public enum VmStates {
+public enum States {
 
   PENDING("pending"),
   RUNNING("running"),
@@ -35,7 +35,7 @@ public enum VmStates {
 
   private final String value;
 
-  VmStates(String value) {
+  States(String value) {
     this.value = value;
   }
 
@@ -56,16 +56,16 @@ public enum VmStates {
    *          : string of the value to retrieve
    * @return A VmProperty
    */
-  public static VmStates getEnumFromValue(String value)
+  public static States getEnumFromValue(String value)
       throws NoEnumFoundException {
     if (value != null) {
-      for (VmStates property : VmStates.values()) {
+      for (States property : States.values()) {
         if (value.equalsIgnoreCase(property.getValue())) {
           return property;
         }
       }
     }
-    throw new NoEnumFoundException(ImMessages.EXCEPTION_NO_VM_STATE_ENUM_FOUND);
+    throw new NoEnumFoundException(ImMessages.EXCEPTION_NO_STATE_ENUM_FOUND);
   }
 
 }
