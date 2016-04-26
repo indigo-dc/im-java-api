@@ -62,11 +62,6 @@ public class InfrastructureManagerTest extends ImTestWatcher {
 
   private static final String VM_DEFAULT_ID = "0";
 
-  private static final String EXPECTED_INFRASTRUCTURE_OUTPUT_GALAXY_URL_KEY =
-      "galaxy_url";
-  private static final String EXPECTED_INFRASTRUCTURE_OUTPUT_GALAXY_URL_VALUE =
-      "http://10.0.0.1:8080";
-
   private String getInfrastructureId() {
     return infrastructureId;
   }
@@ -215,10 +210,21 @@ public class InfrastructureManagerTest extends ImTestWatcher {
     String infId = getInfrastructureId();
     InfOutputValues result = getIm().getInfrastructureOutputs(infId);
     Map<String, Object> outputs = result.getOutputs();
-    String galaxyUrl =
-        (String) outputs.get(EXPECTED_INFRASTRUCTURE_OUTPUT_GALAXY_URL_KEY);
-    Assert.assertEquals(EXPECTED_INFRASTRUCTURE_OUTPUT_GALAXY_URL_VALUE,
-        galaxyUrl);
+    String galaxyUrl = (String) outputs.get("galaxy_url");
+    Assert.assertEquals("http://10.0.0.1:8080", galaxyUrl);
+  }
+
+  @Test
+  public void testInfrastructureNestedOutputs() throws ImClientException {
+    String infId = getInfrastructureId();
+    InfOutputValues result = getIm().getInfrastructureOutputs(infId);
+    Map<String, Object> outputs = result.getOutputs();
+    Map<String, Object> credentials =
+        (Map<String, Object>) outputs.get("cluster_creds");
+    String user = (String) credentials.get("user");
+    String token = (String) credentials.get("token");
+    Assert.assertEquals("username", user);
+    Assert.assertEquals("password", token);
   }
 
   @Test
