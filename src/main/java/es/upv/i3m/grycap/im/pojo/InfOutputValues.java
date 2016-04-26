@@ -27,13 +27,13 @@ import java.util.Map;
 public class InfOutputValues {
 
   @JsonProperty("outputs")
-  private Map<String, String> outputs;
+  private Map<String, Object> outputs;
 
-  public InfOutputValues(@JsonProperty("outputs") Map<String, String> outputs) {
+  public InfOutputValues(@JsonProperty("outputs") Map<String, Object> outputs) {
     this.outputs = outputs;
   }
 
-  public Map<String, String> getOutputs() {
+  public Map<String, Object> getOutputs() {
     return outputs;
   }
 
