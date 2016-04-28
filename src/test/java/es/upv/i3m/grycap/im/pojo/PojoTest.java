@@ -1,5 +1,6 @@
 package es.upv.i3m.grycap.im.pojo;
 
+import es.upv.i3m.grycap.ImTestWatcher;
 import es.upv.i3m.grycap.im.exceptions.FileException;
 import es.upv.i3m.grycap.im.exceptions.InfrastructureUuidNotFoundException;
 
@@ -10,7 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PojoTest {
+public class PojoTest extends ImTestWatcher {
 
   @Test
   public void testInfOutputValuesEquals() {
@@ -179,5 +180,4 @@ public class PojoTest {
 
     Assert.assertNotEquals(vmInfo1, vmInfo2);
   }
-
 }

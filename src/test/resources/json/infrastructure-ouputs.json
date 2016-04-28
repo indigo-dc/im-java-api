@@ -1,0 +1,9 @@
+{
+    "outputs": {
+        "galaxy_url": "http://127.0.0.1:8080",
+        "cluster_creds": {
+            "token": "password",
+            "user": "username"
+        }
+    }
+}
