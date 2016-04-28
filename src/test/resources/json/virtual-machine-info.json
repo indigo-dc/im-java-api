@@ -1,0 +1,40 @@
+{
+    "radl": [
+        {
+            "provider_id": "publica",
+            "outbound": "yes",
+            "class": "network",
+            "id": "public_net"
+        },
+        {
+            "provider_id": "privada",
+            "outbound": "no",
+            "class": "network",
+            "id": "private_net"
+        },
+        {
+            "net_interface.1.ip": "10.0.0.72",
+            "cpu.arch": "x86_64",
+            "disk.0.os.credentials.username": "ubuntu",
+            "virtual_system_type": "qemu",
+            "net_interface.1.connection": "private_net",
+            "disk.0.image.name": "Ramses_Ubuntu_14_04_demo",
+            "memory.size": 1000341504,
+            "provider.type": "OpenNebula",
+            "net_interface.0.connection": "public_net",
+            "disk.0.device": "hda",
+            "disk.0.os.name": "linux",
+            "class": "system",
+            "instance_id": "10030",
+            "disk.0.image.url": "one://ramses.i3m.upv.es/95",
+            "cpu.count": 1,
+            "disk.0.os.version": "14.04",
+            "launch_time": 1461843667,
+            "id": "galaxy_server",
+            "instance_name": "Ramses_Ubuntu_14_04_demo",
+            "state": "configured",
+            "provider.port": 2633,
+            "disk.0.size": 20971520000
+        }
+    ]
+}

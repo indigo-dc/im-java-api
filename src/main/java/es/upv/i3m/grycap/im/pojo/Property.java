@@ -20,6 +20,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import es.upv.i3m.grycap.im.pojo.deserializer.PropertyDeserializer;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * Generic property class that stores all the different properties that can have
  * the infrastructure or the virtual machines.
@@ -41,6 +45,29 @@ public class Property {
 
   public String getValue() {
     return value;
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this);
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder().append(key).append(value).toHashCode();
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other == this) {
+      return true;
+    }
+    if (other instanceof Property) {
+      Property prop = (Property) other;
+      return new EqualsBuilder().append(key, prop.key).append(value, prop.value)
+          .isEquals();
+    }
+    return false;
   }
 
 }
