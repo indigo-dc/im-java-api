@@ -28,16 +28,8 @@ import javax.ws.rs.client.ClientBuilder;
 
 public class SslClient implements RestClient {
 
-  private SSLContext ctx;
-  private HostnameVerifier verifier;
-
-  public SslClient() {
-    this.ctx = SslConfigurator.newInstance(true).createSSLContext();
-  }
-
-  public SslClient(final SSLContext ctx) {
-    this.ctx = ctx;
-  }
+  private final SSLContext ctx;
+  private final HostnameVerifier verifier;
 
   public SslClient(final SSLContext ctx, final HostnameVerifier verifier) {
     this.ctx = ctx;
@@ -51,14 +43,16 @@ public class SslClient implements RestClient {
    */
   @Override
   public Client createClient() {
-    if (ctx == null) {
+    SSLContext context = ctx;
+    if (context == null) {
       // Generate generic SSL context
-      ctx = SslConfigurator.newInstance(true).createSSLContext();
+      context = SslConfigurator.newInstance(true).createSSLContext();
     }
     return verifier == null
-        ? ClientBuilder.newBuilder().sslContext(ctx)
+        ? ClientBuilder.newBuilder().sslContext(context)
             .register(ImResponsesReader.class).build()
-        : ClientBuilder.newBuilder().sslContext(ctx).hostnameVerifier(verifier)
-            .register(ImResponsesReader.class).build();
+        : ClientBuilder.newBuilder().sslContext(context)
+            .hostnameVerifier(verifier).register(ImResponsesReader.class)
+            .build();
   }
 }
