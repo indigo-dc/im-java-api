@@ -17,12 +17,12 @@ public class SslClientTest {
   private final String target = "https://127.0.0.1:1080";
 
   @Before
-  public void startProxy() {
+  public void startServer() {
     mockServer = ClientAndServer.startClientAndServer(1080);
   }
 
   @After
-  public void stopProxy() {
+  public void stopServer() {
     mockServer.stop();
   }
 
