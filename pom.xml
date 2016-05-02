@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>es.upv.i3m.grycap</groupId>
   <artifactId>im-java-api</artifactId>
-  <version>0.4.3</version>
+  <version>0.4.4</version>
   <name>IM Java API</name>
   <description>Java client for the REST API of the IM</description>
 
@@ -19,6 +19,7 @@
     <java.version>7</java.version>
     <maven-javadoc-plugin.version>2.10.3</maven-javadoc-plugin.version>
     <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
+    <mockserver-netty.version>3.10.4</mockserver-netty.version>
   </properties>
 
   <dependencies>
@@ -62,6 +63,13 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- mockserver -->
+    <dependency>
+      <groupId>org.mock-server</groupId>
+      <artifactId>mockserver-netty</artifactId>
+      <version>${mockserver-netty.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

@@ -60,5 +60,7 @@ public final class ImMessages {
       "REST call with empty body content";
 
   private ImMessages() {
+    // It is not allowed to instantiate this class
+    throw new UnsupportedOperationException();
   }
 }
