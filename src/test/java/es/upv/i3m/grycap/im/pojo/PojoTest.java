@@ -19,6 +19,7 @@ public class PojoTest extends ImTestWatcher {
     outputValues.put("test", "test");
     InfOutputValues outputs1 = new InfOutputValues(outputValues);
     InfOutputValues outputs2 = new InfOutputValues(outputValues);
+    Assert.assertEquals(outputs1, outputs1);
     Assert.assertEquals(outputs1, outputs2);
   }
 
@@ -39,6 +40,7 @@ public class PojoTest extends ImTestWatcher {
         new InfrastructureState("infState", infStates);
     InfrastructureState infState2 =
         new InfrastructureState("infState", infStates);
+    Assert.assertEquals(infState1, infState1);
     Assert.assertEquals(infState1, infState2);
   }
 
@@ -56,6 +58,7 @@ public class PojoTest extends ImTestWatcher {
   public void testInfrastructureUriEquals() {
     InfrastructureUri uri1 = new InfrastructureUri("uri");
     InfrastructureUri uri2 = new InfrastructureUri("uri");
+    Assert.assertEquals(uri1, uri1);
     Assert.assertEquals(uri1, uri2);
   }
 
@@ -89,6 +92,7 @@ public class PojoTest extends ImTestWatcher {
         .asList(new InfrastructureUri("uri"), new InfrastructureUri("uri")));
     InfrastructureUris uris2 = new InfrastructureUris(Arrays
         .asList(new InfrastructureUri("uri"), new InfrastructureUri("uri")));
+    Assert.assertEquals(uris1, uris1);
     Assert.assertEquals(uris1, uris2);
   }
 
@@ -106,6 +110,7 @@ public class PojoTest extends ImTestWatcher {
   public void testPropertyEquals() {
     Property prop1 = new Property("key", "value");
     Property prop2 = new Property("key", "value");
+    Assert.assertEquals(prop1, prop1);
     Assert.assertEquals(prop1, prop2);
   }
 
@@ -120,6 +125,7 @@ public class PojoTest extends ImTestWatcher {
   public void testErrorEquals() {
     ResponseError error1 = new ResponseError("message", 200);
     ResponseError error2 = new ResponseError("message", 200);
+    Assert.assertEquals(error1, error1);
     Assert.assertEquals(error1, error2);
   }
 
@@ -159,6 +165,7 @@ public class PojoTest extends ImTestWatcher {
     VirtualMachineInfo vmInfo2 =
         new VirtualMachineInfo(Arrays.asList(property3, property4));
 
+    Assert.assertEquals(vmInfo1, vmInfo1);
     Assert.assertEquals(vmInfo1, vmInfo2);
   }
 
