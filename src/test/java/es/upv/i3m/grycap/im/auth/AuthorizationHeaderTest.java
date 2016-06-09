@@ -5,6 +5,8 @@ import es.upv.i3m.grycap.im.auth.credential.Credential;
 import es.upv.i3m.grycap.im.auth.credential.DummyCredential;
 import es.upv.i3m.grycap.im.auth.credential.im.ImCredential.ImUsernamePasswordCredential;
 import es.upv.i3m.grycap.im.auth.credential.occi.OcciCredential;
+import es.upv.i3m.grycap.im.auth.credential.opennebula.OpenNebulaTokenCredential;
+import es.upv.i3m.grycap.im.auth.credential.opennebula.OpenNebulaUserPwdCredential;
 import es.upv.i3m.grycap.im.auth.credential.openstack.OpenstackAuthVersion;
 import es.upv.i3m.grycap.im.auth.credential.openstack.OpenstackCredential;
 import es.upv.i3m.grycap.im.auth.credential.vmrc.VmrcCredential;
@@ -28,6 +30,10 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
       "id = ost ; type = OpenStack ; username = usr ; password = pwd ; host = host ; service_region = region";
   private static final String OCCI_CREDS =
       "id = occi ; type = OCCI ; host = host ; proxy = proxy";
+  private static final String ONE_UP_CREDS =
+      "id = one ; type = OpenNebula ; username = usr ; password = pwd ; host = host";
+  private static final String ONE_TK_CREDS =
+      "  id = one ; type = OpenNebula ; token = token ; host = host";
 
   private static AuthorizationHeader ah;
 
@@ -72,6 +78,22 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
         .withAuthVersion(OpenstackAuthVersion.PASSWORD_2_0).build();
     ah.addCredential(cred);
     Assert.assertEquals(OST_CREDS, ah.serialize());
+  }
+
+  @Test
+  public void testOpenNebulaUserPassCredentials() throws ImClientException {
+    Credential<?> cred = OpenNebulaUserPwdCredential.getBuilder().withId("one")
+        .withUsername("usr").withPassword("pwd").withHost("host").build();
+    ah.addCredential(cred);
+    Assert.assertEquals(ONE_UP_CREDS, ah.serialize());
+  }
+
+  @Test
+  public void testOpenNebulaTokenCredentials() throws ImClientException {
+    Credential<?> cred = OpenNebulaTokenCredential.getBuilder().withId("one")
+        .withToken("token").withHost("host").build();
+    ah.addCredential(cred);
+    Assert.assertEquals(ONE_TK_CREDS, ah.serialize());
   }
 
   @Test

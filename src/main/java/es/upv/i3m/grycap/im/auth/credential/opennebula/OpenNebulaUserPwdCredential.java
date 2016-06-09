@@ -3,8 +3,8 @@ package es.upv.i3m.grycap.im.auth.credential.opennebula;
 import es.upv.i3m.grycap.im.auth.credential.AbstractUsernamePasswordCredential;
 import es.upv.i3m.grycap.im.auth.credential.ServiceType;
 
-public class OpennebulaUserPwdCredential
-    extends AbstractUsernamePasswordCredential<OpennebulaUserPwdCredential> {
+public class OpenNebulaUserPwdCredential
+    extends AbstractUsernamePasswordCredential<OpenNebulaUserPwdCredential> {
 
   private String host;
 
@@ -31,7 +31,7 @@ public class OpennebulaUserPwdCredential
     return sb;
   }
 
-  protected OpennebulaUserPwdCredential(
+  protected OpenNebulaUserPwdCredential(
       OpennebulaUserPwdCredentialBuilder builder) {
     super(builder);
     setHost(builder.getHost());
@@ -44,7 +44,7 @@ public class OpennebulaUserPwdCredential
   //@formatter:off
   public static class OpennebulaUserPwdCredentialBuilder extends
       AbstractUsernamePasswordCredentialBuilder<OpennebulaUserPwdCredentialBuilder, 
-      OpennebulaUserPwdCredential> {
+      OpenNebulaUserPwdCredential> {
     //@formatter:on
 
     private String host;
@@ -59,8 +59,8 @@ public class OpennebulaUserPwdCredential
     }
 
     @Override
-    public OpennebulaUserPwdCredential build() {
-      return new OpennebulaUserPwdCredential(this);
+    public OpenNebulaUserPwdCredential build() {
+      return new OpenNebulaUserPwdCredential(this);
     }
   }
 }

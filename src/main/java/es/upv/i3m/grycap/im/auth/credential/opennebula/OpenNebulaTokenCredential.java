@@ -3,12 +3,12 @@ package es.upv.i3m.grycap.im.auth.credential.opennebula;
 import es.upv.i3m.grycap.im.auth.credential.AbstractTokenCredential;
 import es.upv.i3m.grycap.im.auth.credential.ServiceType;
 
-public class OpennebulaTokenCredential
-    extends AbstractTokenCredential<OpennebulaTokenCredential> {
+public class OpenNebulaTokenCredential
+    extends AbstractTokenCredential<OpenNebulaTokenCredential> {
 
   private String host;
 
-  protected OpennebulaTokenCredential(
+  protected OpenNebulaTokenCredential(
       OpennebulaTokenCredentialBuilder builder) {
     super(builder);
     setHost(builder.getHost());
@@ -42,7 +42,7 @@ public class OpennebulaTokenCredential
   }
 
   public static class OpennebulaTokenCredentialBuilder extends
-      AbstractTokenCredentialBuilder<OpennebulaTokenCredentialBuilder, OpennebulaTokenCredential> {
+      AbstractTokenCredentialBuilder<OpennebulaTokenCredentialBuilder, OpenNebulaTokenCredential> {
 
     private String host;
 
@@ -56,8 +56,8 @@ public class OpennebulaTokenCredential
     }
 
     @Override
-    public OpennebulaTokenCredential build() {
-      return new OpennebulaTokenCredential(this);
+    public OpenNebulaTokenCredential build() {
+      return new OpenNebulaTokenCredential(this);
     }
   }
 }
