@@ -7,6 +7,7 @@ description: >
   TOSCA test for launching a Virtual Elastic Cluster. It will launch
   a single front-end that will be in change of managing the elasticity
   using the specified LRMS (torque, sge, slurm and condor) workload.
+
 topology_template:
 
   node_templates:
@@ -21,14 +22,17 @@ topology_template:
 
     torque_front_end:
       type: tosca.nodes.indigo.LRMS.FrontEnd.Torque
+      properties:
+        wn_ips: { get_attribute: [ torque_wn, private_address ] }
       requirements:
         - host: torque_server
 
     torque_server:
       type: tosca.nodes.indigo.Compute
-      properties:
-        public_ip: yes
       capabilities:
+        endpoint:
+          properties:
+            network_name: PUBLIC
         host:
           properties:
             num_cpus: 1
@@ -39,6 +43,8 @@ topology_template:
 
     wn_node:
       type: tosca.nodes.indigo.LRMS.WorkerNode.Torque
+      properties:
+        front_end_ip: { get_attribute: [ torque_server, private_address, 0 ] }
       capabilities:
         wn:
           properties:
@@ -49,8 +55,6 @@ topology_template:
             
     torque_wn:
       type: tosca.nodes.indigo.Compute
-      properties:
-        public_ip: no
       capabilities:
         scalable:
           properties:
@@ -69,4 +73,4 @@ topology_template:
     cluster_ip:
       value: { get_attribute: [ torque_server, public_address, 0 ] }
     cluster_creds:
-      value: { get_attribute: [ torque_server, credential, 0 ] }
+      value: { get_attribute: [ torque_server, endpoint, credential, 0 ] }

@@ -16,6 +16,7 @@
 
 package es.upv.i3m.grycap.im;
 
+import es.upv.i3m.grycap.im.auth.AuthorizationHeader;
 import es.upv.i3m.grycap.im.exceptions.ImClientException;
 import es.upv.i3m.grycap.im.exceptions.ToscaContentTypeNotSupportedException;
 import es.upv.i3m.grycap.im.lang.ImMessages;
@@ -38,8 +39,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 /**
- * This class offers the user an API to communicate with the Infrastructure
- * Manager.
+ * This class offers the user an API to communicate with the Infrastructure Manager.
  */
 public class InfrastructureManager {
 
@@ -75,9 +75,23 @@ public class InfrastructureManager {
    * @param authorizationHeader
    *          : string with the authorization content
    */
-  public InfrastructureManager(final String targetUrl,
-      final String authorizationHeader) throws ImClientException {
+  public InfrastructureManager(final String targetUrl, final String authorizationHeader)
+      throws ImClientException {
     imClient = new ImClient(targetUrl, authorizationHeader);
+  }
+
+  /**
+   * Create a new IM client.
+   * 
+   * @param targetUrl
+   *          : the URL where the REST API of the IM is defined
+   * @param authorizationHeader
+   *          : {@link AuthorizationHeader} with the authorization content
+   */
+  public InfrastructureManager(final String targetUrl,
+      final AuthorizationHeader authorizationHeader) throws ImClientException {
+    String serializedAuthorizationHeader = authorizationHeader.serialize();
+    imClient = new ImClient(targetUrl, serializedAuthorizationHeader);
   }
 
   private ImClient getImClient() {
@@ -85,8 +99,8 @@ public class InfrastructureManager {
   }
 
   /**
-   * Create and configure an infrastructure with the requirements specified in
-   * the document of the body contents.<br>
+   * Create and configure an infrastructure with the requirements specified in the document of the
+   * body contents.<br>
    * If success, it is returned the URI of the new infrastructure.
    * 
    * @param infrastructureDefinition
@@ -103,29 +117,27 @@ public class InfrastructureManager {
   }
 
   /**
-   * Return a list of URIs referencing the infrastructures associated to the IM
-   * user.
+   * Return a list of URIs referencing the infrastructures associated to the IM user.
    */
   public InfrastructureUris getInfrastructureList() throws ImClientException {
     return getImClient().get(PATH_INFRASTRUCTURES, InfrastructureUris.class);
   }
 
   /**
-   * Return a list of URIs referencing the virtual machines associated to the
-   * infrastructure with ID 'infId'.
+   * Return a list of URIs referencing the virtual machines associated to the infrastructure with ID
+   * 'infId'.
    * 
    * @param infId
    *          : infrastructure id
    */
-  public InfrastructureUris getInfrastructureInfo(String infId)
-      throws ImClientException {
+  public InfrastructureUris getInfrastructureInfo(String infId) throws ImClientException {
     return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId,
         InfrastructureUris.class);
   }
 
   /**
-   * Return information about the virtual machine with ID vmId associated to the
-   * infrastructure with ID infId.
+   * Return information about the virtual machine with ID vmId associated to the infrastructure with
+   * ID infId.
    * 
    * @param infId
    *          : infrastructure id
@@ -133,16 +145,14 @@ public class InfrastructureManager {
    *          : virtual machine id
    * @return : POJO with the vm info.
    */
-  public VirtualMachineInfo getVmInfo(String infId, String vmId)
-      throws ImClientException {
-    return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId
-        + PATH_SEPARATOR + PATH_VMS + PATH_SEPARATOR + vmId,
-        VirtualMachineInfo.class);
+  public VirtualMachineInfo getVmInfo(String infId, String vmId) throws ImClientException {
+    return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
+        + PATH_VMS + PATH_SEPARATOR + vmId, VirtualMachineInfo.class);
   }
 
   /**
-   * Return property 'propertyName' from to the virtual machine with ID 'vmId'
-   * associated to the infrastructure with ID 'infId'.
+   * Return property 'propertyName' from to the virtual machine with ID 'vmId' associated to the
+   * infrastructure with ID 'infId'.
    * 
    * @param infId
    *          : infrastructure id
@@ -151,75 +161,71 @@ public class InfrastructureManager {
    * @param vmProperty
    *          : VM property to retrieve from the virtual machine
    */
-  public Property getVmProperty(String infId, String vmId,
-      VmProperties vmProperty) throws ImClientException {
-    return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId
-        + PATH_SEPARATOR + PATH_VMS + PATH_SEPARATOR + vmId + PATH_SEPARATOR
-        + vmProperty.toString(), Property.class);
+  public Property getVmProperty(String infId, String vmId, VmProperties vmProperty)
+      throws ImClientException {
+    return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
+        + PATH_VMS + PATH_SEPARATOR + vmId + PATH_SEPARATOR + vmProperty.toString(),
+        Property.class);
   }
 
   /**
-   * Return the contextualization log associated to the infrastructure with ID
-   * 'infId'.
+   * Return the contextualization log associated to the infrastructure with ID 'infId'.
    * 
    * @param infId
    *          : infrastructure id
    */
-  public Property getInfrastructureContMsg(String infId)
-      throws ImClientException {
-    return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId
-        + PATH_SEPARATOR + ImValues.CONTMSG, Property.class);
+  public Property getInfrastructureContMsg(String infId) throws ImClientException {
+    return getImClient().get(
+        PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.CONTMSG,
+        Property.class);
   }
 
   /**
-   * Return a json with the original RADL specified to create the infrastructure
-   * with ID 'infId'.
+   * Return a json with the original RADL specified to create the infrastructure with ID 'infId'.
    * 
    * @param infId
    *          : infrastructure id
    */
   public Property getInfrastructureRadl(String infId) throws ImClientException {
-    return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId
-        + PATH_SEPARATOR + ImValues.RADL, Property.class);
+    return getImClient().get(
+        PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.RADL,
+        Property.class);
   }
 
   /**
    * Return a JSON with the infrastructure and virtual machines states.<br>
-   * The JSON has a 'vm_states' array describing the states of all the machines
-   * of the infrastructure and a 'state' that describes the general state of the
-   * infrastructure ( e.g. {"vm_states": {"144838424585": "running"}, "state":
-   * "running"} ).
+   * The JSON has a 'vm_states' array describing the states of all the machines of the
+   * infrastructure and a 'state' that describes the general state of the infrastructure ( e.g.
+   * {"vm_states": {"144838424585": "running"}, "state": "running"} ).
    * 
    * @param infId
    *          : infrastructure id
    * @return : json with the infrastructure state
    */
-  public InfrastructureState getInfrastructureState(String infId)
-      throws ImClientException {
-    return getImClient().get(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId
-        + PATH_SEPARATOR + ImValues.STATE, InfrastructureState.class);
+  public InfrastructureState getInfrastructureState(String infId) throws ImClientException {
+    return getImClient().get(
+        PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.STATE,
+        InfrastructureState.class);
   }
 
   /**
-   * Undeploy the virtual machines associated to the infrastructure with ID
-   * 'infId'.
+   * Undeploy the virtual machines associated to the infrastructure with ID 'infId'.
    * 
    * @param infId
    *          : infrastructure id
    */
   public void destroyInfrastructure(String infId) throws ImClientException {
-    getImClient().delete(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId,
-        String.class);
+    getImClient().delete(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId, String.class);
   }
 
   /**
-   * Add the resources specified in the body contents to the infrastructure with
-   * ID 'infId'. The RADL restrictions are the same as in
-   * <a href="http://www.grycap.upv.es/im/doc/xmlrpc.html#addresource-xmlrpc">
-   * RPC-XML AddResource</a><br>
+   * Add the resources specified in the body contents to the infrastructure with ID 'infId'. The
+   * RADL restrictions are the same as in
+   * <a href="http://www.grycap.upv.es/im/doc/xmlrpc.html#addresource-xmlrpc"> RPC-XML
+   * AddResource</a><br>
    * If success, it is returned a list of URIs of the new virtual machines. <br>
-   * The context parameter is optional and is a flag to specify if the
-   * contextualization step will be launched just after the VM addition.<br>
+   * The context parameter is optional and is a flag to specify if the contextualization step will
+   * be launched just after the VM addition.<br>
    * If not specified the contextualization flag is set to True.
    * 
    * @param infId
@@ -229,31 +235,28 @@ public class InfrastructureManager {
    * @param bodyContentType
    *          : set the body content type. Can be RADL, RADL_JSON or TOSCA.
    * @param context
-   *          : flag to specify if the contextualization step will be launched
-   *          just after the VM addition
+   *          : flag to specify if the contextualization step will be launched just after the VM
+   *          addition
    * @return : list of URIs of the new virtual machines
    */
   public InfrastructureUris addResource(String infId, String radlFile,
-      BodyContentType bodyContentType, boolean... context)
-      throws ImClientException {
+      BodyContentType bodyContentType, boolean... context) throws ImClientException {
 
     RestParameter restParameter = createCallParameters(context);
-    return getImClient().post(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId,
-        radlFile, bodyContentType.getValue(), InfrastructureUris.class,
-        restParameter);
+    return getImClient().post(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId, radlFile,
+        bodyContentType.getValue(), InfrastructureUris.class, restParameter);
   }
 
   private static RestParameter createCallParameters(boolean... context) {
     return (context != null && context.length > 0)
-        ? new Parameter(REST_PARAMETER_NAME_CONTEXT, context[0])
-        : new NoParameter();
+        ? new Parameter(REST_PARAMETER_NAME_CONTEXT, context[0]) : new NoParameter();
   }
 
   /**
-   * Undeploy the virtual machine with ID 'vmId' associated to the
-   * infrastructure with ID 'infId'.<br>
-   * The context parameter is optional and is a flag to specify if the
-   * contextualization step will be launched just after the VM addition.<br>
+   * Undeploy the virtual machine with ID 'vmId' associated to the infrastructure with ID 'infId'.
+   * <br>
+   * The context parameter is optional and is a flag to specify if the contextualization step will
+   * be launched just after the VM addition.<br>
    * As default the contextualization flag is set to True.
    * 
    * @param infId
@@ -261,22 +264,21 @@ public class InfrastructureManager {
    * @param vmIds
    *          : list of virtual machine ids
    * @param context
-   *          : flag to specify if the contextualization step will be launched
-   *          just after the VM addition
+   *          : flag to specify if the contextualization step will be launched just after the VM
+   *          addition
    * @throws ImClientException
    *           : exception in the IM client
    */
-  public void removeResource(String infId, List<String> vmIds,
-      boolean... context) throws ImClientException {
+  public void removeResource(String infId, List<String> vmIds, boolean... context)
+      throws ImClientException {
     String ids = StringUtils.join(vmIds, ",");
     removeResource(infId, ids, context);
   }
 
   /**
-   * Undeploy the virtual machine with ID vmId associated to the infrastructure
-   * with ID 'infId'.<br>
-   * The context parameter is optional and is a flag to specify if the
-   * contextualization step will be launched just after the VM addition.<br>
+   * Undeploy the virtual machine with ID vmId associated to the infrastructure with ID 'infId'.<br>
+   * The context parameter is optional and is a flag to specify if the contextualization step will
+   * be launched just after the VM addition.<br>
    * As default the contextualization flag is set to True.
    * 
    * @param infId
@@ -284,49 +286,46 @@ public class InfrastructureManager {
    * @param vmId
    *          : virtual machine id
    * @param context
-   *          : flag to specify if the contextualization step will be launched
-   *          just after the VM addition
+   *          : flag to specify if the contextualization step will be launched just after the VM
+   *          addition
    */
   public void removeResource(String infId, String vmId, boolean... context)
       throws ImClientException {
 
-    String path = PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
-        + PATH_VMS + PATH_SEPARATOR + vmId;
+    String path = PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS
+        + PATH_SEPARATOR + vmId;
     RestParameter restParameter = createCallParameters(context);
 
     getImClient().delete(path, String.class, restParameter);
   }
 
   /**
-   * Stop (but do not undeploy) all the virtual machines associated to the
-   * infrastructure with ID 'infId'. They can be resumed by the
-   * 'startInfrastructure' method.
+   * Stop (but do not undeploy) all the virtual machines associated to the infrastructure with ID
+   * 'infId'. They can be resumed by the 'startInfrastructure' method.
    * 
    * @param infId
    *          : infrastructure id
    */
   public void stopInfrastructure(String infId) throws ImClientException {
-    String path = PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
-        + ImValues.STOP;
+    String path = PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.STOP;
     getImClient().put(path, String.class);
   }
 
   /**
-   * Resume all the virtual machines associated to the infrastructure with ID
-   * 'infId', previously stopped with the 'stopInfrastructure' method.
+   * Resume all the virtual machines associated to the infrastructure with ID 'infId', previously
+   * stopped with the 'stopInfrastructure' method.
    * 
    * @param infId
    *          : infrastructure id
    */
   public void startInfrastructure(String infId) throws ImClientException {
-    String path = PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
-        + ImValues.START;
+    String path = PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.START;
     getImClient().put(path, String.class);
   }
 
   /**
-   * Perform the 'stop' action in the virtual machine with ID 'vmId' associated
-   * to the infrastructure with ID 'infId'.
+   * Perform the 'stop' action in the virtual machine with ID 'vmId' associated to the
+   * infrastructure with ID 'infId'.
    * 
    * @param infId
    *          : infrastructure id
@@ -335,14 +334,14 @@ public class InfrastructureManager {
    */
   public void stopVm(String infId, String vmId) throws ImClientException {
 
-    String path = PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
-        + PATH_VMS + PATH_SEPARATOR + vmId + PATH_SEPARATOR + ImValues.STOP;
+    String path = PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS
+        + PATH_SEPARATOR + vmId + PATH_SEPARATOR + ImValues.STOP;
     getImClient().put(path, String.class);
   }
 
   /**
-   * Perform the 'start' action in the virtual machine with ID 'vmId' associated
-   * to the infrastructure with ID 'infId'.
+   * Perform the 'start' action in the virtual machine with ID 'vmId' associated to the
+   * infrastructure with ID 'infId'.
    * 
    * @param infId
    *          : infrastructure id
@@ -350,18 +349,16 @@ public class InfrastructureManager {
    *          : virtual machine id
    */
   public void startVm(String infId, String vmId) throws ImClientException {
-    String path = PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
-        + PATH_VMS + PATH_SEPARATOR + vmId + PATH_SEPARATOR + ImValues.START;
+    String path = PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS
+        + PATH_SEPARATOR + vmId + PATH_SEPARATOR + ImValues.START;
     getImClient().put(path, String.class);
   }
 
   /**
-   * Change the features of the virtual machine with ID 'vmId' in the
-   * infrastructure with with ID 'infId', specified by the RADL document
-   * specified in the body contents.<br>
+   * Change the features of the virtual machine with ID 'vmId' in the infrastructure with with ID
+   * 'infId', specified by the RADL document specified in the body contents.<br>
    * Return a RADL with information about the virtual machine, like
-   * <a href="http://www.grycap.upv.es/im/doc/xmlrpc.html#getvminfo-xmlrpc">
-   * GetVMInfo</a>.
+   * <a href="http://www.grycap.upv.es/im/doc/xmlrpc.html#getvminfo-xmlrpc"> GetVMInfo</a>.
    * 
    * @param infId
    *          : infrastructure id
@@ -378,10 +375,9 @@ public class InfrastructureManager {
       BodyContentType bodyContentType) throws ImClientException {
     // The content type must not be TOSCA
     failIfToscaContentType(bodyContentType);
-    String path = PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
-        + PATH_VMS + PATH_SEPARATOR + vmId;
-    return getImClient().put(path, radlFile, bodyContentType.getValue(),
-        VirtualMachineInfo.class);
+    String path = PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + PATH_VMS
+        + PATH_SEPARATOR + vmId;
+    return getImClient().put(path, radlFile, bodyContentType.getValue(), VirtualMachineInfo.class);
   }
 
   /**
@@ -390,38 +386,34 @@ public class InfrastructureManager {
    * @param bodyContentType
    *          : type of the content sent in the body of the message
    */
-  private void failIfToscaContentType(BodyContentType bodyContentType)
-      throws ImClientException {
+  private void failIfToscaContentType(BodyContentType bodyContentType) throws ImClientException {
     if (bodyContentType.equals(BodyContentType.TOSCA)) {
-      ImJavaApiLogger.severe(InfrastructureManager.class,
-          ImMessages.EXCEPTION_TOSCA_NOT_SUPPORTED);
+      ImJavaApiLogger.severe(InfrastructureManager.class, ImMessages.EXCEPTION_TOSCA_NOT_SUPPORTED);
       throw new ToscaContentTypeNotSupportedException();
     }
   }
 
   /**
-   * Perform the reconfigure action in all the virtual machines in the the
-   * infrastructure with ID 'infID'.<br>
+   * Perform the reconfigure action in all the virtual machines in the the infrastructure with ID
+   * 'infID'.<br>
    * This method starts the contextualization process again.<br>
-   * To reconfigure the VMs see the reconfigure methods that include the 'radl'
-   * parameter.
+   * To reconfigure the VMs see the reconfigure methods that include the 'radl' parameter.
    * 
    * @param infId
    *          : infrastructure id
    */
   public void reconfigure(String infId) throws ImClientException {
-    String path = PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
-        + ImValues.RECONFIGURE;
+    String path =
+        PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.RECONFIGURE;
     getImClient().put(path, String.class);
   }
 
   /**
-   * Perform the reconfigure action in all the virtual machines of the
-   * infrastructure with ID 'infID.' It updates the configuration of the
-   * infrastructure as indicated in the 'radlFile'. The RADL restrictions are
-   * the same as in
-   * <a href="http://www.grycap.upv.es/im/doc/xmlrpc.html#reconfigure-xmlrpc">
-   * RPC-XML Reconfigure</a><br>
+   * Perform the reconfigure action in all the virtual machines of the infrastructure with ID
+   * 'infID.' It updates the configuration of the infrastructure as indicated in the 'radlFile'. The
+   * RADL restrictions are the same as in
+   * <a href="http://www.grycap.upv.es/im/doc/xmlrpc.html#reconfigure-xmlrpc"> RPC-XML
+   * Reconfigure</a><br>
    * If no RADL is specified, the contextualization process is started again.
    * 
    * @param infId
@@ -431,22 +423,21 @@ public class InfrastructureManager {
    * @param bodyContentType
    *          : set the body content type. Can be RADL or RADL_JSON
    */
-  public void reconfigure(String infId, String radlFile,
-      BodyContentType bodyContentType) throws ImClientException {
+  public void reconfigure(String infId, String radlFile, BodyContentType bodyContentType)
+      throws ImClientException {
     // The content type must not be TOSCA
     failIfToscaContentType(bodyContentType);
-    String path = PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
-        + ImValues.RECONFIGURE;
+    String path =
+        PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.RECONFIGURE;
     getImClient().put(path, radlFile, bodyContentType.getValue(), String.class);
   }
 
   /**
-   * Perform the reconfigure action in all the virtual machines of the
-   * infrastructure with ID 'infID.' It updates the configuration of the
-   * infrastructure as indicated in the 'radlFile'. The RADL restrictions are
-   * the same as in
-   * <a href="http://www.grycap.upv.es/im/doc/xmlrpc.html#reconfigure-xmlrpc">
-   * RPC-XML Reconfigure</a><br>
+   * Perform the reconfigure action in all the virtual machines of the infrastructure with ID
+   * 'infID.' It updates the configuration of the infrastructure as indicated in the 'radlFile'. The
+   * RADL restrictions are the same as in
+   * <a href="http://www.grycap.upv.es/im/doc/xmlrpc.html#reconfigure-xmlrpc"> RPC-XML
+   * Reconfigure</a><br>
    * If no RADL is specified, the contextualization process is started again.
    * 
    * @param infId
@@ -456,20 +447,17 @@ public class InfrastructureManager {
    * @param bodyContentType
    *          : set the body content type. Can be RADL or RADL_JSON
    * @param vmList
-   *          : comma separated list of IDs of the VMs to reconfigure. If not
-   *          specified all the VMs will be reconfigured.
+   *          : comma separated list of IDs of the VMs to reconfigure. If not specified all the VMs
+   *          will be reconfigured.
    */
-  public void reconfigure(String infId, String radlFile,
-      BodyContentType bodyContentType, List<Integer> vmList)
-      throws ImClientException {
+  public void reconfigure(String infId, String radlFile, BodyContentType bodyContentType,
+      List<Integer> vmList) throws ImClientException {
     // The content type must not be TOSCA
     failIfToscaContentType(bodyContentType);
-    RestParameter parameters =
-        new Parameter(REST_PARAMETER_NAME_VMLIST, vmList);
-    String path = PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
-        + ImValues.RECONFIGURE;
-    getImClient().put(path, radlFile, bodyContentType.getValue(), String.class,
-        parameters);
+    RestParameter parameters = new Parameter(REST_PARAMETER_NAME_VMLIST, vmList);
+    String path =
+        PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR + ImValues.RECONFIGURE;
+    getImClient().put(path, radlFile, bodyContentType.getValue(), String.class, parameters);
   }
 
   /**
@@ -477,11 +465,9 @@ public class InfrastructureManager {
    * 
    * @param infId
    *          : infrastructure id
-   * @return : InfrastructureStatus class with an internal map containing the
-   *         outputs
+   * @return : InfrastructureStatus class with an internal map containing the outputs
    */
-  public InfOutputValues getInfrastructureOutputs(String infId)
-      throws ImClientException {
+  public InfOutputValues getInfrastructureOutputs(String infId) throws ImClientException {
     String path = PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
         + REST_PARAMETER_INFRASTRUCTURE_OUTPUTS;
     return getImClient().get(path, InfOutputValues.class);
