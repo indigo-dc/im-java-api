@@ -1,0 +1,24 @@
+-classpath
+'/var/lib/jenkins/.m2/repository/org/glassfish/hk2/external/aopalliance-repackaged/2.4.0-b31/aopalliance-repackaged-2.4.0-b31.jar:/var/lib/jenkins/.m2/repository/javax/ws/rs/javax.ws.rs-api/2.0.1/javax.ws.rs-api-2.0.1.jar:/var/lib/jenkins/.m2/repository/org/glassfish/jersey/core/jersey-client/2.22.1/jersey-client-2.22.1.jar:/var/lib/jenkins/.m2/repository/org/glassfish/hk2/hk2-api/2.4.0-b31/hk2-api-2.4.0-b31.jar:/var/lib/jenkins/.m2/repository/javax/annotation/javax.annotation-api/1.2/javax.annotation-api-1.2.jar:/var/lib/jenkins/.m2/repository/org/glassfish/jersey/core/jersey-common/2.22.1/jersey-common-2.22.1.jar:/var/lib/jenkins/.m2/repository/org/glassfish/hk2/hk2-locator/2.4.0-b31/hk2-locator-2.4.0-b31.jar:/var/lib/jenkins/.m2/repository/log4j/log4j/1.2.17/log4j-1.2.17.jar:/var/lib/jenkins/.m2/repository/org/glassfish/hk2/osgi-resource-locator/1.0.1/osgi-resource-locator-1.0.1.jar:/var/lib/jenkins/.m2/repository/org/javassist/javassist/3.18.1-GA/javassist-3.18.1-GA.jar:/var/lib/jenkins/.m2/repository/org/glassfish/jersey/bundles/repackaged/jersey-guava/2.22.1/jersey-guava-2.22.1.jar:/var/lib/jenkins/.m2/repository/org/glassfish/hk2/hk2-utils/2.4.0-b31/hk2-utils-2.4.0-b31.jar:/var/lib/jenkins/.m2/repository/org/glassfish/hk2/external/javax.inject/2.4.0-b31/javax.inject-2.4.0-b31.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/var/lib/jenkins/workspace/im-java-api-javadoc/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2016. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/var/lib/jenkins/workspace/im-java-api-javadoc/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'IM Java API 0.0.2 API'
+-linkoffline
+'http://docs.oracle.com/javase/8/docs/api' '/var/lib/jenkins/workspace/im-java-api-javadoc/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'IM Java API 0.0.2 API'
