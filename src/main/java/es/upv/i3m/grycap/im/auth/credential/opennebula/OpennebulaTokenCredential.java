@@ -1,25 +1,33 @@
-package es.upv.i3m.grycap.im.pojo.auth.credential;
+package es.upv.i3m.grycap.im.auth.credential.opennebula;
 
-import com.google.common.base.Strings;
+import es.upv.i3m.grycap.im.auth.credential.AbstractTokenCredential;
+import es.upv.i3m.grycap.im.auth.credential.ServiceType;
 
-public class OpennebulaTokenCredential extends AbstractTokenCredential<OpennebulaTokenCredential> {
+public class OpennebulaTokenCredential
+    extends AbstractTokenCredential<OpennebulaTokenCredential> {
 
   private String host;
+
+  protected OpennebulaTokenCredential(
+      OpennebulaTokenCredentialBuilder builder) {
+    super(builder);
+    setHost(builder.getHost());
+  }
 
   public String getHost() {
     return host;
   }
 
-  public void setHost(String host) {
-    if (Strings.isNullOrEmpty(host)) {
-      throw new IllegalArgumentException("host must not be blank");
+  private void setHost(String host) {
+    if (isNullOrEmpty(host)) {
+      throw new IllegalArgumentException("Host must not be blank");
     }
     this.host = host;
   }
 
   @Override
-  public SERVICE_TYPE getServiceType() {
-    return SERVICE_TYPE.OPENNEBULA;
+  public ServiceType getServiceType() {
+    return ServiceType.OPENNEBULA;
   }
 
   @Override
@@ -27,11 +35,6 @@ public class OpennebulaTokenCredential extends AbstractTokenCredential<Opennebul
     sb = super.serialize(sb);
     sb.append(" ; host = ").append(host);
     return sb;
-  }
-
-  protected OpennebulaTokenCredential(OpennebulaTokenCredentialBuilder builder) {
-    super(builder);
-    setHost(builder.getHost());
   }
 
   public static OpennebulaTokenCredentialBuilder getBuilder() {
@@ -56,6 +59,5 @@ public class OpennebulaTokenCredential extends AbstractTokenCredential<Opennebul
     public OpennebulaTokenCredential build() {
       return new OpennebulaTokenCredential(this);
     }
-
   }
 }

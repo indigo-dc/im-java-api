@@ -1,8 +1,12 @@
-package es.upv.i3m.grycap.im.pojo.auth.credential;
+package es.upv.i3m.grycap.im.auth.credential.occi;
 
-import com.google.common.base.Strings;
+import es.upv.i3m.grycap.im.auth.credential.AbstractCredential;
+import es.upv.i3m.grycap.im.auth.credential.ServiceType;
 
 public class OcciCredential extends AbstractCredential<OcciCredential> {
+
+  private String host;
+  private String proxy;
 
   protected OcciCredential(OcciCredentialBuilder builder) {
     super(builder);
@@ -11,19 +15,16 @@ public class OcciCredential extends AbstractCredential<OcciCredential> {
   }
 
   @Override
-  public SERVICE_TYPE getServiceType() {
-    return SERVICE_TYPE.OCCI;
+  public ServiceType getServiceType() {
+    return ServiceType.OCCI;
   }
-
-  private String host;
-  private String proxy;
 
   public String getHost() {
     return host;
   }
 
-  public void setHost(String host) {
-    if (Strings.isNullOrEmpty(host)) {
+  private void setHost(String host) {
+    if (isNullOrEmpty(host)) {
       throw new IllegalArgumentException("host must not be blank");
     }
     this.host = host;
@@ -33,8 +34,8 @@ public class OcciCredential extends AbstractCredential<OcciCredential> {
     return proxy;
   }
 
-  public void setProxy(String proxy) {
-    if (Strings.isNullOrEmpty(proxy)) {
+  private void setProxy(String proxy) {
+    if (isNullOrEmpty(proxy)) {
       throw new IllegalArgumentException("proxy must not be blank");
     }
     this.proxy = proxy;
@@ -80,6 +81,5 @@ public class OcciCredential extends AbstractCredential<OcciCredential> {
     public OcciCredential build() {
       return new OcciCredential(this);
     }
-
   }
 }

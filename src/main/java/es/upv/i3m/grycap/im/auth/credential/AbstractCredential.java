@@ -1,14 +1,14 @@
-package es.upv.i3m.grycap.im.pojo.auth.credential;
+package es.upv.i3m.grycap.im.auth.credential;
 
-import com.google.common.base.Strings;
-
-public abstract class AbstractCredential<T extends AbstractCredential<T>> implements Credential<T> {
-
-  protected <B extends AbstractCredentialBuilder<B, T>> AbstractCredential(B builder) {
-    id = builder.getId();
-  }
+public abstract class AbstractCredential<T extends AbstractCredential<T>>
+    implements Credential<T> {
 
   private String id;
+
+  protected <B extends AbstractCredentialBuilder<B, T>> AbstractCredential(
+      B builder) {
+    id = builder.getId();
+  }
 
   public String getId() {
     return id;
@@ -27,15 +27,18 @@ public abstract class AbstractCredential<T extends AbstractCredential<T>> implem
     if (sb == null) {
       sb = new StringBuilder();
     }
-    if (!Strings.isNullOrEmpty(id)) {
+    if (!isNullOrEmpty(id)) {
       sb.append("id = ").append(id).append(" ; ");
     }
     sb.append("type = ").append(getServiceType().getValue());
     return sb;
   }
 
-  public static abstract class AbstractCredentialBuilder<B extends AbstractCredentialBuilder<B, T>, T extends AbstractCredential<T>>
+  //@formatter:off
+  public abstract static class AbstractCredentialBuilder
+      <B extends AbstractCredentialBuilder<B, T>, T extends AbstractCredential<T>>
       implements CredentialBuilder<T> {
+    //@formatter:on
 
     private String id;
 
@@ -48,5 +51,9 @@ public abstract class AbstractCredential<T extends AbstractCredential<T>> implem
       this.id = id;
       return (B) this;
     }
+  }
+
+  public static boolean isNullOrEmpty(String string) {
+    return (string == null) || string.isEmpty();
   }
 }

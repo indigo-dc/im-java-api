@@ -1,8 +1,18 @@
-package es.upv.i3m.grycap.im.pojo.auth.credential;
+package es.upv.i3m.grycap.im.auth.credential.openstack;
 
-import com.google.common.base.Strings;
+import es.upv.i3m.grycap.im.auth.credential.AbstractUsernamePasswordCredential;
+import es.upv.i3m.grycap.im.auth.credential.ServiceType;
 
-public class OpenstackCredential extends AbstractUsernamePasswordCredential<OpenstackCredential> {
+public class OpenstackCredential
+    extends AbstractUsernamePasswordCredential<OpenstackCredential> {
+
+  private OpenstackAuthVersion authVersion = OpenstackAuthVersion.PASSWORD_2_0;
+  private String tenant;
+  private String host;
+  private String baseUrl;
+  private String serviceRegion;
+  private String serviceName;
+  private String authToken;
 
   protected OpenstackCredential(OpenstackCredentialBuilder builder) {
     super(builder);
@@ -15,39 +25,16 @@ public class OpenstackCredential extends AbstractUsernamePasswordCredential<Open
     authToken = builder.getAuthToken();
   }
 
-  public enum AUTH_VERSION {
-
-    PASSWORD_2_0("2.0_password"), PASSWORD_3_x("3.X_password");
-
-    private final String value;
-
-    AUTH_VERSION(String value) {
-      this.value = value;
-    }
-
-    public String getValue() {
-      return value;
-    }
-  }
-
-  private AUTH_VERSION authVersion = AUTH_VERSION.PASSWORD_2_0;
-  private String tenant;
-  private String host;
-  private String baseUrl;
-  private String serviceRegion;
-  private String serviceName;
-  private String authToken;
-
   @Override
-  public SERVICE_TYPE getServiceType() {
-    return SERVICE_TYPE.OPENSTACK;
+  public ServiceType getServiceType() {
+    return ServiceType.OPENSTACK;
   }
 
-  public AUTH_VERSION getAuthVersion() {
+  public OpenstackAuthVersion getAuthVersion() {
     return authVersion;
   }
 
-  public void setAuthVersion(AUTH_VERSION authVersion) {
+  public void setAuthVersion(OpenstackAuthVersion authVersion) {
     this.authVersion = authVersion;
   }
 
@@ -63,9 +50,9 @@ public class OpenstackCredential extends AbstractUsernamePasswordCredential<Open
     return host;
   }
 
-  public void setHost(String host) {
-    if (Strings.isNullOrEmpty(host)) {
-      throw new IllegalArgumentException("host must not be blank");
+  private void setHost(String host) {
+    if (isNullOrEmpty(host)) {
+      throw new IllegalArgumentException("Host must not be blank");
     }
     this.host = host;
   }
@@ -106,19 +93,19 @@ public class OpenstackCredential extends AbstractUsernamePasswordCredential<Open
   public StringBuilder serialize(StringBuilder sb) {
     sb = super.serialize(sb);
     sb.append(" ; host = ").append(host);
-    if (authVersion != AUTH_VERSION.PASSWORD_2_0) {
-      sb.append(" ; auth_version = ").append(authVersion.getValue());
+    if (authVersion != OpenstackAuthVersion.PASSWORD_2_0) {
+      sb.append(" ; OpenstackAuthVersion = ").append(authVersion.getValue());
     }
-    if (!Strings.isNullOrEmpty(baseUrl)) {
+    if (!isNullOrEmpty(baseUrl)) {
       sb.append(" ; base_url = ").append(baseUrl);
     }
-    if (!Strings.isNullOrEmpty(serviceRegion)) {
+    if (!isNullOrEmpty(serviceRegion)) {
       sb.append(" ; service_region = ").append(serviceRegion);
     }
-    if (!Strings.isNullOrEmpty(serviceName)) {
+    if (!isNullOrEmpty(serviceName)) {
       sb.append(" ; service_name = ").append(serviceName);
     }
-    if (!Strings.isNullOrEmpty(authToken)) {
+    if (!isNullOrEmpty(authToken)) {
       sb.append(" ; auth_token = ").append(authToken);
     }
     return sb;
@@ -131,7 +118,7 @@ public class OpenstackCredential extends AbstractUsernamePasswordCredential<Open
   public static class OpenstackCredentialBuilder extends
       AbstractUsernamePasswordCredentialBuilder<OpenstackCredentialBuilder, OpenstackCredential> {
 
-    private AUTH_VERSION authVersion;
+    private OpenstackAuthVersion authVersion;
     private String tenant;
     private String host;
     private String baseUrl;
@@ -139,11 +126,12 @@ public class OpenstackCredential extends AbstractUsernamePasswordCredential<Open
     private String serviceName;
     private String authToken;
 
-    public AUTH_VERSION getAuthVersion() {
+    public OpenstackAuthVersion getAuthVersion() {
       return authVersion;
     }
 
-    public OpenstackCredentialBuilder withAuthVersion(AUTH_VERSION authVersion) {
+    public OpenstackCredentialBuilder
+        withAuthVersion(OpenstackAuthVersion authVersion) {
       this.authVersion = authVersion;
       return this;
     }
@@ -206,6 +194,5 @@ public class OpenstackCredential extends AbstractUsernamePasswordCredential<Open
     public OpenstackCredential build() {
       return new OpenstackCredential(this);
     }
-
   }
 }

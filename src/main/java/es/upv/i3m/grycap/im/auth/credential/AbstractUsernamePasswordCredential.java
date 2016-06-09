@@ -1,19 +1,23 @@
-package es.upv.i3m.grycap.im.pojo.auth.credential;
+package es.upv.i3m.grycap.im.auth.credential;
 
-import com.google.common.base.Strings;
-
-public abstract class AbstractUsernamePasswordCredential<T extends AbstractUsernamePasswordCredential<T>>
+//@formatter:off
+public abstract class AbstractUsernamePasswordCredential<T extends 
+    AbstractUsernamePasswordCredential<T>>
     extends AbstractCredential<T> {
+  //@formatter:on
 
-  protected <B extends AbstractUsernamePasswordCredentialBuilder<B, T>> AbstractUsernamePasswordCredential(
-      B builder) {
+  private String username;
+  private String password;
+
+  //@formatter:off
+  protected <B extends AbstractUsernamePasswordCredentialBuilder<B, T>> 
+      AbstractUsernamePasswordCredential(B builder) {
+    //@formatter:on
+
     super(builder);
     username = builder.getUsername();
     password = builder.getPassword();
   }
-
-  private String username;
-  private String password;
 
   public String getUsername() {
     return username;
@@ -34,17 +38,22 @@ public abstract class AbstractUsernamePasswordCredential<T extends AbstractUsern
   @Override
   public StringBuilder serialize(StringBuilder sb) {
     sb = super.serialize(sb);
-    if (!Strings.isNullOrEmpty(username)) {
+    if (!isNullOrEmpty(username)) {
       sb.append(" ; username = ").append(username);
     }
-    if (!Strings.isNullOrEmpty(password)) {
+    if (!isNullOrEmpty(password)) {
       sb.append(" ; password = ").append(password);
     }
     return sb;
   }
 
-  public static abstract class AbstractUsernamePasswordCredentialBuilder<B extends AbstractUsernamePasswordCredentialBuilder<B, T>, T extends AbstractUsernamePasswordCredential<T>>
+  //@formatter:off
+  public abstract static class AbstractUsernamePasswordCredentialBuilder
+      <B extends AbstractUsernamePasswordCredentialBuilder<B, T>, 
+      T extends AbstractUsernamePasswordCredential<T>>
       extends AbstractCredentialBuilder<B, T> {
+    //@formatter:on
+
     private String username;
     private String password;
 

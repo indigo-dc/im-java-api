@@ -1,23 +1,22 @@
-package es.upv.i3m.grycap.im.pojo.auth.credential;
-
-import com.google.common.base.Strings;
+package es.upv.i3m.grycap.im.auth.credential;
 
 public abstract class AbstractTokenCredential<T extends AbstractTokenCredential<T>>
     extends AbstractCredential<T> {
 
-  protected <B extends AbstractTokenCredentialBuilder<B, T>> AbstractTokenCredential(B builder) {
+  protected String token;
+
+  protected <B extends AbstractTokenCredentialBuilder<B, T>> AbstractTokenCredential(
+      B builder) {
     super(builder);
     setToken(builder.getToken());
   }
-
-  protected String token;
 
   public String getToken() {
     return token;
   }
 
-  public void setToken(String token) {
-    if (Strings.isNullOrEmpty(token)) {
+  private void setToken(String token) {
+    if (isNullOrEmpty(token)) {
       throw new IllegalArgumentException("token must not be blank");
     }
     this.token = token;
@@ -30,8 +29,11 @@ public abstract class AbstractTokenCredential<T extends AbstractTokenCredential<
     return sb;
   }
 
-  public static abstract class AbstractTokenCredentialBuilder<B extends AbstractTokenCredentialBuilder<B, T>, T extends AbstractTokenCredential<T>>
+  //@formatter:off
+  public abstract static class AbstractTokenCredentialBuilder
+      <B extends AbstractTokenCredentialBuilder<B, T>, T extends AbstractTokenCredential<T>>
       extends AbstractCredentialBuilder<B, T> {
+    //@formatter:on
     private String token;
 
     @SuppressWarnings("unchecked")

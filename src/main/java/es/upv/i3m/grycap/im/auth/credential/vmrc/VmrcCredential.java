@@ -1,27 +1,30 @@
-package es.upv.i3m.grycap.im.pojo.auth.credential;
+package es.upv.i3m.grycap.im.auth.credential.vmrc;
 
-import com.google.common.base.Strings;
+import es.upv.i3m.grycap.im.auth.credential.AbstractUsernamePasswordCredential;
+import es.upv.i3m.grycap.im.auth.credential.ServiceType;
 
-public class VmrcCredential extends AbstractUsernamePasswordCredential<VmrcCredential> {
+public class VmrcCredential
+    extends AbstractUsernamePasswordCredential<VmrcCredential> {
+
+  private String host;
 
   protected VmrcCredential(VmrcCredentialBuilder builder) {
     super(builder);
     setHost(builder.getHost());
+
   }
 
   @Override
-  public SERVICE_TYPE getServiceType() {
-    return SERVICE_TYPE.VMRC;
+  public ServiceType getServiceType() {
+    return ServiceType.VMRC;
   }
-
-  private String host;
 
   public String getHost() {
     return host;
   }
 
-  public void setHost(String host) {
-    if (Strings.isNullOrEmpty(host)) {
+  private void setHost(String host) {
+    if (isNullOrEmpty(host)) {
       throw new IllegalArgumentException("host must not be blank");
     }
     this.host = host;
@@ -38,8 +41,8 @@ public class VmrcCredential extends AbstractUsernamePasswordCredential<VmrcCrede
     return new VmrcCredentialBuilder();
   }
 
-  public static class VmrcCredentialBuilder
-      extends AbstractUsernamePasswordCredentialBuilder<VmrcCredentialBuilder, VmrcCredential> {
+  public static class VmrcCredentialBuilder extends
+      AbstractUsernamePasswordCredentialBuilder<VmrcCredentialBuilder, VmrcCredential> {
 
     private String host;
 

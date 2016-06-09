@@ -1,4 +1,4 @@
-package es.upv.i3m.grycap.im.pojo.auth.credential;
+package es.upv.i3m.grycap.im.auth.credential;
 
 public class DummyCredential extends AbstractCredential<DummyCredential> {
 
@@ -7,16 +7,16 @@ public class DummyCredential extends AbstractCredential<DummyCredential> {
   }
 
   @Override
-  public SERVICE_TYPE getServiceType() {
-    return SERVICE_TYPE.DUMMY;
+  public ServiceType getServiceType() {
+    return ServiceType.DUMMY;
   }
 
   public static DummyCredentialBuilder getBuilder() {
     return new DummyCredentialBuilder();
   }
 
-  public static class DummyCredentialBuilder
-      extends AbstractCredentialBuilder<DummyCredentialBuilder, DummyCredential> {
+  public static class DummyCredentialBuilder extends
+      AbstractCredentialBuilder<DummyCredentialBuilder, DummyCredential> {
 
     @Override
     public DummyCredential build() {

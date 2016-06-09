@@ -1,6 +1,7 @@
-package es.upv.i3m.grycap.im.pojo.auth.credential;
+package es.upv.i3m.grycap.im.auth.credential.opennebula;
 
-import com.google.common.base.Strings;
+import es.upv.i3m.grycap.im.auth.credential.AbstractUsernamePasswordCredential;
+import es.upv.i3m.grycap.im.auth.credential.ServiceType;
 
 public class OpennebulaUserPwdCredential
     extends AbstractUsernamePasswordCredential<OpennebulaUserPwdCredential> {
@@ -11,16 +12,16 @@ public class OpennebulaUserPwdCredential
     return host;
   }
 
-  public void setHost(String host) {
-    if (Strings.isNullOrEmpty(host)) {
+  private void setHost(String host) {
+    if (isNullOrEmpty(host)) {
       throw new IllegalArgumentException("host must not be blank");
     }
     this.host = host;
   }
 
   @Override
-  public SERVICE_TYPE getServiceType() {
-    return SERVICE_TYPE.OPENNEBULA;
+  public ServiceType getServiceType() {
+    return ServiceType.OPENNEBULA;
   }
 
   @Override
@@ -30,7 +31,8 @@ public class OpennebulaUserPwdCredential
     return sb;
   }
 
-  protected OpennebulaUserPwdCredential(OpennebulaUserPwdCredentialBuilder builder) {
+  protected OpennebulaUserPwdCredential(
+      OpennebulaUserPwdCredentialBuilder builder) {
     super(builder);
     setHost(builder.getHost());
   }
@@ -39,8 +41,11 @@ public class OpennebulaUserPwdCredential
     return new OpennebulaUserPwdCredentialBuilder();
   }
 
+  //@formatter:off
   public static class OpennebulaUserPwdCredentialBuilder extends
-      AbstractUsernamePasswordCredentialBuilder<OpennebulaUserPwdCredentialBuilder, OpennebulaUserPwdCredential> {
+      AbstractUsernamePasswordCredentialBuilder<OpennebulaUserPwdCredentialBuilder, 
+      OpennebulaUserPwdCredential> {
+    //@formatter:on
 
     private String host;
 
@@ -57,6 +62,5 @@ public class OpennebulaUserPwdCredential
     public OpennebulaUserPwdCredential build() {
       return new OpennebulaUserPwdCredential(this);
     }
-
   }
 }

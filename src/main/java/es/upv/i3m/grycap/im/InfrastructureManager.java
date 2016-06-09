@@ -16,6 +16,7 @@
 
 package es.upv.i3m.grycap.im;
 
+import es.upv.i3m.grycap.im.auth.AuthorizationHeader;
 import es.upv.i3m.grycap.im.exceptions.ImClientException;
 import es.upv.i3m.grycap.im.exceptions.ToscaContentTypeNotSupportedException;
 import es.upv.i3m.grycap.im.lang.ImMessages;
@@ -25,7 +26,6 @@ import es.upv.i3m.grycap.im.pojo.InfrastructureUri;
 import es.upv.i3m.grycap.im.pojo.InfrastructureUris;
 import es.upv.i3m.grycap.im.pojo.Property;
 import es.upv.i3m.grycap.im.pojo.VirtualMachineInfo;
-import es.upv.i3m.grycap.im.pojo.auth.AuthorizationHeader;
 import es.upv.i3m.grycap.im.rest.client.BodyContentType;
 import es.upv.i3m.grycap.im.rest.client.ImClient;
 import es.upv.i3m.grycap.im.rest.client.parameters.NoParameter;
