@@ -20,7 +20,6 @@ import es.upv.i3m.grycap.ImTestWatcher;
 import es.upv.i3m.grycap.file.NoNullOrEmptyFile;
 import es.upv.i3m.grycap.file.Utf8File;
 import es.upv.i3m.grycap.im.exceptions.FileException;
-import es.upv.i3m.grycap.im.exceptions.ImClientErrorException;
 import es.upv.i3m.grycap.im.exceptions.ImClientException;
 import es.upv.i3m.grycap.im.exceptions.ToscaContentTypeNotSupportedException;
 import es.upv.i3m.grycap.im.pojo.InfOutputValues;
@@ -109,25 +108,16 @@ public class InfrastructureManagerTest extends ImTestWatcher {
 
   /**
    * Creates a new infrastructure.
+   * 
+   * @throws ImClientException
    */
   @Before
-  public void createInfrastructure() {
-    try {
-      InfrastructureUri newInfrastructureUri = getIm().createInfrastructure(
-          readFile(TOSCA_FILE_PATH), BodyContentType.TOSCA);
-      String uri = newInfrastructureUri.getUri();
-      Assert.assertEquals(false, uri.isEmpty());
-      setInfrastructureId(newInfrastructureUri.getInfrastructureId());
-    } catch (ImClientException exception) {
-      if (exception instanceof ImClientErrorException) {
-        System.out.println(
-            "Message: " + ((ImClientErrorException) exception).getMessage());
-        System.out.println(
-            "Message: " + ((ImClientErrorException) exception).getCause());
-        System.out.println("Message: " + ((ImClientErrorException) exception)
-            .getResponseError().getFormattedErrorMessage());
-      }
-    }
+  public void createInfrastructure() throws ImClientException {
+    InfrastructureUri newInfrastructureUri = getIm()
+        .createInfrastructure(readFile(TOSCA_FILE_PATH), BodyContentType.TOSCA);
+    String uri = newInfrastructureUri.getUri();
+    Assert.assertEquals(false, uri.isEmpty());
+    setInfrastructureId(newInfrastructureUri.getInfrastructureId());
   }
 
   private String readFile(String filePath) throws FileException {
