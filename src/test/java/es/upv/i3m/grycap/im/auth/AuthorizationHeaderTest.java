@@ -33,7 +33,7 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
   private static final String ONE_UP_CREDS =
       "id = one ; type = OpenNebula ; username = usr ; password = pwd ; host = host";
   private static final String ONE_TK_CREDS =
-      "  id = one ; type = OpenNebula ; token = token ; host = host";
+      "id = one ; type = OpenNebula ; token = token ; host = host";
 
   private static AuthorizationHeader ah;
 
