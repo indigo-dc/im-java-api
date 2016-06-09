@@ -1,6 +1,10 @@
 package es.upv.i3m.grycap.im.auth;
 
 import es.upv.i3m.grycap.ImTestWatcher;
+import es.upv.i3m.grycap.file.NoNullOrEmptyFile;
+import es.upv.i3m.grycap.file.Utf8File;
+import es.upv.i3m.grycap.im.InfrastructureManager;
+import es.upv.i3m.grycap.im.InfrastructureManagerTest;
 import es.upv.i3m.grycap.im.auth.credential.Credential;
 import es.upv.i3m.grycap.im.auth.credential.DummyCredential;
 import es.upv.i3m.grycap.im.auth.credential.im.ImCredential.ImUsernamePasswordCredential;
@@ -11,12 +15,16 @@ import es.upv.i3m.grycap.im.auth.credential.openstack.OpenstackAuthVersion;
 import es.upv.i3m.grycap.im.auth.credential.openstack.OpenstackCredential;
 import es.upv.i3m.grycap.im.auth.credential.vmrc.VmrcCredential;
 import es.upv.i3m.grycap.im.exceptions.ImClientException;
+import es.upv.i3m.grycap.im.pojo.InfrastructureUri;
+import es.upv.i3m.grycap.im.rest.client.BodyContentType;
+import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class AuthorizationHeaderTest extends ImTestWatcher {
@@ -34,6 +42,10 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
       "id = one ; type = OpenNebula ; username = usr ; password = pwd ; host = host";
   private static final String ONE_TK_CREDS =
       "id = one ; type = OpenNebula ; token = token ; host = host";
+  private static final String IM_DUMMY_PROVIDER_URL =
+      "http://servproject.i3m.upv.es:8811";
+  private static final String TOSCA_FILE_PATH =
+      "./src/test/resources/tosca/galaxy_tosca.yaml";
 
   private static AuthorizationHeader ah;
 
@@ -45,6 +57,40 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
   @Before
   public void clearAuthorizationHeader() {
     ah.setCredentialsAuthInfos(new ArrayList<Credential<?>>());
+  }
+
+  @Test
+  public void testAuthorizationHeader() throws ImClientException {
+    // Create authorization headers
+    AuthorizationHeader authorizationHeader = new AuthorizationHeader();
+    Credential<?> cred = ImUsernamePasswordCredential.getBuilder()
+        .withUsername("imuser01").withPassword("invitado").build();
+    authorizationHeader.addCredential(cred);
+    cred = VmrcCredential.getBuilder().withUsername("demo").withPassword("demo")
+        .withHost("http://servproject.i3m.upv.es:8080/vmrc/vmrc").build();
+    authorizationHeader.addCredential(cred);
+    cred = DummyCredential.getBuilder().withId("dummy").build();
+    authorizationHeader.addCredential(cred);
+
+    // Check the headers work with the dummy provider
+    try {
+      InfrastructureManager im = new InfrastructureManager(
+          IM_DUMMY_PROVIDER_URL, authorizationHeader.serialize());
+      String toscaFile =
+          new NoNullOrEmptyFile(new Utf8File(Paths.get(TOSCA_FILE_PATH)))
+              .read();
+      InfrastructureUri newInfrastructureUri =
+          im.createInfrastructure(toscaFile, BodyContentType.TOSCA);
+      String uri = newInfrastructureUri.getUri();
+      Assert.assertEquals(false, uri.isEmpty());
+      String infId = newInfrastructureUri.getInfrastructureId();
+      im.destroyInfrastructure(infId);
+
+    } catch (ImClientException exception) {
+      ImJavaApiLogger.severe(InfrastructureManagerTest.class,
+          exception.getMessage());
+      Assert.fail();
+    }
   }
 
   @Test
