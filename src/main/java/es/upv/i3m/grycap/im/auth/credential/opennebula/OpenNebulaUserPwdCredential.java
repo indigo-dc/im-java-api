@@ -8,6 +8,12 @@ public class OpenNebulaUserPwdCredential
 
   private String host;
 
+  protected OpenNebulaUserPwdCredential(
+      OpennebulaUserPwdCredentialBuilder builder) {
+    super(builder);
+    setHost(builder.getHost());
+  }
+
   public String getHost() {
     return host;
   }
@@ -29,12 +35,6 @@ public class OpenNebulaUserPwdCredential
     sb = super.serialize(sb);
     sb.append(" ; host = ").append(host);
     return sb;
-  }
-
-  protected OpenNebulaUserPwdCredential(
-      OpennebulaUserPwdCredentialBuilder builder) {
-    super(builder);
-    setHost(builder.getHost());
   }
 
   public static OpennebulaUserPwdCredentialBuilder getBuilder() {

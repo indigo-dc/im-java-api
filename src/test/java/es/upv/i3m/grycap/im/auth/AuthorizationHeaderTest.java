@@ -9,6 +9,7 @@ import es.upv.i3m.grycap.im.auth.credential.Credential;
 import es.upv.i3m.grycap.im.auth.credential.docker.DockerCredential;
 import es.upv.i3m.grycap.im.auth.credential.dummy.DummyCredential;
 import es.upv.i3m.grycap.im.auth.credential.ec2.AmazonEc2UserPwdCredential;
+import es.upv.i3m.grycap.im.auth.credential.gce.GceUserPwdCredential;
 import es.upv.i3m.grycap.im.auth.credential.im.ImCredential.ImTokenCredential;
 import es.upv.i3m.grycap.im.auth.credential.im.ImCredential.ImUsernamePasswordCredential;
 import es.upv.i3m.grycap.im.auth.credential.occi.OcciCredential;
@@ -32,29 +33,38 @@ import java.util.ArrayList;
 
 public class AuthorizationHeaderTest extends ImTestWatcher {
 
+  // Test user/pass
+  private static final String USER = "user";
+  private static final String PASS = "pass";
+  private static final String USER_PASS =
+      "username = " + USER + " ; password = " + PASS;
+  // Credentials
   private static final String DUMMY_CREDS = "id = dummy ; type = Dummy";
   private static final String IM_UP_CREDS =
-      "type = InfrastructureManager ; username = imuser01 ; password = pwd";
+      "type = InfrastructureManager ; " + USER_PASS;
   private static final String IM_TK_CREDS =
       "type = InfrastructureManager ; token = token";
   private static final String VMRC_CREDS =
-      "type = VMRC ; username = demo ; password = pwd ; host = host";
-  private static final String OST_CREDS =
-      "id = ost ; type = OpenStack ; username = usr ; password = pwd ; host = host ; service_region = region";
+      "type = VMRC ; " + USER_PASS + " ; host = host";
+  private static final String OST_CREDS = "id = ost ; type = OpenStack ; "
+      + USER_PASS + " ; host = host ; service_region = region";
   private static final String OCCI_CREDS =
       "id = occi ; type = OCCI ; host = host ; proxy = proxy";
   private static final String ONE_UP_CREDS =
-      "id = one ; type = OpenNebula ; username = usr ; password = pwd ; host = host";
+      "id = one ; type = OpenNebula ; " + USER_PASS + " ; host = host";
   private static final String ONE_TK_CREDS =
       "id = one ; type = OpenNebula ; token = token ; host = host";
+  private static final String EC2_CREDS =
+      "id = ec2 ; type = EC2 ; " + USER_PASS;
+  private static final String DOCKER_CREDS =
+      "id = docker ; type = Docker ; host = host_url";
+  private static final String GCE_CREDS =
+      "id = gce ; type = GCE ; " + USER_PASS + " ; project = testPrj";
+  // IM information
   private static final String IM_DUMMY_PROVIDER_URL =
       "http://servproject.i3m.upv.es:8811";
   private static final String TOSCA_FILE_PATH =
       "./src/test/resources/tosca/galaxy_tosca.yaml";
-  private static final String EC2_CREDS =
-      "id = ec2 ; type = EC2 ; username = demo ; password = pwd";
-  private static final String DOCKER_CREDS =
-      "id = docker ; type = Docker ; host = host_url";
 
   private static AuthorizationHeader ah;
 
@@ -111,7 +121,7 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
   @Test
   public void testImUserPassCredentials() {
     Credential<?> cred = ImUsernamePasswordCredential.getBuilder()
-        .withUsername("imuser01").withPassword("pwd").build();
+        .withUsername(USER).withPassword(PASS).build();
     ah.addCredential(cred);
     Assert.assertEquals(IM_UP_CREDS, ah.serialize());
   }
@@ -126,8 +136,8 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
 
   @Test
   public void testVmrcCredentials() {
-    Credential<?> cred = VmrcCredential.getBuilder().withUsername("demo")
-        .withPassword("pwd").withHost("host").build();
+    Credential<?> cred = VmrcCredential.getBuilder().withUsername(USER)
+        .withPassword(PASS).withHost("host").build();
     ah.addCredential(cred);
     Assert.assertEquals(VMRC_CREDS, ah.serialize());
   }
@@ -135,7 +145,7 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
   @Test
   public void testOpenStackCredentials() {
     Credential<?> cred = OpenstackCredential.getBuilder().withId("ost")
-        .withUsername("usr").withPassword("pwd").withTenant("tenant")
+        .withUsername(USER).withPassword(PASS).withTenant("tenant")
         .withServiceRegion("region").withHost("host")
         .withAuthVersion(OpenstackAuthVersion.PASSWORD_2_0).build();
     ah.addCredential(cred);
@@ -145,7 +155,7 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
   @Test
   public void testOpenNebulaUserPassCredentials() {
     Credential<?> cred = OpenNebulaUserPwdCredential.getBuilder().withId("one")
-        .withUsername("usr").withPassword("pwd").withHost("host").build();
+        .withUsername(USER).withPassword(PASS).withHost("host").build();
     ah.addCredential(cred);
     Assert.assertEquals(ONE_UP_CREDS, ah.serialize());
   }
@@ -169,7 +179,7 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
   @Test
   public void testAmazonEc2UserPassCredentials() {
     Credential<?> cred = AmazonEc2UserPwdCredential.getBuilder().withId("ec2")
-        .withUsername("demo").withPassword("pwd").build();
+        .withUsername(USER).withPassword(PASS).build();
     ah.addCredential(cred);
     Assert.assertEquals(EC2_CREDS, ah.serialize());
   }
@@ -180,6 +190,14 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
         .withHost("host_url").build();
     ah.addCredential(cred);
     Assert.assertEquals(DOCKER_CREDS, ah.serialize());
+  }
+
+  @Test
+  public void testGceUserPwdCredentials() {
+    Credential<?> cred = GceUserPwdCredential.getBuilder().withId("gce")
+        .withUsername(USER).withPassword(PASS).withProject("testPrj").build();
+    ah.addCredential(cred);
+    Assert.assertEquals(GCE_CREDS, ah.serialize());
   }
 
 }
