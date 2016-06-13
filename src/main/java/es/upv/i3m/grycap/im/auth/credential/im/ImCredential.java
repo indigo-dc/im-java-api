@@ -35,14 +35,15 @@ public final class ImCredential {
 
   public static class ImUsernamePasswordCredential
       extends AbstractUsernamePasswordCredential<ImUsernamePasswordCredential> {
-    @Override
-    public ServiceType getServiceType() {
-      return ServiceType.INFRASTRUCTURE_MANAGER;
-    }
 
     protected ImUsernamePasswordCredential(
         ImUsernamePasswordCredentialBuilder builder) {
       super(builder);
+    }
+
+    @Override
+    public ServiceType getServiceType() {
+      return ServiceType.INFRASTRUCTURE_MANAGER;
     }
 
     public static ImUsernamePasswordCredentialBuilder getBuilder() {

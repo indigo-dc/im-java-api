@@ -1,4 +1,7 @@
-package es.upv.i3m.grycap.im.auth.credential;
+package es.upv.i3m.grycap.im.auth.credential.dummy;
+
+import es.upv.i3m.grycap.im.auth.credential.AbstractCredential;
+import es.upv.i3m.grycap.im.auth.credential.ServiceType;
 
 public class DummyCredential extends AbstractCredential<DummyCredential> {
 

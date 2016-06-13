@@ -9,16 +9,16 @@ import java.util.List;
 public class AuthorizationHeader {
 
   private static final String ERROR_MESSAGE = "Credentials must not be null";
-  private List<Credential<?>> credentials = new ArrayList<>();
+  private List<Credential> credentials = new ArrayList<>();
 
-  public List<Credential<?>> getCredentials() {
+  public List<Credential> getCredentials() {
     return credentials;
   }
 
   /**
    * Sets the credentials information.
    */
-  public void setCredentialsAuthInfos(List<Credential<?>> credentials) {
+  public void setCredentialsAuthInfos(List<Credential> credentials) {
     if (credentials == null) {
       throw new IllegalArgumentException(ERROR_MESSAGE);
     }
@@ -34,7 +34,7 @@ public class AuthorizationHeader {
    */
   public String serialize() {
     StringBuilder sb = new StringBuilder();
-    Iterator<Credential<?>> it = credentials.iterator();
+    Iterator<Credential> it = credentials.iterator();
     while (it.hasNext()) {
       String serializedAuthInfo = it.next().serialize();
       sb.append(serializedAuthInfo);
