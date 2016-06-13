@@ -6,7 +6,9 @@ import es.upv.i3m.grycap.file.Utf8File;
 import es.upv.i3m.grycap.im.InfrastructureManager;
 import es.upv.i3m.grycap.im.InfrastructureManagerTest;
 import es.upv.i3m.grycap.im.auth.credential.Credential;
+import es.upv.i3m.grycap.im.auth.credential.docker.DockerCredential;
 import es.upv.i3m.grycap.im.auth.credential.dummy.DummyCredential;
+import es.upv.i3m.grycap.im.auth.credential.ec2.AmazonEc2UserPwdCredential;
 import es.upv.i3m.grycap.im.auth.credential.im.ImCredential.ImTokenCredential;
 import es.upv.i3m.grycap.im.auth.credential.im.ImCredential.ImUsernamePasswordCredential;
 import es.upv.i3m.grycap.im.auth.credential.occi.OcciCredential;
@@ -49,6 +51,10 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
       "http://servproject.i3m.upv.es:8811";
   private static final String TOSCA_FILE_PATH =
       "./src/test/resources/tosca/galaxy_tosca.yaml";
+  private static final String EC2_CREDS =
+      "id = ec2 ; type = EC2 ; username = demo ; password = pwd";
+  private static final String DOCKER_CREDS =
+      "id = docker ; type = Docker ; host = host_url";
 
   private static AuthorizationHeader ah;
 
@@ -96,14 +102,14 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
   }
 
   @Test
-  public void testDummyCredentials() throws ImClientException {
+  public void testDummyCredentials() {
     Credential<?> cred = DummyCredential.getBuilder().withId("dummy").build();
     ah.addCredential(cred);
     Assert.assertEquals(DUMMY_CREDS, ah.serialize());
   }
 
   @Test
-  public void testImUserPassCredentials() throws ImClientException {
+  public void testImUserPassCredentials() {
     Credential<?> cred = ImUsernamePasswordCredential.getBuilder()
         .withUsername("imuser01").withPassword("pwd").build();
     ah.addCredential(cred);
@@ -111,7 +117,7 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
   }
 
   @Test
-  public void testImTokenCredentials() throws ImClientException {
+  public void testImTokenCredentials() {
     Credential<?> cred =
         ImTokenCredential.getBuilder().withToken("token").build();
     ah.addCredential(cred);
@@ -119,7 +125,7 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
   }
 
   @Test
-  public void testVmrcCredentials() throws ImClientException {
+  public void testVmrcCredentials() {
     Credential<?> cred = VmrcCredential.getBuilder().withUsername("demo")
         .withPassword("pwd").withHost("host").build();
     ah.addCredential(cred);
@@ -127,7 +133,7 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
   }
 
   @Test
-  public void testOpenStackCredentials() throws ImClientException {
+  public void testOpenStackCredentials() {
     Credential<?> cred = OpenstackCredential.getBuilder().withId("ost")
         .withUsername("usr").withPassword("pwd").withTenant("tenant")
         .withServiceRegion("region").withHost("host")
@@ -137,7 +143,7 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
   }
 
   @Test
-  public void testOpenNebulaUserPassCredentials() throws ImClientException {
+  public void testOpenNebulaUserPassCredentials() {
     Credential<?> cred = OpenNebulaUserPwdCredential.getBuilder().withId("one")
         .withUsername("usr").withPassword("pwd").withHost("host").build();
     ah.addCredential(cred);
@@ -145,7 +151,7 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
   }
 
   @Test
-  public void testOpenNebulaTokenCredentials() throws ImClientException {
+  public void testOpenNebulaTokenCredentials() {
     Credential<?> cred = OpenNebulaTokenCredential.getBuilder().withId("one")
         .withToken("token").withHost("host").build();
     ah.addCredential(cred);
@@ -153,11 +159,27 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
   }
 
   @Test
-  public void testOcciCredentials() throws ImClientException {
+  public void testOcciCredentials() {
     Credential<?> cred = OcciCredential.getBuilder().withId("occi")
         .withHost("host").withProxy("proxy").build();
     ah.addCredential(cred);
     Assert.assertEquals(OCCI_CREDS, ah.serialize());
+  }
+
+  @Test
+  public void testAmazonEc2UserPassCredentials() {
+    Credential<?> cred = AmazonEc2UserPwdCredential.getBuilder().withId("ec2")
+        .withUsername("demo").withPassword("pwd").build();
+    ah.addCredential(cred);
+    Assert.assertEquals(EC2_CREDS, ah.serialize());
+  }
+
+  @Test
+  public void testDockerCredentials() {
+    Credential<?> cred = DockerCredential.getBuilder().withId("docker")
+        .withHost("host_url").build();
+    ah.addCredential(cred);
+    Assert.assertEquals(DOCKER_CREDS, ah.serialize());
   }
 
 }
