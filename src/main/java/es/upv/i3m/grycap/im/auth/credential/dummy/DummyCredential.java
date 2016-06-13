@@ -1,7 +1,7 @@
 package es.upv.i3m.grycap.im.auth.credential.dummy;
 
 import es.upv.i3m.grycap.im.auth.credential.AbstractCredential;
-import es.upv.i3m.grycap.im.auth.credential.ServiceType;
+import es.upv.i3m.grycap.im.auth.credential.ServiceProvider;
 
 public class DummyCredential extends AbstractCredential<DummyCredential> {
 
@@ -10,8 +10,8 @@ public class DummyCredential extends AbstractCredential<DummyCredential> {
   }
 
   @Override
-  public ServiceType getServiceType() {
-    return ServiceType.DUMMY;
+  public ServiceProvider getServiceProvider() {
+    return ServiceProvider.DUMMY;
   }
 
   public static DummyCredentialBuilder getBuilder() {

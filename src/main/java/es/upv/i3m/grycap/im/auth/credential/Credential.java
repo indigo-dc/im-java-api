@@ -2,7 +2,7 @@ package es.upv.i3m.grycap.im.auth.credential;
 
 public interface Credential<T extends Credential<T>> {
 
-  public ServiceType getServiceType();
+  public ServiceProvider getServiceProvider();
 
   public String serialize();
 

@@ -41,11 +41,11 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
   // Credentials
   private static final String DUMMY_CREDS = "id = dummy ; type = Dummy";
   private static final String IM_UP_CREDS =
-      "type = InfrastructureManager ; " + USER_PASS;
+      "id = im ; type = InfrastructureManager ; " + USER_PASS;
   private static final String IM_TK_CREDS =
-      "type = InfrastructureManager ; token = token";
+      "id = im ; type = InfrastructureManager ; token = token";
   private static final String VMRC_CREDS =
-      "type = VMRC ; " + USER_PASS + " ; host = host";
+      "id = vmrc ; type = VMRC ; " + USER_PASS + " ; host = host";
   private static final String OST_CREDS = "id = ost ; type = OpenStack ; "
       + USER_PASS + " ; host = host ; service_region = region";
   private static final String OCCI_CREDS =
@@ -87,7 +87,7 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
     cred = VmrcCredential.getBuilder().withUsername("demo").withPassword("demo")
         .withHost("http://servproject.i3m.upv.es:8080/vmrc/vmrc").build();
     ah.addCredential(cred);
-    cred = DummyCredential.getBuilder().withId("dummy").build();
+    cred = DummyCredential.getBuilder().build();
     ah.addCredential(cred);
 
     // Check the headers work with the dummy provider
@@ -113,7 +113,7 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
 
   @Test
   public void testDummyCredentials() {
-    Credential<?> cred = DummyCredential.getBuilder().withId("dummy").build();
+    Credential<?> cred = DummyCredential.getBuilder().build();
     ah.addCredential(cred);
     Assert.assertEquals(DUMMY_CREDS, ah.serialize());
   }
@@ -144,17 +144,17 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
 
   @Test
   public void testOpenStackCredentials() {
-    Credential<?> cred = OpenstackCredential.getBuilder().withId("ost")
-        .withUsername(USER).withPassword(PASS).withTenant("tenant")
-        .withServiceRegion("region").withHost("host")
-        .withAuthVersion(OpenstackAuthVersion.PASSWORD_2_0).build();
+    Credential<?> cred =
+        OpenstackCredential.getBuilder().withUsername(USER).withPassword(PASS)
+            .withTenant("tenant").withServiceRegion("region").withHost("host")
+            .withAuthVersion(OpenstackAuthVersion.PASSWORD_2_0).build();
     ah.addCredential(cred);
     Assert.assertEquals(OST_CREDS, ah.serialize());
   }
 
   @Test
   public void testOpenNebulaUserPassCredentials() {
-    Credential<?> cred = OpenNebulaUserPwdCredential.getBuilder().withId("one")
+    Credential<?> cred = OpenNebulaUserPwdCredential.getBuilder()
         .withUsername(USER).withPassword(PASS).withHost("host").build();
     ah.addCredential(cred);
     Assert.assertEquals(ONE_UP_CREDS, ah.serialize());
@@ -162,7 +162,7 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
 
   @Test
   public void testOpenNebulaTokenCredentials() {
-    Credential<?> cred = OpenNebulaTokenCredential.getBuilder().withId("one")
+    Credential<?> cred = OpenNebulaTokenCredential.getBuilder()
         .withToken("token").withHost("host").build();
     ah.addCredential(cred);
     Assert.assertEquals(ONE_TK_CREDS, ah.serialize());
@@ -170,15 +170,15 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
 
   @Test
   public void testOcciCredentials() {
-    Credential<?> cred = OcciCredential.getBuilder().withId("occi")
-        .withHost("host").withProxy("proxy").build();
+    Credential<?> cred =
+        OcciCredential.getBuilder().withHost("host").withProxy("proxy").build();
     ah.addCredential(cred);
     Assert.assertEquals(OCCI_CREDS, ah.serialize());
   }
 
   @Test
   public void testAmazonEc2UserPassCredentials() {
-    Credential<?> cred = AmazonEc2UserPwdCredential.getBuilder().withId("ec2")
+    Credential<?> cred = AmazonEc2UserPwdCredential.getBuilder()
         .withUsername(USER).withPassword(PASS).build();
     ah.addCredential(cred);
     Assert.assertEquals(EC2_CREDS, ah.serialize());
@@ -186,16 +186,16 @@ public class AuthorizationHeaderTest extends ImTestWatcher {
 
   @Test
   public void testDockerCredentials() {
-    Credential<?> cred = DockerCredential.getBuilder().withId("docker")
-        .withHost("host_url").build();
+    Credential<?> cred =
+        DockerCredential.getBuilder().withHost("host_url").build();
     ah.addCredential(cred);
     Assert.assertEquals(DOCKER_CREDS, ah.serialize());
   }
 
   @Test
   public void testGceUserPwdCredentials() {
-    Credential<?> cred = GceUserPwdCredential.getBuilder().withId("gce")
-        .withUsername(USER).withPassword(PASS).withProject("testPrj").build();
+    Credential<?> cred = GceUserPwdCredential.getBuilder().withUsername(USER)
+        .withPassword(PASS).withProject("testPrj").build();
     ah.addCredential(cred);
     Assert.assertEquals(GCE_CREDS, ah.serialize());
   }

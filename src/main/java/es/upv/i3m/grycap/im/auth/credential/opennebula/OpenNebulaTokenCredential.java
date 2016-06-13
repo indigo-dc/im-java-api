@@ -1,7 +1,7 @@
 package es.upv.i3m.grycap.im.auth.credential.opennebula;
 
 import es.upv.i3m.grycap.im.auth.credential.AbstractTokenCredential;
-import es.upv.i3m.grycap.im.auth.credential.ServiceType;
+import es.upv.i3m.grycap.im.auth.credential.ServiceProvider;
 
 public class OpenNebulaTokenCredential
     extends AbstractTokenCredential<OpenNebulaTokenCredential> {
@@ -26,8 +26,8 @@ public class OpenNebulaTokenCredential
   }
 
   @Override
-  public ServiceType getServiceType() {
-    return ServiceType.OPENNEBULA;
+  public ServiceProvider getServiceProvider() {
+    return ServiceProvider.OPENNEBULA;
   }
 
   @Override

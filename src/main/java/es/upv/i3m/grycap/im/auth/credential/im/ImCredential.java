@@ -2,7 +2,7 @@ package es.upv.i3m.grycap.im.auth.credential.im;
 
 import es.upv.i3m.grycap.im.auth.credential.AbstractTokenCredential;
 import es.upv.i3m.grycap.im.auth.credential.AbstractUsernamePasswordCredential;
-import es.upv.i3m.grycap.im.auth.credential.ServiceType;
+import es.upv.i3m.grycap.im.auth.credential.ServiceProvider;
 
 public final class ImCredential {
 
@@ -14,8 +14,8 @@ public final class ImCredential {
     }
 
     @Override
-    public ServiceType getServiceType() {
-      return ServiceType.INFRASTRUCTURE_MANAGER;
+    public ServiceProvider getServiceProvider() {
+      return ServiceProvider.INFRASTRUCTURE_MANAGER;
     }
 
     public static ImTokenCredentialBuilder getBuilder() {
@@ -42,8 +42,8 @@ public final class ImCredential {
     }
 
     @Override
-    public ServiceType getServiceType() {
-      return ServiceType.INFRASTRUCTURE_MANAGER;
+    public ServiceProvider getServiceProvider() {
+      return ServiceProvider.INFRASTRUCTURE_MANAGER;
     }
 
     public static ImUsernamePasswordCredentialBuilder getBuilder() {

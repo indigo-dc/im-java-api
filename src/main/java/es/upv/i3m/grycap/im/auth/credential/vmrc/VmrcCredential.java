@@ -1,7 +1,7 @@
 package es.upv.i3m.grycap.im.auth.credential.vmrc;
 
 import es.upv.i3m.grycap.im.auth.credential.AbstractUsernamePasswordCredential;
-import es.upv.i3m.grycap.im.auth.credential.ServiceType;
+import es.upv.i3m.grycap.im.auth.credential.ServiceProvider;
 
 public class VmrcCredential
     extends AbstractUsernamePasswordCredential<VmrcCredential> {
@@ -15,8 +15,8 @@ public class VmrcCredential
   }
 
   @Override
-  public ServiceType getServiceType() {
-    return ServiceType.VMRC;
+  public ServiceProvider getServiceProvider() {
+    return ServiceProvider.VMRC;
   }
 
   public String getHost() {

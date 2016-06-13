@@ -1,7 +1,7 @@
 package es.upv.i3m.grycap.im.auth.credential.gce;
 
 import es.upv.i3m.grycap.im.auth.credential.AbstractUsernamePasswordCredential;
-import es.upv.i3m.grycap.im.auth.credential.ServiceType;
+import es.upv.i3m.grycap.im.auth.credential.ServiceProvider;
 
 public class GceUserPwdCredential
     extends AbstractUsernamePasswordCredential<GceUserPwdCredential> {
@@ -25,8 +25,8 @@ public class GceUserPwdCredential
   }
 
   @Override
-  public ServiceType getServiceType() {
-    return ServiceType.GCE;
+  public ServiceProvider getServiceProvider() {
+    return ServiceProvider.GCE;
   }
 
   @Override

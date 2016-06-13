@@ -17,16 +17,17 @@ public abstract class AbstractTokenCredential<T extends AbstractTokenCredential<
 
   private void setToken(String token) {
     if (isNullOrEmpty(token)) {
-      throw new IllegalArgumentException("token must not be blank");
+      throw new IllegalArgumentException("Token must not be blank");
     }
     this.token = token;
   }
 
   @Override
-  protected StringBuilder serialize(StringBuilder sb) {
-    sb = super.serialize(sb);
-    sb.append(" ; token = ").append(token);
-    return sb;
+  protected StringBuilder serialize(final StringBuilder sb) {
+    StringBuilder serializedSb = sb;
+    serializedSb = super.serialize(serializedSb);
+    serializedSb.append(" ; token = ").append(token);
+    return serializedSb;
   }
 
   //@formatter:off

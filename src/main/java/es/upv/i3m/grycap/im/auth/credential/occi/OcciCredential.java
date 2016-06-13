@@ -1,7 +1,7 @@
 package es.upv.i3m.grycap.im.auth.credential.occi;
 
 import es.upv.i3m.grycap.im.auth.credential.AbstractCredential;
-import es.upv.i3m.grycap.im.auth.credential.ServiceType;
+import es.upv.i3m.grycap.im.auth.credential.ServiceProvider;
 
 public class OcciCredential extends AbstractCredential<OcciCredential> {
 
@@ -15,8 +15,8 @@ public class OcciCredential extends AbstractCredential<OcciCredential> {
   }
 
   @Override
-  public ServiceType getServiceType() {
-    return ServiceType.OCCI;
+  public ServiceProvider getServiceProvider() {
+    return ServiceProvider.OCCI;
   }
 
   public String getHost() {

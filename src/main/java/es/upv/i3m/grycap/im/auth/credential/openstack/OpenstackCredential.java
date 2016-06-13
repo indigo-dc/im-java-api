@@ -1,7 +1,7 @@
 package es.upv.i3m.grycap.im.auth.credential.openstack;
 
 import es.upv.i3m.grycap.im.auth.credential.AbstractUsernamePasswordCredential;
-import es.upv.i3m.grycap.im.auth.credential.ServiceType;
+import es.upv.i3m.grycap.im.auth.credential.ServiceProvider;
 
 public class OpenstackCredential
     extends AbstractUsernamePasswordCredential<OpenstackCredential> {
@@ -26,8 +26,8 @@ public class OpenstackCredential
   }
 
   @Override
-  public ServiceType getServiceType() {
-    return ServiceType.OPENSTACK;
+  public ServiceProvider getServiceProvider() {
+    return ServiceProvider.OPENSTACK;
   }
 
   public OpenstackAuthVersion getAuthVersion() {

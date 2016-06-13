@@ -23,7 +23,7 @@ public abstract class AbstractUsernamePasswordCredential<T extends
     return username;
   }
 
-  public void setUsername(String username) {
+  public void setUsername(final String username) {
     this.username = username;
   }
 
@@ -31,20 +31,21 @@ public abstract class AbstractUsernamePasswordCredential<T extends
     return password;
   }
 
-  public void setPassword(String password) {
+  public void setPassword(final String password) {
     this.password = password;
   }
 
   @Override
-  public StringBuilder serialize(StringBuilder sb) {
-    sb = super.serialize(sb);
+  public StringBuilder serialize(final StringBuilder sb) {
+    StringBuilder serializedSb = sb;
+    serializedSb = super.serialize(serializedSb);
     if (!isNullOrEmpty(username)) {
-      sb.append(" ; username = ").append(username);
+      serializedSb.append(" ; username = ").append(username);
     }
     if (!isNullOrEmpty(password)) {
-      sb.append(" ; password = ").append(password);
+      serializedSb.append(" ; password = ").append(password);
     }
-    return sb;
+    return serializedSb;
   }
 
   //@formatter:off
@@ -58,13 +59,13 @@ public abstract class AbstractUsernamePasswordCredential<T extends
     private String password;
 
     @SuppressWarnings("unchecked")
-    public B withUsername(String username) {
+    public B withUsername(final String username) {
       this.username = username;
       return (B) this;
     }
 
     @SuppressWarnings("unchecked")
-    public B withPassword(String password) {
+    public B withPassword(final String password) {
       this.password = password;
       return (B) this;
     }

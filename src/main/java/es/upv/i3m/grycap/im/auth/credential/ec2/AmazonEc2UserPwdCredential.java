@@ -1,7 +1,7 @@
 package es.upv.i3m.grycap.im.auth.credential.ec2;
 
 import es.upv.i3m.grycap.im.auth.credential.AbstractUsernamePasswordCredential;
-import es.upv.i3m.grycap.im.auth.credential.ServiceType;
+import es.upv.i3m.grycap.im.auth.credential.ServiceProvider;
 
 public class AmazonEc2UserPwdCredential
     extends AbstractUsernamePasswordCredential<AmazonEc2UserPwdCredential> {
@@ -12,8 +12,8 @@ public class AmazonEc2UserPwdCredential
   }
 
   @Override
-  public ServiceType getServiceType() {
-    return ServiceType.EC2;
+  public ServiceProvider getServiceProvider() {
+    return ServiceProvider.EC2;
   }
 
   public static AmazonEc2UserPwdCredentialBuilder getBuilder() {

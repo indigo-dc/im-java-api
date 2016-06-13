@@ -1,7 +1,7 @@
 package es.upv.i3m.grycap.im.auth.credential.docker;
 
 import es.upv.i3m.grycap.im.auth.credential.AbstractCredential;
-import es.upv.i3m.grycap.im.auth.credential.ServiceType;
+import es.upv.i3m.grycap.im.auth.credential.ServiceProvider;
 
 public class DockerCredential extends AbstractCredential<DockerCredential> {
 
@@ -16,7 +16,7 @@ public class DockerCredential extends AbstractCredential<DockerCredential> {
     return host;
   }
 
-  private void setHost(String host) {
+  private void setHost(final String host) {
     if (isNullOrEmpty(host)) {
       throw new IllegalArgumentException("Host must not be blank");
     }
@@ -24,15 +24,16 @@ public class DockerCredential extends AbstractCredential<DockerCredential> {
   }
 
   @Override
-  public ServiceType getServiceType() {
-    return ServiceType.DOCKER;
+  public ServiceProvider getServiceProvider() {
+    return ServiceProvider.DOCKER;
   }
 
   @Override
-  public StringBuilder serialize(StringBuilder sb) {
-    sb = super.serialize(sb);
-    sb.append(" ; host = ").append(host);
-    return sb;
+  public StringBuilder serialize(final StringBuilder sb) {
+    StringBuilder serializedSb = sb;
+    serializedSb = super.serialize(serializedSb);
+    serializedSb.append(" ; host = ").append(host);
+    return serializedSb;
   }
 
   public static DockerCredentialBuilder getBuilder() {
@@ -48,7 +49,7 @@ public class DockerCredential extends AbstractCredential<DockerCredential> {
       return host;
     }
 
-    public DockerCredentialBuilder withHost(String host) {
+    public DockerCredentialBuilder withHost(final String host) {
       this.host = host;
       return this;
     }
