@@ -1,12 +1,8 @@
 es.upv.i3m.grycap.file
 es.upv.i3m.grycap.im
-es.upv.i3m.grycap.im.auth
-es.upv.i3m.grycap.im.auth.credential
-es.upv.i3m.grycap.im.auth.credential.im
-es.upv.i3m.grycap.im.auth.credential.occi
-es.upv.i3m.grycap.im.auth.credential.opennebula
-es.upv.i3m.grycap.im.auth.credential.openstack
-es.upv.i3m.grycap.im.auth.credential.vmrc
+es.upv.i3m.grycap.im.auth.credentials
+es.upv.i3m.grycap.im.auth.credentials.properties
+es.upv.i3m.grycap.im.auth.credentials.providers
 es.upv.i3m.grycap.im.exceptions
 es.upv.i3m.grycap.im.lang
 es.upv.i3m.grycap.im.pojo
