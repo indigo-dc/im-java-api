@@ -13,7 +13,7 @@ The javadoc for this project can be found here: [Javadoc](http://indigo-dc.githu
 1.1 REQUISITES
 --------------
 This project has been created with maven.
-To compile it you will need at least **Apache Maven 3.0.5** and **Java 1.7**.
+To compile it you will need at least **Apache Maven 3.0.5** and **Java 1.8**.
 Maven will take care of downloading all the extra dependencies needed for the project.
 
 1.2 INSTALLING
@@ -57,3 +57,17 @@ InfrastructureUri newInfrastructureUri = im.createInfrastructure(readFile(TOSCA_
 im.destroyInfrastructure(getInfrastructureId());
 ```
 The 'im' client always returns a POJO with the information of the call. If an error occurs, an **ImClientErrorException** is thrown. This exception contains the error message and the error code returned by the server.
+
+### 1.4.3 Create authorization headers
+Since version 0.4.5 the infrastructure manager allows to use the **AuthorizationHeader** class and different builders to create the authorization headers.
+The usage is as follows:
+```
+AuthorizationHeader ah = new AuthorizationHeader();
+Credentials imCred = ImCredentials.buildCredentials().withUsername("user").withPassword("pass");
+Credentials vmrcCred = VmrcCredentials.buildCredentials().withUsername("user").withPassword("pass").withHost("host");
+Credentials dummyCred = DummyCredential.buildCredentials();
+ah.addCredential(imCred);
+ah.addCredential(vmrcCred);
+ah.addCredential(dummyCred);
+InfrastructureManager im = new InfrastructureManager("IM_ENDPOINT", ah);
+```

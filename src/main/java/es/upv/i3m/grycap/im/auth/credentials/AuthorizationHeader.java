@@ -1,6 +1,4 @@
-package es.upv.i3m.grycap.im.auth;
-
-import es.upv.i3m.grycap.im.auth.credential.Credential;
+package es.upv.i3m.grycap.im.auth.credentials;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -9,23 +7,23 @@ import java.util.List;
 public class AuthorizationHeader {
 
   private static final String ERROR_MESSAGE = "Credentials must not be null";
-  private List<Credential<?>> credentials = new ArrayList<>();
+  private List<Credentials> credentials = new ArrayList<>();
 
-  public List<Credential<?>> getCredentials() {
+  public List<Credentials> getCredentials() {
     return credentials;
   }
 
   /**
    * Sets the credentials information.
    */
-  public void setCredentialsAuthInfos(List<Credential<?>> credentials) {
+  public void setCredentialsAuthInfos(List<Credentials> credentials) {
     if (credentials == null) {
       throw new IllegalArgumentException(ERROR_MESSAGE);
     }
     this.credentials = credentials;
   }
 
-  public void addCredential(Credential<?> credential) {
+  public void addCredential(Credentials credential) {
     credentials.add(credential);
   }
 
@@ -34,7 +32,7 @@ public class AuthorizationHeader {
    */
   public String serialize() {
     StringBuilder sb = new StringBuilder();
-    Iterator<Credential<?>> it = credentials.iterator();
+    Iterator<Credentials> it = credentials.iterator();
     while (it.hasNext()) {
       String serializedAuthInfo = it.next().serialize();
       sb.append(serializedAuthInfo);
