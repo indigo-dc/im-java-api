@@ -14,17 +14,30 @@
  * limitations under the License.
  */
 
-package es.upv.i3m.grycap.im.auth.credentials.properties;
+package es.upv.i3m.grycap.im.auth.credentials;
 
-import es.upv.i3m.grycap.im.auth.credentials.Credentials;
+import es.upv.i3m.grycap.ImTestWatcher;
 
-public class PublicKeyProperty extends GenericProperty {
+import org.junit.Before;
+import org.junit.BeforeClass;
 
-  private static final String PROPERTY_NAME = "public_key";
-  private static final String ERROR_MESSAGE = "Public key must not be blank";
+import java.util.ArrayList;
 
-  public PublicKeyProperty(Credentials credential, String publicKey) {
-    super(credential, PROPERTY_NAME, publicKey, ERROR_MESSAGE);
+public class GenericCredentials extends ImTestWatcher {
+
+  private static AuthorizationHeader ah;
+
+  @BeforeClass
+  public static void createAuthorizationHeader() {
+    ah = new AuthorizationHeader();
   }
 
+  @Before
+  public void clearAuthorizationHeader() {
+    ah.setCredentialsAuthInfos(new ArrayList<Credentials>());
+  }
+
+  protected AuthorizationHeader getAuthorizationHeader() {
+    return ah;
+  }
 }

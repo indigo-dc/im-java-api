@@ -405,7 +405,7 @@ public class InfrastructureManager {
    * @param bodyContentType
    *          : type of the content sent in the body of the message
    */
-  private void failIfToscaContentType(BodyContentType bodyContentType)
+  private static void failIfToscaContentType(BodyContentType bodyContentType)
       throws ImClientException {
     if (bodyContentType.equals(BodyContentType.TOSCA)) {
       ImJavaApiLogger.severe(InfrastructureManager.class,

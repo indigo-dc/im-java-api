@@ -32,7 +32,6 @@ public class ImResponsesReader<T> implements MessageBodyReader<T> {
   @Override
   public boolean isReadable(Class<?> type, Type genericType,
       Annotation[] annotations, MediaType mediaType) {
-    // TODO make this condition less generic
     return true;
   }
 

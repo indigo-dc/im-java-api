@@ -230,7 +230,7 @@ public class ImClient {
    *          : content of the call body
    * @return : the same body content if not null and an empty string if null
    */
-  private String normalizeBodyContent(final String bodyContent) {
+  private static String normalizeBodyContent(final String bodyContent) {
     if (bodyContent != null) {
       return bodyContent;
     } else {

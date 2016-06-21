@@ -18,37 +18,44 @@ package es.upv.i3m.grycap.logger;
 
 import es.upv.i3m.grycap.ImTestWatcher;
 import es.upv.i3m.grycap.im.exceptions.AuthorizationFileException;
-import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class LoggerTest extends ImTestWatcher {
 
   private static final String TEST_MESSAGE = "Test Message";
+  private static final String CLASS_NAME = LoggerTest.class.getName();
 
   @Test
   public void testLoggerDebug() {
     ImJavaApiLogger.debug(this.getClass(), TEST_MESSAGE);
+    Assert.assertEquals(CLASS_NAME + ": " + TEST_MESSAGE, getLogOutput());
   }
 
   @Test
   public void testLoggerInfo() {
     ImJavaApiLogger.info(this.getClass(), TEST_MESSAGE);
+    Assert.assertEquals(CLASS_NAME + ": " + TEST_MESSAGE, getLogOutput());
   }
 
   @Test
   public void testLoggerWarning() {
     ImJavaApiLogger.warning(this.getClass(), TEST_MESSAGE);
+    Assert.assertEquals(CLASS_NAME + ": " + TEST_MESSAGE, getLogOutput());
   }
 
   @Test
   public void testLoggerSevereException() {
     ImJavaApiLogger.severe(this.getClass(),
         new AuthorizationFileException(TEST_MESSAGE));
+    Assert.assertTrue(getLogOutput().contains(
+        "es.upv.i3m.grycap.im.exceptions.AuthorizationFileException: Test Message"));
   }
 
   @Test
   public void testLoggerSevereMessage() {
     ImJavaApiLogger.severe(this.getClass(), TEST_MESSAGE);
+    Assert.assertEquals(CLASS_NAME + ": " + TEST_MESSAGE, getLogOutput());
   }
 }

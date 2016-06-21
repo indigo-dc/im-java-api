@@ -1,0 +1,1 @@
+type = InfrastructureManager; username = imuser01; password = invitado\\nid = dummy; type = Dummy;\\ntype = VMRC; host = http://servproject.i3m.upv.es:8080/vmrc/vmrc; username = demo; password = demo;
