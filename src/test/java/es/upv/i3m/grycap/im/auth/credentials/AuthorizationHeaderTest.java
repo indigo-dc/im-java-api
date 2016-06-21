@@ -19,7 +19,7 @@ package es.upv.i3m.grycap.im.auth.credentials;
 import es.upv.i3m.grycap.file.NoNullOrEmptyFile;
 import es.upv.i3m.grycap.file.Utf8File;
 import es.upv.i3m.grycap.im.InfrastructureManager;
-import es.upv.i3m.grycap.im.InfrastructureManagerIT;
+import es.upv.i3m.grycap.im.InfrastructureManagerTest;
 import es.upv.i3m.grycap.im.auth.credentials.providers.DummyCredential;
 import es.upv.i3m.grycap.im.auth.credentials.providers.ImCredentials;
 import es.upv.i3m.grycap.im.auth.credentials.providers.VmrcCredentials;
@@ -33,7 +33,7 @@ import org.junit.Test;
 
 import java.nio.file.Paths;
 
-public class AuthorizationHeaderIT extends GenericCredentials {
+public class AuthorizationHeaderTest extends GenericCredentials {
 
   // IM information
   private static final String IM_DUMMY_PROVIDER_URL =
@@ -69,7 +69,7 @@ public class AuthorizationHeaderIT extends GenericCredentials {
       im.destroyInfrastructure(infId);
 
     } catch (ImClientException exception) {
-      ImJavaApiLogger.severe(InfrastructureManagerIT.class,
+      ImJavaApiLogger.severe(InfrastructureManagerTest.class,
           exception.getMessage());
       Assert.fail();
     }

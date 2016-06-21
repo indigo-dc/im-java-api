@@ -26,7 +26,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class ImClientIT extends ImTestWatcher {
+public class ImClientTest extends ImTestWatcher {
 
   private static ImClient imClient;
   private static final String IM_DUMMY_PROVIDER_URL =
@@ -47,7 +47,7 @@ public class ImClientIT extends ImTestWatcher {
     try {
       imClient = new ImClient(IM_DUMMY_PROVIDER_URL, AUTH_FILE_PATH);
     } catch (ImClientException exception) {
-      ImJavaApiLogger.severe(ImClientIT.class, exception.getMessage());
+      ImJavaApiLogger.severe(ImClientTest.class, exception.getMessage());
       Assert.fail();
     }
   }

@@ -43,7 +43,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class InfrastructureManagerIT extends ImTestWatcher {
+public class InfrastructureManagerTest extends ImTestWatcher {
 
   private static InfrastructureManager im;
   private String infrastructureId;
@@ -100,7 +100,7 @@ public class InfrastructureManagerIT extends ImTestWatcher {
       im = new InfrastructureManager(IM_DUMMY_PROVIDER_URL,
           Paths.get(AUTH_FILE_PATH));
     } catch (ImClientException exception) {
-      ImJavaApiLogger.severe(InfrastructureManagerIT.class,
+      ImJavaApiLogger.severe(InfrastructureManagerTest.class,
           exception.getMessage());
       Assert.fail();
     }
