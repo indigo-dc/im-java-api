@@ -16,25 +16,29 @@
 
 package es.upv.i3m.grycap.im.rest.client.parameters;
 
-/**
- * Defined to avoid sending null as parameter to the REST call.
- */
-public class NoParameter implements RestParameter {
+import es.upv.i3m.grycap.ImTestWatcher;
 
-  private static final Object[] value = new Object[0];
+import org.junit.Assert;
+import org.junit.Test;
 
-  @Override
-  public void addValue(Object value) {
-    // No need to add anything
+public class NoParameterTest extends ImTestWatcher {
+
+  @Test
+  public void testNoParameterCreation() {
+    NoParameter np = new NoParameter();
+    Assert.assertArrayEquals(new Object[0], np.getValues());
   }
 
-  @Override
-  public String getName() {
-    return "";
+  @Test
+  public void testNoParameterName() {
+    NoParameter np = new NoParameter();
+    Assert.assertEquals("", np.getName());
   }
 
-  @Override
-  public Object[] getValues() {
-    return value;
+  @Test
+  public void testNoParameterAddValue() {
+    NoParameter np = new NoParameter();
+    np.addValue("TEST");
+    Assert.assertArrayEquals(new Object[0], np.getValues());
   }
 }

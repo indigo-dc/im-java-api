@@ -41,13 +41,13 @@ public class Parameter implements RestParameter {
    * 
    * @param name
    *          : name of the parameter
-   * @param values
+   * @param value
    *          : value of the parameter
    */
-  public Parameter(String name, Object values) {
+  public Parameter(String name, Object value) {
     this.name = name;
     this.values = new ArrayList<>();
-    addValue(values);
+    addValue(value);
   }
 
   /**

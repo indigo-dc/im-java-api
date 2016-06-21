@@ -34,7 +34,7 @@ import javax.ws.rs.client.Client;
 
 public class SslTrustAllClient implements RestClient {
 
-  private TrustManager[] getCerts() {
+  private static TrustManager[] getCerts() {
     return new TrustManager[] { new X509TrustManager() {
       @Override
       public X509Certificate[] getAcceptedIssuers() {

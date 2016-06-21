@@ -6,8 +6,11 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class ResponseError {
+import java.io.Serializable;
 
+public class ResponseError implements Serializable {
+
+  private static final long serialVersionUID = 79790631011270851L;
   private final String message;
   private final Integer code;
 
