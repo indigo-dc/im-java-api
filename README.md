@@ -45,7 +45,7 @@ Also check the following lines to see some examples of use:
 InfrastructureManager im = new InfrastructureManager("IM_ENDPOINT", "AUTH_FILE_PATH");
 ```
 When creating a new client you have to specify a valid IM URL, and an authorization file path with the credentials required for the infrastructure deployment.
-More information about the authorization file can be found here: [Auth file](http://www.grycap.upv.es/im/doc/client.html#auth-file).
+More information about the authorization file can be found here: [Auth file](http://imdocs.readthedocs.io/en/devel/client.html#authorization-file).
 You can also check the authorization file used for the tests that is available in 'src/test/resources/'.
 
 ### 1.4.2 Create and destroy an infrastructure
