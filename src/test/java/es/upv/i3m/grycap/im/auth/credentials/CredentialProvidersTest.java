@@ -27,7 +27,7 @@ import es.upv.i3m.grycap.im.auth.credentials.providers.KubernetesCredentials;
 import es.upv.i3m.grycap.im.auth.credentials.providers.OcciCredentials;
 import es.upv.i3m.grycap.im.auth.credentials.providers.OpenNebulaCredentials;
 import es.upv.i3m.grycap.im.auth.credentials.providers.OpenStackCredentials;
-import es.upv.i3m.grycap.im.auth.credentials.providers.OpenstackAuthVersion;
+import es.upv.i3m.grycap.im.auth.credentials.providers.OpenStackAuthVersion;
 import es.upv.i3m.grycap.im.auth.credentials.providers.VmrcCredentials;
 
 import org.junit.Assert;
@@ -186,7 +186,7 @@ public class CredentialProvidersTest extends GenericCredentials {
     Credentials cred =
         OpenStackCredentials.buildCredentials().withUsername(USER)
             .withPassword(PASS).withTenant("tenant").withServiceRegion("region")
-            .withHost("host").withAuthVersion(OpenstackAuthVersion.PASSWORD_2_0)
+            .withHost("host").withAuthVersion(OpenStackAuthVersion.PASSWORD_2_0)
             .withBaseUrl("base").withServiceName("name").withAuthToken("token");
     getAuthorizationHeader().addCredential(cred);
     Assert.assertEquals(OST_CREDS, getAuthorizationHeader().serialize());
@@ -197,7 +197,7 @@ public class CredentialProvidersTest extends GenericCredentials {
     Credentials cred = OpenStackCredentials.buildCredentials()
         .withUsername(USER).withPassword(PASS).withTenant("tenant")
         .withServiceRegion("region").withHost("host")
-        .withAuthVersion(OpenstackAuthVersion.PASSWORD_3_X);
+        .withAuthVersion(OpenStackAuthVersion.PASSWORD_3_X);
     getAuthorizationHeader().addCredential(cred);
     Assert.assertEquals(OST_CREDS_PASS_3, getAuthorizationHeader().serialize());
   }
@@ -207,7 +207,7 @@ public class CredentialProvidersTest extends GenericCredentials {
     Credentials cred = OpenStackCredentials.buildCredentials()
         .withUsername(USER).withPassword(PASS).withTenant("tenant")
         .withServiceRegion("region").withHost("host")
-        .withAuthVersion(OpenstackAuthVersion.PASSWORD_3_X_TOKEN);
+        .withAuthVersion(OpenStackAuthVersion.PASSWORD_3_X_TOKEN);
     getAuthorizationHeader().addCredential(cred);
     Assert.assertEquals(OST_CREDS_PASS_3_TOKEN,
         getAuthorizationHeader().serialize());

@@ -30,8 +30,8 @@ import es.upv.i3m.grycap.im.auth.credentials.properties.ServiceNameProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.ServiceRegionProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.TenantProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.TokenProperty;
-import es.upv.i3m.grycap.im.auth.credentials.properties.UsernameProperty;
-import es.upv.i3m.grycap.im.auth.credentials.providers.OpenstackAuthVersion;
+import es.upv.i3m.grycap.im.auth.credentials.properties.UserNameProperty;
+import es.upv.i3m.grycap.im.auth.credentials.providers.OpenStackAuthVersion;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -126,25 +126,25 @@ public class PropertiesTest extends GenericCredentials {
   @Test
   public void testOpenStackAuthVersionPropertyPassword2() {
     OpenStackAuthVersionProperty p =
-        new OpenStackAuthVersionProperty(BP, OpenstackAuthVersion.PASSWORD_2_0);
+        new OpenStackAuthVersionProperty(BP, OpenStackAuthVersion.PASSWORD_2_0);
     Assert.assertEquals(BP_EXPECTED_RESULT, p.serialize());
   }
 
   @Test
   public void testOpenStackAuthVersionPropertyPassword3() {
     OpenStackAuthVersionProperty p =
-        new OpenStackAuthVersionProperty(BP, OpenstackAuthVersion.PASSWORD_3_X);
+        new OpenStackAuthVersionProperty(BP, OpenStackAuthVersion.PASSWORD_3_X);
     Assert.assertEquals(BP_EXPECTED_RESULT + " ; auth_version = "
-        + OpenstackAuthVersion.PASSWORD_3_X.getValue(), p.serialize());
+        + OpenStackAuthVersion.PASSWORD_3_X.getValue(), p.serialize());
   }
 
   @Test
   public void testOpenStackAuthVersionPropertyPassword3Token() {
     OpenStackAuthVersionProperty p = new OpenStackAuthVersionProperty(BP,
-        OpenstackAuthVersion.PASSWORD_3_X_TOKEN);
+        OpenStackAuthVersion.PASSWORD_3_X_TOKEN);
     Assert.assertEquals(
         BP_EXPECTED_RESULT + " ; auth_version = "
-            + OpenstackAuthVersion.PASSWORD_3_X_TOKEN.getValue(),
+            + OpenStackAuthVersion.PASSWORD_3_X_TOKEN.getValue(),
         p.serialize());
   }
 
@@ -210,7 +210,7 @@ public class PropertiesTest extends GenericCredentials {
 
   @Test
   public void testUsernameProperty() {
-    UsernameProperty p = new UsernameProperty(BP, PROPERTY_VALUE);
+    UserNameProperty p = new UserNameProperty(BP, PROPERTY_VALUE);
     Assert.assertEquals(BP_EXPECTED_RESULT + " ; username = " + PROPERTY_VALUE,
         p.serialize());
   }

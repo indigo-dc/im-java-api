@@ -64,7 +64,7 @@ public class OpenStackCredentials
    * Sets the authorization version specific for OpenStack.
    */
   public OpenStackCredentials
-      withAuthVersion(OpenstackAuthVersion authVersion) {
+      withAuthVersion(OpenStackAuthVersion authVersion) {
     setCredentials(
         new OpenStackAuthVersionProperty(getCredentials(), authVersion));
     return this;

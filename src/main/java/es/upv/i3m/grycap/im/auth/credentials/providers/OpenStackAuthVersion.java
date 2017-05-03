@@ -16,7 +16,7 @@
 
 package es.upv.i3m.grycap.im.auth.credentials.providers;
 
-public enum OpenstackAuthVersion {
+public enum OpenStackAuthVersion {
 
   //@formatter:off
   PASSWORD_2_0("2.0_password"), 
@@ -26,7 +26,7 @@ public enum OpenstackAuthVersion {
 
   private final String value;
 
-  OpenstackAuthVersion(String value) {
+  OpenStackAuthVersion(String value) {
     this.value = value;
   }
 
