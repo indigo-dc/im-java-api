@@ -19,6 +19,7 @@ package es.upv.i3m.grycap.im.auth.credentials;
 import es.upv.i3m.grycap.im.auth.credentials.properties.AuthTokenProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.BaseProperties;
 import es.upv.i3m.grycap.im.auth.credentials.properties.BaseUrlProperty;
+import es.upv.i3m.grycap.im.auth.credentials.properties.DomainProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.GenericProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.HostProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.OpenStackAuthVersionProperty;
@@ -212,6 +213,13 @@ public class PropertiesTest extends GenericCredentials {
   public void testUsernameProperty() {
     UserNameProperty p = new UserNameProperty(BP, PROPERTY_VALUE);
     Assert.assertEquals(BP_EXPECTED_RESULT + " ; username = " + PROPERTY_VALUE,
+        p.serialize());
+  }
+
+  @Test
+  public void testDomainProperty() {
+    DomainProperty p = new DomainProperty(BP, PROPERTY_VALUE);
+    Assert.assertEquals(BP_EXPECTED_RESULT + " ; domain = " + PROPERTY_VALUE,
         p.serialize());
   }
 
