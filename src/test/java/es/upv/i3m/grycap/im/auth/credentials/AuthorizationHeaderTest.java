@@ -37,7 +37,7 @@ public class AuthorizationHeaderTest extends GenericCredentials {
 
   // IM information
   private static final String IM_DUMMY_PROVIDER_URL =
-      "http://servproject.i3m.upv.es:8811";
+      "https://servproject.i3m.upv.es:8811";
   private static final String TOSCA_FILE_PATH =
       "./src/test/resources/tosca/galaxy_tosca.yaml";
 
