@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>es.upv.i3m.grycap</groupId>
   <artifactId>im-java-api</artifactId>
-  <version>0.4.7</version>
+  <version>0.4.8</version>
   <name>IM Java API</name>
   <description>Java client for the REST API of the IM</description>
 
@@ -120,7 +120,7 @@
         <executions>
           <execution>
      <!-- this is used for inheritance merges -->
-            <id>make-assembly</id> 
+            <id>make-assembly</id>
       <!-- bind to the packaging phase -->
             <phase>package</phase>
             <goals>
