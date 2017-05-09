@@ -17,7 +17,7 @@
 package es.upv.i3m.grycap.im.auth.credentials.properties;
 
 import es.upv.i3m.grycap.im.auth.credentials.Credentials;
-import es.upv.i3m.grycap.im.auth.credentials.providers.OpenstackAuthVersion;
+import es.upv.i3m.grycap.im.auth.credentials.providers.OpenStackAuthVersion;
 
 public class OpenStackAuthVersionProperty extends GenericProperty {
 
@@ -26,7 +26,7 @@ public class OpenStackAuthVersionProperty extends GenericProperty {
       "OpenStack auth version must not be blank";
 
   public OpenStackAuthVersionProperty(Credentials credential,
-      OpenstackAuthVersion openstackAuthVersion) {
+      OpenStackAuthVersion openstackAuthVersion) {
     super(credential, PROPERTY_NAME, openstackAuthVersion.getValue(),
         ERROR_MESSAGE);
   }
@@ -34,7 +34,7 @@ public class OpenStackAuthVersionProperty extends GenericProperty {
   @Override
   public String serialize() {
     // Default property, not needed to add it to the credentials
-    if (!OpenstackAuthVersion.PASSWORD_2_0.compare(getPropertyValue())) {
+    if (!OpenStackAuthVersion.PASSWORD_2_0.compare(getPropertyValue())) {
       return super.serialize();
     }
     return getCredentials().serialize();

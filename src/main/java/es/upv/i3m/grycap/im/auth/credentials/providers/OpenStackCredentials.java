@@ -19,6 +19,7 @@ package es.upv.i3m.grycap.im.auth.credentials.providers;
 import es.upv.i3m.grycap.im.auth.credentials.ServiceProvider;
 import es.upv.i3m.grycap.im.auth.credentials.properties.AuthTokenProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.BaseUrlProperty;
+import es.upv.i3m.grycap.im.auth.credentials.properties.DomainProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.OpenStackAuthVersionProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.ServiceNameProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.ServiceRegionProperty;
@@ -60,11 +61,16 @@ public class OpenStackCredentials
     return this;
   }
 
+  public OpenStackCredentials withDomain(String domain) {
+    setCredentials(new DomainProperty(getCredentials(), domain));
+    return this;
+  }
+
   /**
    * Sets the authorization version specific for OpenStack.
    */
   public OpenStackCredentials
-      withAuthVersion(OpenstackAuthVersion authVersion) {
+      withAuthVersion(OpenStackAuthVersion authVersion) {
     setCredentials(
         new OpenStackAuthVersionProperty(getCredentials(), authVersion));
     return this;

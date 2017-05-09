@@ -23,7 +23,7 @@ import es.upv.i3m.grycap.im.auth.credentials.properties.HostProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.PasswordProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.ProxyProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.TokenProperty;
-import es.upv.i3m.grycap.im.auth.credentials.properties.UsernameProperty;
+import es.upv.i3m.grycap.im.auth.credentials.properties.UserNameProperty;
 
 public abstract class GenericCredentials<T> implements Credentials {
 
@@ -50,7 +50,7 @@ public abstract class GenericCredentials<T> implements Credentials {
 
   @SuppressWarnings("unchecked")
   public T withUsername(String username) {
-    setCredentials(new UsernameProperty(getCredentials(), username));
+    setCredentials(new UserNameProperty(getCredentials(), username));
     return (T) this;
   }
 

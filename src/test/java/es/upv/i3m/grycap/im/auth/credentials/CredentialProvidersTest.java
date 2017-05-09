@@ -26,8 +26,8 @@ import es.upv.i3m.grycap.im.auth.credentials.providers.ImCredentials;
 import es.upv.i3m.grycap.im.auth.credentials.providers.KubernetesCredentials;
 import es.upv.i3m.grycap.im.auth.credentials.providers.OcciCredentials;
 import es.upv.i3m.grycap.im.auth.credentials.providers.OpenNebulaCredentials;
+import es.upv.i3m.grycap.im.auth.credentials.providers.OpenStackAuthVersion;
 import es.upv.i3m.grycap.im.auth.credentials.providers.OpenStackCredentials;
-import es.upv.i3m.grycap.im.auth.credentials.providers.OpenstackAuthVersion;
 import es.upv.i3m.grycap.im.auth.credentials.providers.VmrcCredentials;
 
 import org.junit.Assert;
@@ -54,7 +54,7 @@ public class CredentialProvidersTest extends GenericCredentials {
   private static final String OST_CREDS =
       "id = ost ; type = OpenStack ; " + USER_PASS
           + " ; tenant = tenant ; service_region = region ; host = host ; base_url = base ;"
-          + " service_name = name ; auth_token = token";
+          + " service_name = name ; auth_token = token ; domain = domain";
   private static final String OST_CREDS_PASS_3 =
       "id = ost ; type = OpenStack ; " + USER_PASS
           + " ; tenant = tenant ; service_region = region ; host = host ; auth_version = 3.X_password";
@@ -183,11 +183,11 @@ public class CredentialProvidersTest extends GenericCredentials {
 
   @Test
   public void testOpenStackCredentials() {
-    Credentials cred =
-        OpenStackCredentials.buildCredentials().withUsername(USER)
-            .withPassword(PASS).withTenant("tenant").withServiceRegion("region")
-            .withHost("host").withAuthVersion(OpenstackAuthVersion.PASSWORD_2_0)
-            .withBaseUrl("base").withServiceName("name").withAuthToken("token");
+    Credentials cred = OpenStackCredentials.buildCredentials()
+        .withUsername(USER).withPassword(PASS).withTenant("tenant")
+        .withServiceRegion("region").withHost("host")
+        .withAuthVersion(OpenStackAuthVersion.PASSWORD_2_0).withBaseUrl("base")
+        .withServiceName("name").withAuthToken("token").withDomain("domain");
     getAuthorizationHeader().addCredential(cred);
     Assert.assertEquals(OST_CREDS, getAuthorizationHeader().serialize());
   }
@@ -197,7 +197,7 @@ public class CredentialProvidersTest extends GenericCredentials {
     Credentials cred = OpenStackCredentials.buildCredentials()
         .withUsername(USER).withPassword(PASS).withTenant("tenant")
         .withServiceRegion("region").withHost("host")
-        .withAuthVersion(OpenstackAuthVersion.PASSWORD_3_X);
+        .withAuthVersion(OpenStackAuthVersion.PASSWORD_3_X);
     getAuthorizationHeader().addCredential(cred);
     Assert.assertEquals(OST_CREDS_PASS_3, getAuthorizationHeader().serialize());
   }
@@ -207,7 +207,7 @@ public class CredentialProvidersTest extends GenericCredentials {
     Credentials cred = OpenStackCredentials.buildCredentials()
         .withUsername(USER).withPassword(PASS).withTenant("tenant")
         .withServiceRegion("region").withHost("host")
-        .withAuthVersion(OpenstackAuthVersion.PASSWORD_3_X_TOKEN);
+        .withAuthVersion(OpenStackAuthVersion.PASSWORD_3_X_TOKEN);
     getAuthorizationHeader().addCredential(cred);
     Assert.assertEquals(OST_CREDS_PASS_3_TOKEN,
         getAuthorizationHeader().serialize());

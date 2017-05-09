@@ -48,7 +48,7 @@ public class InfrastructureManagerTest extends ImTestWatcher {
   private static InfrastructureManager im;
   private String infrastructureId;
   private static final String IM_DUMMY_PROVIDER_URL =
-      "http://servproject.i3m.upv.es:8811";
+      "https://servproject.i3m.upv.es:8811";
 
   private static final String AUTH_FILE_PATH = "./src/test/resources/auth.dat";
   private static final String RADL_ALTER_VM_FILE_PATH =
@@ -160,7 +160,7 @@ public class InfrastructureManagerTest extends ImTestWatcher {
 
     // Check the value of the first map
     Map<?, ?> info = (Map<String, Object>) vmProperties.get(0);
-    Assert.assertEquals("yes", info.get("outbound"));
+    Assert.assertEquals("no", info.get("outbound"));
 
     // Check an internal map inside the map
     Map<?, ?> internalInfo = (Map<String, Object>) vmProperties.get(2);
@@ -213,7 +213,7 @@ public class InfrastructureManagerTest extends ImTestWatcher {
     InfOutputValues result = getIm().getInfrastructureOutputs(infId);
     Map<String, Object> outputs = result.getOutputs();
     String galaxyUrl = (String) outputs.get("galaxy_url");
-    Assert.assertEquals("http://10.0.0.1:8080", galaxyUrl);
+    Assert.assertEquals("http://10.0.0.1/galaxy", galaxyUrl);
   }
 
   @SuppressWarnings("unchecked")
