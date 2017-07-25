@@ -24,8 +24,16 @@ public class ImCredentials extends GenericCredentials<ImCredentials> {
     super(ServiceProvider.INFRASTRUCTURE_MANAGER);
   }
 
+  private ImCredentials(String id) {
+    super(ServiceProvider.INFRASTRUCTURE_MANAGER, id);
+  }
+
   public static ImCredentials buildCredentials() {
     return new ImCredentials();
+  }
+
+  public static ImCredentials buildCredentials(String id) {
+    return new ImCredentials(id);
   }
 
 }
