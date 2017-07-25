@@ -26,8 +26,16 @@ public class AzureCredentials extends GenericCredentials<AzureCredentials> {
     super(ServiceProvider.AZURE);
   }
 
+  private AzureCredentials(String id) {
+    super(ServiceProvider.AZURE, id);
+  }
+
   public static AzureCredentials buildCredentials() {
     return new AzureCredentials();
+  }
+
+  public static AzureCredentials buildCredentials(String id) {
+    return new AzureCredentials(id);
   }
 
   public AzureCredentials withPublicKey(String publicKey) {

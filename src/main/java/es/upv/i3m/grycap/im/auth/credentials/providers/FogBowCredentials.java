@@ -24,8 +24,16 @@ public class FogBowCredentials extends GenericCredentials<FogBowCredentials> {
     super(ServiceProvider.FOG_BOW);
   }
 
+  private FogBowCredentials(String id) {
+    super(ServiceProvider.FOG_BOW, id);
+  }
+
   public static FogBowCredentials buildCredentials() {
     return new FogBowCredentials();
+  }
+
+  public static FogBowCredentials buildCredentials(String id) {
+    return new FogBowCredentials(id);
   }
 
 }
