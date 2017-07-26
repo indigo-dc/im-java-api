@@ -183,7 +183,8 @@ public class InfrastructureManagerTest extends ImTestWatcher {
     Thread.sleep(10000);
     Property contextMessage =
         getIm().getInfrastructureContMsg(getInfrastructureId());
-    Assert.assertEquals(false, contextMessage.getValue().isEmpty());
+    System.out.println(contextMessage.getValue());
+    Assert.assertEquals(true, contextMessage.getValue().isEmpty());
   }
 
   @Test
