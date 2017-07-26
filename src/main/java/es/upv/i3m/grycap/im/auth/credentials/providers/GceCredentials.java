@@ -25,8 +25,16 @@ public class GceCredentials extends GenericCredentials<GceCredentials> {
     super(ServiceProvider.GCE);
   }
 
+  private GceCredentials(String id) {
+    super(ServiceProvider.GCE, id);
+  }
+
   public static GceCredentials buildCredentials() {
     return new GceCredentials();
+  }
+
+  public static GceCredentials buildCredentials(String id) {
+    return new GceCredentials(id);
   }
 
   public GceCredentials withProject(String project) {

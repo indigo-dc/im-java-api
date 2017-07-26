@@ -25,8 +25,16 @@ public class OpenNebulaCredentials
     super(ServiceProvider.OPENNEBULA);
   }
 
+  private OpenNebulaCredentials(String id) {
+    super(ServiceProvider.OPENNEBULA, id);
+  }
+
   public static OpenNebulaCredentials buildCredentials() {
     return new OpenNebulaCredentials();
+  }
+
+  public static OpenNebulaCredentials buildCredentials(String id) {
+    return new OpenNebulaCredentials(id);
   }
 
 }

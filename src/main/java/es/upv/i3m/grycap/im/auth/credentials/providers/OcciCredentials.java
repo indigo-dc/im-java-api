@@ -24,8 +24,16 @@ public class OcciCredentials extends GenericCredentials<OcciCredentials> {
     super(ServiceProvider.OCCI);
   }
 
+  private OcciCredentials(String id) {
+    super(ServiceProvider.OCCI, id);
+  }
+
   public static OcciCredentials buildCredentials() {
     return new OcciCredentials();
+  }
+
+  public static OcciCredentials buildCredentials(String id) {
+    return new OcciCredentials(id);
   }
 
 }

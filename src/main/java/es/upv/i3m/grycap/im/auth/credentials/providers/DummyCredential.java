@@ -24,8 +24,16 @@ public class DummyCredential extends GenericCredentials<DummyCredential> {
     super(ServiceProvider.DUMMY);
   }
 
+  private DummyCredential(String id) {
+    super(ServiceProvider.DUMMY, id);
+  }
+
   public static DummyCredential buildCredentials() {
     return new DummyCredential();
+  }
+
+  public static DummyCredential buildCredentials(String id) {
+    return new DummyCredential(id);
   }
 
 }

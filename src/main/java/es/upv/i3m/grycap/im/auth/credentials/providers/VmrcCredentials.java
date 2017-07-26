@@ -24,8 +24,16 @@ public class VmrcCredentials extends GenericCredentials<VmrcCredentials> {
     super(ServiceProvider.VMRC);
   }
 
+  private VmrcCredentials(String id) {
+    super(ServiceProvider.VMRC, id);
+  }
+
   public static VmrcCredentials buildCredentials() {
     return new VmrcCredentials();
+  }
+
+  public static VmrcCredentials buildCredentials(String id) {
+    return new VmrcCredentials(id);
   }
 
 }

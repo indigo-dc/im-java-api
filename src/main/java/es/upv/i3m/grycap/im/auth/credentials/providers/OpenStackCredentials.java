@@ -31,9 +31,17 @@ public class OpenStackCredentials
   private OpenStackCredentials() {
     super(ServiceProvider.OPENSTACK);
   }
+  
+  private OpenStackCredentials(String id) {
+    super(ServiceProvider.OPENSTACK, id);
+  }
 
   public static OpenStackCredentials buildCredentials() {
     return new OpenStackCredentials();
+  }
+  
+  public static OpenStackCredentials buildCredentials(String id) {
+    return new OpenStackCredentials(id);
   }
 
   public OpenStackCredentials withTenant(String tenant) {

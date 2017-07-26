@@ -25,8 +25,16 @@ public class AmazonEc2Credentials
     super(ServiceProvider.EC2);
   }
 
+  private AmazonEc2Credentials(String id) {
+    super(ServiceProvider.EC2, id);
+  }
+  
   public static AmazonEc2Credentials buildCredentials() {
     return new AmazonEc2Credentials();
+  }
+  
+  public static AmazonEc2Credentials buildCredentials(String id) {
+    return new AmazonEc2Credentials(id);
   }
 
 }

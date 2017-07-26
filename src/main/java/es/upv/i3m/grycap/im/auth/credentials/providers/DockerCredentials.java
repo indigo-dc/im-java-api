@@ -24,8 +24,16 @@ public class DockerCredentials extends GenericCredentials<DockerCredentials> {
     super(ServiceProvider.DOCKER);
   }
 
+  private DockerCredentials(String id) {
+    super(ServiceProvider.DOCKER, id);
+  }
+
   public static DockerCredentials buildCredentials() {
     return new DockerCredentials();
+  }
+
+  public static DockerCredentials buildCredentials(String id) {
+    return new DockerCredentials(id);
   }
 
 }

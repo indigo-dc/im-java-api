@@ -20,7 +20,7 @@ public enum OpenStackAuthVersion {
 
   //@formatter:off
   PASSWORD_2_0("2.0_password"), 
-  PASSWORD_3_X("3.X_password"),
+  PASSWORD_3_X("3.x_password"),
   PASSWORD_3_X_TOKEN("3.x_oidc_access_token");
   //@formatter:on
 

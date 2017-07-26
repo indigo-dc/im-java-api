@@ -33,6 +33,10 @@ public abstract class GenericCredentials<T> implements Credentials {
     credentials = new BaseProperties(provider.getId(), provider.getType());
   }
 
+  protected GenericCredentials(ServiceProvider provider, String id) {
+    credentials = new BaseProperties(id, provider.getType());
+  }
+
   @Override
   public String serialize() {
     return credentials.serialize();
