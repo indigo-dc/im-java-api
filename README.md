@@ -30,22 +30,22 @@ mvn clean install -DskipTests
 When the compilation finishes you will have a **target** folder. Inside you can find the compiled java classes and the packaged jars. The jar **im-java-api-x.x.x-jar-with-dependencies.jar** includes all the libraries needed by the im-java-api and can be used independently. The jar **im-java-api-x.x.x.jar** contains only the im-java-api compiled code and needs external libraries to work. The external libraries needed by the project are specified in the pom.xml
 
 ### 1.2.1 From a tarball
-The code for the library can also be found in the [indigo repository](http://jenkins.indigo-datacloud.eu/repository/indigo/1/ubuntu/dists/trusty/main/source/).
+The code for the library can also be found in the [im-java-api github repository](https://github.com/indigo-dc/im-java-api/releases/tag/v0.4.9).
 To download the source code:
 ```
-wget http://jenkins.indigo-datacloud.eu/repository/indigo/1/ubuntu/dists/trusty/main/source/im-java-api-v0.4.7.tar.gz
+wget https://github.com/indigo-dc/im-java-api/archive/v0.4.9.tar.gz
 ```
 After the download you have to untar the package and inside the folder compile the project like in the maven section:
 ```
-tar zxf im-java-api-v0.4.7.tar.gz
-cd im-java-api-0.4.7
+tar zxf im-java-api-v0.4.9.tar.gz
+cd im-java-api-0.4.9
 mvn clean install
 ```
 Once the compilation finishes in the folder target you can find the jar.
 
 Also you can download the jar already packaged with all the dependencies from:
 ```
-wget http://jenkins.indigo-datacloud.eu/repository/indigo/1/ubuntu/dists/trusty/main/source/im-java-api-0.4.7-jar-with-dependencies.tar.gz
+wget https://github.com/indigo-dc/im-java-api/releases/download/v0.4.9/im-java-api-0.4.9-jar-with-dependencies.tar.gz
 ```
 
 1.3 CONFIGURATION
