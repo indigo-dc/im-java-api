@@ -29,6 +29,7 @@ import es.upv.i3m.grycap.im.auth.credentials.properties.ProjectProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.PublicKeyProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.ServiceNameProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.ServiceRegionProperty;
+import es.upv.i3m.grycap.im.auth.credentials.properties.SubscriptionIdProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.TenantProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.TokenProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.UserNameProperty;
@@ -220,6 +221,13 @@ public class PropertiesTest extends GenericCredentials {
   public void testDomainProperty() {
     DomainProperty p = new DomainProperty(BP, PROPERTY_VALUE);
     Assert.assertEquals(BP_EXPECTED_RESULT + " ; domain = " + PROPERTY_VALUE,
+        p.serialize());
+  }
+  
+  @Test
+  public void testSubscriptionIdProperty() {
+    SubscriptionIdProperty p = new SubscriptionIdProperty(BP, PROPERTY_VALUE);
+    Assert.assertEquals(BP_EXPECTED_RESULT + " ; subscription_id = " + PROPERTY_VALUE,
         p.serialize());
   }
 

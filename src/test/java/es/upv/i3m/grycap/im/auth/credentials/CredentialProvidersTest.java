@@ -82,8 +82,8 @@ public class CredentialProvidersTest extends GenericCredentials {
   private static final String EC2_CREDS =
       "id = ec2 ; type = EC2 ; " + USER_PASS;
   private static final String EC2_WITH_ID = CUSTOM_ID + "type = EC2";
-  private static final String AZURE_CREDS = "id = azure ; type = Azure ; "
-      + "username = " + USER + " ; private_key = public ; public_key = private";
+  private static final String AZURE_CREDS = "id = azure ; type = Azure ; " + "username = " + USER
+      + " ; subscription_id = subscription-id ; private_key = public ; public_key = private";
   private static final String AZURE_WITH_ID = CUSTOM_ID + "type = Azure";
   private static final String DOCKER_CREDS =
       "id = docker ; type = Docker ; host = host_url";
@@ -124,7 +124,7 @@ public class CredentialProvidersTest extends GenericCredentials {
   @Test
   public void testAzureCredentials() {
     Credentials cred = AzureCredentials.buildCredentials().withUsername(USER)
-        .withPublicKey("public").withPrivateKey("private");
+        .withSubscriptionId("subscription-id").withPublicKey("public").withPrivateKey("private");
     getAuthorizationHeader().addCredential(cred);
     Assert.assertEquals(AZURE_CREDS, getAuthorizationHeader().serialize());
   }
