@@ -19,6 +19,7 @@ package es.upv.i3m.grycap.im.auth.credentials.providers;
 import es.upv.i3m.grycap.im.auth.credentials.ServiceProvider;
 import es.upv.i3m.grycap.im.auth.credentials.properties.PrivateKeyProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.PublicKeyProperty;
+import es.upv.i3m.grycap.im.auth.credentials.properties.SubscriptionIdProperty;
 
 public class AzureCredentials extends GenericCredentials<AzureCredentials> {
 
@@ -45,6 +46,11 @@ public class AzureCredentials extends GenericCredentials<AzureCredentials> {
 
   public AzureCredentials withPrivateKey(String privateKey) {
     setCredentials(new PublicKeyProperty(getCredentials(), privateKey));
+    return this;
+  }
+  
+  public AzureCredentials withSubscriptionId(String subscriptionId) {
+    setCredentials(new SubscriptionIdProperty(getCredentials(), subscriptionId));
     return this;
   }
 
