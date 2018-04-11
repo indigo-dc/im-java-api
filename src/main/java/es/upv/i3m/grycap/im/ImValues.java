@@ -29,7 +29,8 @@ public enum ImValues {
   CONTMSG("contmsg"),
   RADL("radl"),
   STATE("state"),
-  RECONFIGURE("reconfigure");
+  RECONFIGURE("reconfigure"),
+  OUTPUTS("outputs");
 
   private final String value;
 

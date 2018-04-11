@@ -7,7 +7,7 @@ For more information about the IM capabilities check: [IM Web](http://www.grycap
 
 The javadoc for this project can be found here: [Javadoc](http://indigo-dc.github.io/im-java-api/apidocs/)
 
-1. INSTALLATION
+1 INSTALLATION
 ===============
 
 1.1 REQUISITES
@@ -55,7 +55,7 @@ If you want you can define a **log4j.properties** to log the REST service calls.
 To configure the logger you have to create a **log4j.properties** file and set the logger properties.
 The log4j.properties file of the tests can help you with the logger configuration.
 
-2. USAGE
+2 USAGE
 ===============
 The tests defined in the class **InfrastructureManagerTest** show how to use the im-java-api.
 Also check the following lines to see some examples of use:

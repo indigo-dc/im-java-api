@@ -50,8 +50,8 @@ public class InfrastructureManager {
   private static final String PATH_SEPARATOR = "/";
   // IM REST parameters
   private static final String REST_PARAMETER_NAME_CONTEXT = "context";
+  private static final String REST_PARAMETER_NAME_ASYNC = "async";
   private static final String REST_PARAMETER_NAME_VMLIST = "vm_list";
-  private static final String REST_PARAMETER_INFRASTRUCTURE_OUTPUTS = "outputs";
 
   private final ImClient imClient;
 
@@ -248,6 +248,7 @@ public class InfrastructureManager {
    *          just after the VM addition
    * @return : list of URIs of the new virtual machines
    */
+  @Deprecated
   public InfrastructureUris addResource(String infId, String radlFile,
       BodyContentType bodyContentType, boolean... context)
       throws ImClientException {
@@ -258,6 +259,133 @@ public class InfrastructureManager {
         restParameter);
   }
 
+  /**
+   * Add the resources specified in the body contents to the infrastructure with
+   * ID 'infId'. The RADL restrictions are the same as in
+   * <a href="http://www.grycap.upv.es/im/doc/xmlrpc.html#addresource-xmlrpc">
+   * RPC-XML AddResource</a><br>
+   * If success, it is returned a list of URIs of the new virtual machines. <br>
+   * The context parameter is optional and is a flag to specify if the
+   * contextualization step will be launched just after the VM addition.<br>
+   * If not specified the contextualization flag is set to True.
+   * 
+   * @param infId
+   *          : infrastructure id
+   * @param radlFile
+   *          : file with the virtual machine properties and configuration
+   * @param bodyContentType
+   *          : set the body content type. Can be RADL, RADL_JSON or TOSCA.
+   * @return : list of URIs of the new virtual machines
+   */
+  public InfrastructureUris addResource(String infId, String radlFile,
+      BodyContentType bodyContentType) throws ImClientException {
+    return addResourcesWithParameters(infId, radlFile, bodyContentType);
+  }
+
+  /**
+   * Add the resources specified in the body contents to the infrastructure with
+   * ID 'infId'. The RADL restrictions are the same as in
+   * <a href="http://www.grycap.upv.es/im/doc/xmlrpc.html#addresource-xmlrpc">
+   * RPC-XML AddResource</a><br>
+   * If success, it is returned a list of URIs of the new virtual machines. <br>
+   * The context parameter is optional and is a flag to specify if the
+   * contextualization step will be launched just after the VM addition.<br>
+   * If not specified the contextualization flag is set to True.
+   * 
+   * @param infId
+   *          : infrastructure id
+   * @param radlFile
+   *          : file with the virtual machine properties and configuration
+   * @param bodyContentType
+   *          : set the body content type. Can be RADL, RADL_JSON or TOSCA.
+   * @param context
+   *          : flag to specify if the contextualization step will be launched
+   *          just after the VM addition
+   * @param async
+   *          : flag to specify if the call has to wait for the VMs to be
+   *          created.
+   * @return : list of URIs of the new virtual machines
+   */
+  public InfrastructureUris addResource(String infId, String radlFile,
+      BodyContentType bodyContentType, boolean context, boolean async)
+      throws ImClientException {
+
+    RestParameter ctxParameter =
+        createCallParameters(REST_PARAMETER_NAME_CONTEXT, context);
+    RestParameter asyncParameter =
+        createCallParameters(REST_PARAMETER_NAME_ASYNC, async);
+
+    return getImClient().post(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId,
+        radlFile, bodyContentType.getValue(), InfrastructureUris.class,
+        ctxParameter, asyncParameter);
+  }
+
+  /**
+   * Add the resources specified in the body contents to the infrastructure with
+   * ID 'infId'. The RADL restrictions are the same as in
+   * <a href="http://www.grycap.upv.es/im/doc/xmlrpc.html#addresource-xmlrpc">
+   * RPC-XML AddResource</a><br>
+   * If success, it is returned a list of URIs of the new virtual machines. <br>
+   * This call will not wait the VMs to be created.
+   * 
+   * @param infId
+   *          : infrastructure id
+   * @param radlFile
+   *          : file with the virtual machine properties and configuration
+   * @param bodyContentType
+   *          : set the body content type. Can be RADL, RADL_JSON or TOSCA.
+   * @return : list of URIs of the new virtual machines
+   */
+  public InfrastructureUris addAsyncResource(String infId, String radlFile,
+      BodyContentType bodyContentType) throws ImClientException {
+    RestParameter asyncParameter =
+        createCallParameters(REST_PARAMETER_NAME_ASYNC, true);
+    return addResourcesWithParameters(infId, radlFile, bodyContentType,
+        asyncParameter);
+  }
+
+  /**
+   * Add the resources specified in the body contents to the infrastructure with
+   * ID 'infId'. The RADL restrictions are the same as in
+   * <a href="http://www.grycap.upv.es/im/doc/xmlrpc.html#addresource-xmlrpc">
+   * RPC-XML AddResource</a><br>
+   * If success, it is returned a list of URIs of the new virtual machines. <br>
+   * This call activates the contextualization step just after the VM addition.
+   * <br>
+   * 
+   * @param infId
+   *          : infrastructure id
+   * @param radlFile
+   *          : file with the virtual machine properties and configuration
+   * @param bodyContentType
+   *          : set the body content type. Can be RADL, RADL_JSON or TOSCA.
+   * @return : list of URIs of the new virtual machines
+   */
+  public InfrastructureUris addResourceAndContextualize(String infId,
+      String radlFile, BodyContentType bodyContentType)
+      throws ImClientException {
+
+    RestParameter ctxParameter =
+        createCallParameters(REST_PARAMETER_NAME_CONTEXT, true);
+    return addResourcesWithParameters(infId, radlFile, bodyContentType,
+        ctxParameter);
+  }
+
+  private InfrastructureUris addResourcesWithParameters(String infId,
+      String radlFile, BodyContentType bodyContentType,
+      RestParameter... parameters) throws ImClientException {
+
+    return getImClient().post(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId,
+        radlFile, bodyContentType.getValue(), InfrastructureUris.class,
+        parameters);
+  }
+
+  private static RestParameter createCallParameters(String paramName,
+      Object value) {
+    return new Parameter(paramName, value);
+  }
+
+  @Deprecated
   private static RestParameter createCallParameters(boolean... context) {
     return (context != null && context.length > 0)
         ? new Parameter(REST_PARAMETER_NAME_CONTEXT, context[0])
@@ -498,7 +626,7 @@ public class InfrastructureManager {
   public InfOutputValues getInfrastructureOutputs(String infId)
       throws ImClientException {
     String path = PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId + PATH_SEPARATOR
-        + REST_PARAMETER_INFRASTRUCTURE_OUTPUTS;
+        + ImValues.OUTPUTS;
     return getImClient().get(path, InfOutputValues.class);
   }
 

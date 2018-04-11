@@ -260,6 +260,35 @@ public class InfrastructureManagerTest extends ImTestWatcher {
   }
 
   @Test
+  public void testAddResourceContext() throws ImClientException {
+    InfrastructureUris infUris =
+        getIm().addResourceAndContextualize(getInfrastructureId(),
+            readFile(TOSCA_EXTRA_NODE_FILE_PATH), BodyContentType.TOSCA);
+
+    Assert.assertEquals(1, infUris.getUris().size());
+    Assert.assertEquals(false, infUris.getUris().get(0).getUri().isEmpty());
+  }
+
+  @Test
+  public void testAddResourceAsync() throws ImClientException {
+    InfrastructureUris infUris = getIm().addAsyncResource(getInfrastructureId(),
+        readFile(TOSCA_EXTRA_NODE_FILE_PATH), BodyContentType.TOSCA);
+
+    Assert.assertEquals(1, infUris.getUris().size());
+    Assert.assertEquals(false, infUris.getUris().get(0).getUri().isEmpty());
+  }
+
+  @Test
+  public void testAddResourceWithAllParams() throws ImClientException {
+    InfrastructureUris infUris = getIm().addResource(getInfrastructureId(),
+        readFile(TOSCA_EXTRA_NODE_FILE_PATH), BodyContentType.TOSCA, true,
+        true);
+
+    Assert.assertEquals(1, infUris.getUris().size());
+    Assert.assertEquals(false, infUris.getUris().get(0).getUri().isEmpty());
+  }
+
+  @Test
   public void testRemoveResourceNoContext() throws ImClientException {
     getIm().removeResource(getInfrastructureId(), VM_DEFAULT_ID);
   }
