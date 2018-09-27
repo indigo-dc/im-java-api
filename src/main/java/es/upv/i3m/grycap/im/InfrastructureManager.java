@@ -131,9 +131,9 @@ public class InfrastructureManager {
    */
   public InfrastructureUri createInfrastructureAsync(String infrastructureDefinition,
       BodyContentType bodyContentType) throws ImClientException {
-	
-	RestParameter asyncParameter = createCallParameters(REST_PARAMETER_NAME_ASYNC, true);
-	  
+
+    RestParameter asyncParameter = createCallParameters(REST_PARAMETER_NAME_ASYNC, true);
+
     return getImClient().post(PATH_INFRASTRUCTURES, infrastructureDefinition,
         bodyContentType.getValue(), InfrastructureUri.class, asyncParameter);
   }  
