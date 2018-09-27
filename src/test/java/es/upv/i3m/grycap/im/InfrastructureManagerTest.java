@@ -133,6 +133,16 @@ public class InfrastructureManagerTest extends ImTestWatcher {
   public void testCreateAndDestroyInfrastructure() {
     // Create empty test to check the @Before and @After methods
   }
+  
+  @Test
+  public void testCreateAndDestroyAsyncInfrastructure() throws ImClientException {
+    InfrastructureUri newInfrastructureUri = getIm().createInfrastructureAsync(
+    		readFile(TOSCA_FILE_PATH), BodyContentType.TOSCA);
+    String uri = newInfrastructureUri.getUri();
+    Assert.assertEquals(false, uri.isEmpty());
+    String infId = newInfrastructureUri.getInfrastructureId();
+    getIm().destroyInfrastructure(infId);
+  }
 
   @Test
   public void testInfrastructuresList() throws ImClientException {
@@ -264,15 +274,6 @@ public class InfrastructureManagerTest extends ImTestWatcher {
     InfrastructureUris infUris =
         getIm().addResourceAndContextualize(getInfrastructureId(),
             readFile(TOSCA_EXTRA_NODE_FILE_PATH), BodyContentType.TOSCA);
-
-    Assert.assertEquals(1, infUris.getUris().size());
-    Assert.assertEquals(false, infUris.getUris().get(0).getUri().isEmpty());
-  }
-
-  @Test
-  public void testAddResourceAsync() throws ImClientException {
-    InfrastructureUris infUris = getIm().addAsyncResource(getInfrastructureId(),
-        readFile(TOSCA_EXTRA_NODE_FILE_PATH), BodyContentType.TOSCA);
 
     Assert.assertEquals(1, infUris.getUris().size());
     Assert.assertEquals(false, infUris.getUris().get(0).getUri().isEmpty());

@@ -116,6 +116,27 @@ public class InfrastructureManager {
     return getImClient().post(PATH_INFRASTRUCTURES, infrastructureDefinition,
         bodyContentType.getValue(), InfrastructureUri.class);
   }
+  
+  /**
+   * Create and configure an infrastructure with the requirements specified in
+   * the document of the body contents.<br>
+   * If success, it is returned the URI of the new infrastructure.
+   * This call will not wait for the VMs to be created to return.
+   * 
+   * @param infrastructureDefinition
+   *          : file with the virtual machine properties and configuration
+   * @param bodyContentType
+   *          : set the body content type. Can be RADL, RADL_JSON or TOSCA.
+   * @return : URI of the new infrastructure
+   */
+  public InfrastructureUri createInfrastructureAsync(String infrastructureDefinition,
+      BodyContentType bodyContentType) throws ImClientException {
+
+    RestParameter asyncParameter = createCallParameters(REST_PARAMETER_NAME_ASYNC, true);
+
+    return getImClient().post(PATH_INFRASTRUCTURES, infrastructureDefinition,
+        bodyContentType.getValue(), InfrastructureUri.class, asyncParameter);
+  }  
 
   /**
    * Return a list of URIs referencing the infrastructures associated to the IM
@@ -301,47 +322,18 @@ public class InfrastructureManager {
    * @param context
    *          : flag to specify if the contextualization step will be launched
    *          just after the VM addition
-   * @param async
-   *          : flag to specify if the call has to wait for the VMs to be
-   *          created.
    * @return : list of URIs of the new virtual machines
    */
   public InfrastructureUris addResource(String infId, String radlFile,
-      BodyContentType bodyContentType, boolean context, boolean async)
+      BodyContentType bodyContentType, boolean context)
       throws ImClientException {
 
     RestParameter ctxParameter =
         createCallParameters(REST_PARAMETER_NAME_CONTEXT, context);
-    RestParameter asyncParameter =
-        createCallParameters(REST_PARAMETER_NAME_ASYNC, async);
-
+    
     return getImClient().post(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId,
-        radlFile, bodyContentType.getValue(), InfrastructureUris.class,
-        ctxParameter, asyncParameter);
-  }
-
-  /**
-   * Add the resources specified in the body contents to the infrastructure with
-   * ID 'infId'. The RADL restrictions are the same as in
-   * <a href="http://www.grycap.upv.es/im/doc/xmlrpc.html#addresource-xmlrpc">
-   * RPC-XML AddResource</a><br>
-   * If success, it is returned a list of URIs of the new virtual machines. <br>
-   * This call will not wait the VMs to be created.
-   * 
-   * @param infId
-   *          : infrastructure id
-   * @param radlFile
-   *          : file with the virtual machine properties and configuration
-   * @param bodyContentType
-   *          : set the body content type. Can be RADL, RADL_JSON or TOSCA.
-   * @return : list of URIs of the new virtual machines
-   */
-  public InfrastructureUris addAsyncResource(String infId, String radlFile,
-      BodyContentType bodyContentType) throws ImClientException {
-    RestParameter asyncParameter =
-        createCallParameters(REST_PARAMETER_NAME_ASYNC, true);
-    return addResourcesWithParameters(infId, radlFile, bodyContentType,
-        asyncParameter);
+          radlFile, bodyContentType.getValue(), InfrastructureUris.class,
+          ctxParameter);    
   }
 
   /**
