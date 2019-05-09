@@ -258,7 +258,7 @@ public class ImClient {
       if (parameters != null && parameters.length > 0
           && parameters[0] != null) {
         for (RestParameter parameter : parameters) {
-          webtarget.queryParam(parameter.getName(), parameter.getValues());
+          webtarget = webtarget.queryParam(parameter.getName(), parameter.getValues());
         }
       }
 
