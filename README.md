@@ -97,11 +97,11 @@ InfrastructureManager im = new InfrastructureManager("IM_ENDPOINT", ah);
 2.2 From the Orchestrator
 --------------
 The im-java-api is used to facilitate the connection between the [Orchestrator](https://github.com/indigo-dc/orchestrator) and the [IM](https://github.com/indigo-dc/im).  
-The Orchestrator is mainly developed in Java and the IM in Python, so this library acts as a mediator between this to systems.  
+The Orchestrator is mainly developed in Java and the IM in Python, so this library acts as a mediator between these two systems.  
 The IM offers a REST API that returns JSON messages and the im-java-api transforms this messages in Java classes that are used by the Orchestrator.
 
-This library library is automatically deployed with the Orchestrator (due to maven dependencies).  
-Anyhow, if you want to substitute the library packaged with the war, the location inside the war is WEB-INF/lib/im-java-api-X.X.X.jar.  
+This library is automatically deployed with the Orchestrator (due to maven dependencies).  
+If you want to substitute the library packaged with the war, the location inside the war is WEB-INF/lib/im-java-api-X.X.X.jar.  
 To use this library from the Orchestrator you only have to used the Orchestrator normally and create a deployment that uses the IM endpoint.  
 More info about the Orchestrator can be found [here](http://indigo-dc.github.io/orchestrator/restdocs/).
 
