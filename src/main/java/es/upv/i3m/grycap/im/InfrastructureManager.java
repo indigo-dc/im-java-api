@@ -248,7 +248,7 @@ public class InfrastructureManager {
         String.class);
   }
 
-   /**
+  /**
    * Undeploy the virtual machines associated to the infrastructure with ID
    * 'infId'.
    * This call will not wait for the VMs to be created to return.
