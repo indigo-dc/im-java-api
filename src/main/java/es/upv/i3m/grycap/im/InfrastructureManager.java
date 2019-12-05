@@ -248,6 +248,20 @@ public class InfrastructureManager {
         String.class);
   }
 
+    /**
+   * Undeploy the virtual machines associated to the infrastructure with ID
+   * 'infId'.
+   * This call will not wait for the VMs to be created to return.
+   * 
+   * @param infId
+   *          : infrastructure id
+   */
+  public void destroyInfrastructureAsync(String infId) throws ImClientException {
+    RestParameter asyncParameter = createCallParameters(REST_PARAMETER_NAME_ASYNC, true);
+    getImClient().delete(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId,
+        String.class, asyncParameter);
+  }
+
   /**
    * Add the resources specified in the body contents to the infrastructure with
    * ID 'infId'. The RADL restrictions are the same as in

@@ -48,7 +48,7 @@ public class InfrastructureManagerTest extends ImTestWatcher {
   private static InfrastructureManager im;
   private String infrastructureId;
   private static final String IM_DUMMY_PROVIDER_URL =
-      "https://servproject.i3m.upv.es:8800";
+      "https://appsgrycap.i3m.upv.es:31443/im-dev";
 
   private static final String AUTH_FILE_PATH = "./src/test/resources/auth.dat";
   private static final String RADL_ALTER_VM_FILE_PATH =
