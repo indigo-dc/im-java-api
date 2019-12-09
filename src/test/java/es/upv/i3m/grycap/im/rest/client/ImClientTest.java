@@ -30,7 +30,7 @@ public class ImClientTest extends ImTestWatcher {
 
   private static ImClient imClient;
   private static final String IM_DUMMY_PROVIDER_URL =
-      "https://servproject.i3m.upv.es:8811";
+      "https://appsgrycap.i3m.upv.es:31443/im-dev/";
   private static final String AUTH_FILE_PATH = "./src/test/resources/auth.dat";
   private static final Integer EXPECTED_ERROR_CODE = 404;
   private static final String EXPECTED_ERROR_MESSAGE = "Not found: '/'";
