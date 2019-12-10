@@ -87,6 +87,30 @@ public class ImClient {
   }
 
   /**
+   * Creates a new client using the 'imServiceUrl' as endpoint.<br>
+   * Loads the authorization credentials from the 'authorizationHeader'
+   * parameter. It also enables to set the read and connection timeouts.
+   *
+   * @param targetUrl
+   *          : url of the IM rest service
+   * @param authorizationHeader
+   *          : string with the authorization content
+   * @param connectTimeout
+   *          : int with the client connection timeout
+   * @param readTimeout
+   *          : int with the client read timeout
+   */
+  public ImClient(final String targetUrl, final String authorizationHeader,
+      final int connectTimeout, final int readTimeout)
+      throws ImClientException {
+    this.targetUrl = targetUrl;
+    this.authorizationHeader = authorizationHeader;
+    this.client = createRestClient();
+    this.client.property("jersey.config.client.connectTimeout", connectTimeout);
+    this.client.property("jersey.config.client.readTimeout", readTimeout);
+  }
+
+  /**
    * Creates a new REST client based on the target URL.
    */
   private Client createRestClient() throws ImClientException {
