@@ -31,6 +31,7 @@ import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
 import java.nio.file.Path;
 
+import javax.ws.rs.ProcessingException;
 import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
@@ -173,7 +174,17 @@ public class ImClient {
   private static ResponseError
       createReponseError(WebApplicationException exception) {
     Response clientReponse = exception.getResponse();
-    return clientReponse.readEntity(ResponseError.class);
+
+    ResponseError response;
+    try {
+      response = clientReponse.readEntity(ResponseError.class);
+    } catch (ProcessingException e) {
+      // if the error msg is not the expected JSON, get it as String
+      String errorMessage = clientReponse.readEntity(String.class);
+      response = new ResponseError(errorMessage, clientReponse.getStatus());
+    }
+
+    return response;
   }
 
   /**
