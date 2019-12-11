@@ -17,7 +17,6 @@
 package es.upv.i3m.grycap.im.rest.client;
 
 import es.upv.i3m.grycap.ImTestWatcher;
-import es.upv.i3m.grycap.im.exceptions.ImClientServerErrorException;
 import es.upv.i3m.grycap.im.exceptions.ImClientErrorException;
 import es.upv.i3m.grycap.im.exceptions.ImClientException;
 import es.upv.i3m.grycap.im.pojo.ResponseError;
@@ -35,7 +34,6 @@ public class ImClientTest extends ImTestWatcher {
   private static final String AUTH_FILE_PATH = "./src/test/resources/auth.dat";
   private static final Integer EXPECTED_ERROR_CODE = 404;
   private static final String EXPECTED_ERROR_MESSAGE = "Not found: '/'";
-  private static final String IM_FAKE_PROVIDER_URL = "http://localhost:1234";
 
   private ImClient getImClient() {
     return imClient;
