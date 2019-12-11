@@ -99,6 +99,8 @@ public class InfrastructureManagerTest extends ImTestWatcher {
     try {
       im = new InfrastructureManager(IM_DUMMY_PROVIDER_URL,
           Paths.get(AUTH_FILE_PATH));
+      im.setConnectTimeout(100000);
+      im.setReadTimeout(100000);
     } catch (ImClientException exception) {
       ImJavaApiLogger.severe(InfrastructureManagerTest.class,
           exception.getMessage());

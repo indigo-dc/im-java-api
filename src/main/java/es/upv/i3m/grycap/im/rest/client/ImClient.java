@@ -87,7 +87,7 @@ public class ImClient {
   }
 
   /**
-   * Set the client connection timeout.
+   * Set the client connection timeout in milliseconds.
    *
    * @param connectTimeout
    *          : int with the client connection timeout
@@ -97,7 +97,7 @@ public class ImClient {
   }
 
   /**
-   * Set the client read timeout.
+   * Set the client read timeout in milliseconds.
    *
    * @param readTimeout
    *          : int with the client read timeout
