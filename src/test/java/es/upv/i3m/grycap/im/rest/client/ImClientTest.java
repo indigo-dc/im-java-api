@@ -17,7 +17,6 @@
 package es.upv.i3m.grycap.im.rest.client;
 
 import es.upv.i3m.grycap.ImTestWatcher;
-import es.upv.i3m.grycap.im.exceptions.ImClientServerErrorException;
 import es.upv.i3m.grycap.im.exceptions.ImClientErrorException;
 import es.upv.i3m.grycap.im.exceptions.ImClientException;
 import es.upv.i3m.grycap.im.pojo.ResponseError;
