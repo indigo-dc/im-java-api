@@ -94,22 +94,6 @@ public class ImClientTest extends ImTestWatcher {
     }
   }
 
-  @Test
-  public void testServerError() throws ImClientException {
-    try {
-      imClient = new ImClient(IM_FAKE_PROVIDER_URL, AUTH_FILE_PATH);
-    } catch (ImClientException exception) {
-      ImJavaApiLogger.severe(ImClientTest.class, exception.getMessage());
-      Assert.fail();
-    }
-
-    try {
-      // Force an error
-      getImClient().delete("", String.class);
-    } catch (ImClientServerErrorException exception) {
-    }
-  }
-
   private void checkError(ImClientErrorException exception) {
     ResponseError error = exception.getResponseError();
     Assert.assertEquals(EXPECTED_ERROR_CODE, error.getCode());
