@@ -143,6 +143,10 @@ public class InfrastructureManagerTest extends ImTestWatcher {
     String uri = newInfrastructureUri.getUri();
     Assert.assertEquals(false, uri.isEmpty());
     String infId = newInfrastructureUri.getInfrastructureId();
+    try {
+      Thread.sleep(3000);
+    } catch (Exception e) {
+    }
     getIm().destroyInfrastructure(infId);
   }
 
