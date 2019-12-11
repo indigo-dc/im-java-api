@@ -22,6 +22,7 @@ import es.upv.i3m.grycap.file.NoNullOrEmptyFile;
 import es.upv.i3m.grycap.file.Utf8File;
 import es.upv.i3m.grycap.im.exceptions.ImClientErrorException;
 import es.upv.i3m.grycap.im.exceptions.ImClientException;
+import es.upv.i3m.grycap.im.exceptions.ImClientServerErrorException;
 import es.upv.i3m.grycap.im.lang.ImMessages;
 import es.upv.i3m.grycap.im.pojo.ResponseError;
 import es.upv.i3m.grycap.im.rest.client.parameters.RestParameter;
@@ -30,6 +31,7 @@ import es.upv.i3m.grycap.logger.ImJavaApiLogger;
 
 import java.nio.file.Path;
 
+import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -144,6 +146,8 @@ public class ImClient {
       logCallInfo(HttpMethods.GET, path);
       return configureClient(path, parameters).get(type);
 
+    } catch (ServerErrorException exception) {
+      throw new ImClientServerErrorException(createReponseError(exception));
     } catch (WebApplicationException exception) {
       throw new ImClientErrorException(createReponseError(exception));
     }
@@ -159,6 +163,8 @@ public class ImClient {
       Builder clientConfigured = configureClient(path, parameters);
       return clientConfigured.delete(type);
 
+    } catch (ServerErrorException exception) {
+      throw new ImClientServerErrorException(createReponseError(exception));
     } catch (WebApplicationException exception) {
       throw new ImClientErrorException(createReponseError(exception));
     }
@@ -195,6 +201,8 @@ public class ImClient {
           Entity.entity(normalizedBodyContent, contentType);
       Builder clientConfigured = configureClient(path, parameters);
       return clientConfigured.post(content, type);
+    } catch (ServerErrorException exception) {
+      throw new ImClientServerErrorException(createReponseError(exception));
     } catch (WebApplicationException exception) {
       throw new ImClientErrorException(createReponseError(exception));
     }
@@ -225,6 +233,8 @@ public class ImClient {
           Entity.entity(normalizedBodyContent, contentType);
       Builder clientConfigured = configureClient(path, parameters);
       return clientConfigured.put(content, type);
+    } catch (ServerErrorException exception) {
+      throw new ImClientServerErrorException(createReponseError(exception));
     } catch (WebApplicationException exception) {
       throw new ImClientErrorException(createReponseError(exception));
     }
