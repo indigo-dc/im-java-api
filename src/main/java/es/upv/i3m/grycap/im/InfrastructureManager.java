@@ -100,6 +100,26 @@ public class InfrastructureManager {
   }
 
   /**
+   * Set the client connection timeout in milliseconds.
+   *
+   * @param connectTimeout
+   *          : int with the client connection timeout
+   */
+  public void setConnectTimeout(final int connectTimeout) {
+    imClient.setConnectTimeout(connectTimeout);
+  }
+
+  /**
+   * Set the client read timeout in milliseconds.
+   *
+   * @param readTimeout
+   *          : int with the client read timeout
+   */
+  public void setReadTimeout(final int readTimeout) {
+    imClient.setReadTimeout(readTimeout);
+  }
+
+  /**
    * Create and configure an infrastructure with the requirements specified in
    * the document of the body contents.<br>
    * If success, it is returned the URI of the new infrastructure.
