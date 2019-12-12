@@ -31,7 +31,8 @@ public enum States {
   STOPPED("stopped"),
   OFF("off"),
   FAILED("failed"),
-  UNKNOWN("unknown");
+  UNKNOWN("unknown"),
+  DELETING("deleting");
 
   private final String value;
 
