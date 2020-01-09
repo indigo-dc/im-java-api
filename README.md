@@ -30,7 +30,7 @@ mvn clean install -DskipTests
 When the compilation finishes you will have a **target** folder. Inside you can find the compiled java classes and the packaged jars. The jar **im-java-api-x.x.x-jar-with-dependencies.jar** includes all the libraries needed by the im-java-api and can be used independently. The jar **im-java-api-x.x.x.jar** contains only the im-java-api compiled code and needs external libraries to work. The external libraries needed by the project are specified in the pom.xml
 
 ### 1.2.1 From a tarball
-The code for the library can also be found in the [im-java-api github repository](https://github.com/indigo-dc/im-java-api/releases/tag/v0.4.9).
+The code for the library can also be found in the [im-java-api github repository](https://github.com/indigo-dc/im-java-api/releases/latest).
 To download the source code:
 ```
 wget https://github.com/indigo-dc/im-java-api/archive/v0.4.9.tar.gz
