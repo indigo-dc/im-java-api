@@ -182,7 +182,7 @@ public class InfrastructureManagerTest extends ImTestWatcher {
     Map<?, ?> internalInfo = (Map<String, Object>) vmProperties.get(2);
     List<?> applications = (List<?>) internalInfo.get("disk.0.applications");
     Map<?, ?> applicationsInfo = (Map<?, ?>) applications.get(0);
-    Assert.assertEquals("ansible.modules.indigo-dc.zabbix-agent",
+    Assert.assertEquals("ansible.modules.indigo-dc.galaxycloud",
         applicationsInfo.get("name"));
   }
 
