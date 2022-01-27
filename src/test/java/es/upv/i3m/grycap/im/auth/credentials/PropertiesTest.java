@@ -22,6 +22,9 @@ import es.upv.i3m.grycap.im.auth.credentials.properties.BaseUrlProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.DomainProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.GenericProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.HostProperty;
+import es.upv.i3m.grycap.im.auth.credentials.properties.ImageUrlProperty;
+import es.upv.i3m.grycap.im.auth.credentials.properties.MicroversionProperty;
+import es.upv.i3m.grycap.im.auth.credentials.properties.NetworkUrlProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.OpenStackAuthVersionProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.PasswordProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.PrivateKeyProperty;
@@ -33,11 +36,9 @@ import es.upv.i3m.grycap.im.auth.credentials.properties.SubscriptionIdProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.TenantProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.TokenProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.UserNameProperty;
+import es.upv.i3m.grycap.im.auth.credentials.properties.VolumeUrlProperty;
 import es.upv.i3m.grycap.im.auth.credentials.providers.OpenStackAuthVersion;
-import es.upv.i3m.grycap.im.auth.credentials.providers.MicroversionProperty;
-import es.upv.i3m.grycap.im.auth.credentials.providers.ImageUrlProperty;
-import es.upv.i3m.grycap.im.auth.credentials.providers.NetworkUrlProperty;
-import es.upv.i3m.grycap.im.auth.credentials.providers.VolumeUrlProperty;
+
 
 import org.junit.Assert;
 import org.junit.Test;
