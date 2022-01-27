@@ -83,18 +83,18 @@ public class OpenStackCredentials
     return this;
   }
 
-  public OpenStackCredentials withImageUrl(String image_url) {
-    setCredentials(new ImageUrlProperty(getCredentials(), image_url));
+  public OpenStackCredentials withImageUrl(String imageUrl) {
+    setCredentials(new ImageUrlProperty(getCredentials(), imageUrl));
     return this;
   }
 
-  public OpenStackCredentials withNetworkUrl(String network_url) {
-    setCredentials(new NetworkUrlProperty(getCredentials(), network_url));
+  public OpenStackCredentials withNetworkUrl(String networkUrl) {
+    setCredentials(new NetworkUrlProperty(getCredentials(), networkUrl));
     return this;
   }
 
-  public OpenStackCredentials withVolumeUrl(String volume_url) {
-    setCredentials(new VolumeUrlProperty(getCredentials(), volume_url));
+  public OpenStackCredentials withVolumeUrl(String volumeUrl) {
+    setCredentials(new VolumeUrlProperty(getCredentials(), volumeUrl));
     return this;
   }
 
