@@ -34,6 +34,10 @@ import es.upv.i3m.grycap.im.auth.credentials.properties.TenantProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.TokenProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.UserNameProperty;
 import es.upv.i3m.grycap.im.auth.credentials.providers.OpenStackAuthVersion;
+import es.upv.i3m.grycap.im.auth.credentials.providers.MicroversionProperty;
+import es.upv.i3m.grycap.im.auth.credentials.providers.ImageUrlProperty;
+import es.upv.i3m.grycap.im.auth.credentials.providers.NetworkUrlProperty;
+import es.upv.i3m.grycap.im.auth.credentials.providers.VolumeUrlProperty;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -228,6 +232,34 @@ public class PropertiesTest extends GenericCredentials {
   public void testSubscriptionIdProperty() {
     SubscriptionIdProperty p = new SubscriptionIdProperty(BP, PROPERTY_VALUE);
     Assert.assertEquals(BP_EXPECTED_RESULT + " ; subscription_id = " + PROPERTY_VALUE,
+        p.serialize());
+  }
+
+  @Test
+  public void testImageUrlProperty() {
+    BaseUrlProperty p = new ImageUrlProperty(BP, PROPERTY_VALUE);
+    Assert.assertEquals(BP_EXPECTED_RESULT + " ; image_url = " + PROPERTY_VALUE,
+        p.serialize());
+  }
+
+  @Test
+  public void testVolumeUrlProperty() {
+    BaseUrlProperty p = new VolumeUrlProperty(BP, PROPERTY_VALUE);
+    Assert.assertEquals(BP_EXPECTED_RESULT + " ; volume_url = " + PROPERTY_VALUE,
+        p.serialize());
+  }
+
+  @Test
+  public void testNetworkUrlProperty() {
+    BaseUrlProperty p = new NetworkUrlProperty(BP, PROPERTY_VALUE);
+    Assert.assertEquals(BP_EXPECTED_RESULT + " ; network_url = " + PROPERTY_VALUE,
+        p.serialize());
+  }
+
+  @Test
+  public void testMicroversioProperty() {
+    BaseUrlProperty p = new MicroversionProperty(BP, PROPERTY_VALUE);
+    Assert.assertEquals(BP_EXPECTED_RESULT + " ; microversion = " + PROPERTY_VALUE,
         p.serialize());
   }
 
