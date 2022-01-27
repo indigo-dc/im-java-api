@@ -20,13 +20,13 @@ import es.upv.i3m.grycap.im.auth.credentials.ServiceProvider;
 import es.upv.i3m.grycap.im.auth.credentials.properties.AuthTokenProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.BaseUrlProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.DomainProperty;
+import es.upv.i3m.grycap.im.auth.credentials.properties.ImageUrlProperty;
+import es.upv.i3m.grycap.im.auth.credentials.properties.MicroversionProperty;
+import es.upv.i3m.grycap.im.auth.credentials.properties.NetworkUrlPropertyç;
 import es.upv.i3m.grycap.im.auth.credentials.properties.OpenStackAuthVersionProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.ServiceNameProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.ServiceRegionProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.TenantProperty;
-import es.upv.i3m.grycap.im.auth.credentials.properties.MicroversionProperty;
-import es.upv.i3m.grycap.im.auth.credentials.properties.ImageUrlProperty;
-import es.upv.i3m.grycap.im.auth.credentials.properties.NetworkUrlPropertyç;
 import es.upv.i3m.grycap.im.auth.credentials.properties.VolumeUrlProperty;
 
 public class OpenStackCredentials
