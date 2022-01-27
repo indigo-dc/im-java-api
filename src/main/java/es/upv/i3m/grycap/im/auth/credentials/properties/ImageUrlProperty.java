@@ -23,7 +23,7 @@ public class ImageUrlProperty extends GenericProperty {
   private static final String PROPERTY_NAME = "image_url";
   private static final String ERROR_MESSAGE = "Image url must not be blank";
 
-  public BaseUrlProperty(Credentials credential, String imageUrl) {
+  public ImageUrlProperty(Credentials credential, String imageUrl) {
     super(credential, PROPERTY_NAME, imageUrl, ERROR_MESSAGE);
   }
 
