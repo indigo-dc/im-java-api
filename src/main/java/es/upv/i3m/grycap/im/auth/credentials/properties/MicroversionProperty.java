@@ -23,7 +23,7 @@ public class MicroversionProperty extends GenericProperty {
   private static final String PROPERTY_NAME = "microversion";
   private static final String ERROR_MESSAGE = "Microversion must not be blank";
 
-  public MicroversionProperty(Credentials credential, String tenant) {
+  public MicroversionProperty(Credentials credential, String microversion) {
     super(credential, PROPERTY_NAME, microversion, ERROR_MESSAGE);
   }
 

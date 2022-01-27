@@ -22,7 +22,7 @@ import es.upv.i3m.grycap.im.auth.credentials.properties.BaseUrlProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.DomainProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.ImageUrlProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.MicroversionProperty;
-import es.upv.i3m.grycap.im.auth.credentials.properties.NetworkUrlPropertyç;
+import es.upv.i3m.grycap.im.auth.credentials.properties.NetworkUrlProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.OpenStackAuthVersionProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.ServiceNameProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.ServiceRegionProperty;
