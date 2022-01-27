@@ -49,7 +49,7 @@ public class AuthorizationHeaderTest extends GenericCredentials {
     getAuthorizationHeader().addCredential(cred);
     cred = VmrcCredentials.buildCredentials().withUsername("demo")
         .withPassword("demo")
-        .withHost("http://servproject.i3m.upv.es:8080/vmrc/vmrc");
+        .withHost("http://appsgrycap.i3m.upv.es:32080/vmrc/vmrc");
     getAuthorizationHeader().addCredential(cred);
     cred = DummyCredential.buildCredentials();
     getAuthorizationHeader().addCredential(cred);
