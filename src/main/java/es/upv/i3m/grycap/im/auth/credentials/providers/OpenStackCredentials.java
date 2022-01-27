@@ -20,10 +20,14 @@ import es.upv.i3m.grycap.im.auth.credentials.ServiceProvider;
 import es.upv.i3m.grycap.im.auth.credentials.properties.AuthTokenProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.BaseUrlProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.DomainProperty;
+import es.upv.i3m.grycap.im.auth.credentials.properties.ImageUrlProperty;
+import es.upv.i3m.grycap.im.auth.credentials.properties.MicroversionProperty;
+import es.upv.i3m.grycap.im.auth.credentials.properties.NetworkUrlProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.OpenStackAuthVersionProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.ServiceNameProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.ServiceRegionProperty;
 import es.upv.i3m.grycap.im.auth.credentials.properties.TenantProperty;
+import es.upv.i3m.grycap.im.auth.credentials.properties.VolumeUrlProperty;
 
 public class OpenStackCredentials
     extends GenericCredentials<OpenStackCredentials> {
@@ -71,6 +75,26 @@ public class OpenStackCredentials
 
   public OpenStackCredentials withDomain(String domain) {
     setCredentials(new DomainProperty(getCredentials(), domain));
+    return this;
+  }
+
+  public OpenStackCredentials withMicroversion(String microversion) {
+    setCredentials(new MicroversionProperty(getCredentials(), microversion));
+    return this;
+  }
+
+  public OpenStackCredentials withImageUrl(String imageUrl) {
+    setCredentials(new ImageUrlProperty(getCredentials(), imageUrl));
+    return this;
+  }
+
+  public OpenStackCredentials withNetworkUrl(String networkUrl) {
+    setCredentials(new NetworkUrlProperty(getCredentials(), networkUrl));
+    return this;
+  }
+
+  public OpenStackCredentials withVolumeUrl(String volumeUrl) {
+    setCredentials(new VolumeUrlProperty(getCredentials(), volumeUrl));
     return this;
   }
 
