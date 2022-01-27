@@ -238,28 +238,28 @@ public class PropertiesTest extends GenericCredentials {
 
   @Test
   public void testImageUrlProperty() {
-    BaseUrlProperty p = new ImageUrlProperty(BP, PROPERTY_VALUE);
+    ImageUrlProperty p = new ImageUrlProperty(BP, PROPERTY_VALUE);
     Assert.assertEquals(BP_EXPECTED_RESULT + " ; image_url = " + PROPERTY_VALUE,
         p.serialize());
   }
 
   @Test
   public void testVolumeUrlProperty() {
-    BaseUrlProperty p = new VolumeUrlProperty(BP, PROPERTY_VALUE);
+    VolumeUrlProperty p = new VolumeUrlProperty(BP, PROPERTY_VALUE);
     Assert.assertEquals(BP_EXPECTED_RESULT + " ; volume_url = " + PROPERTY_VALUE,
         p.serialize());
   }
 
   @Test
   public void testNetworkUrlProperty() {
-    BaseUrlProperty p = new NetworkUrlProperty(BP, PROPERTY_VALUE);
+    NetworkUrlProperty p = new NetworkUrlProperty(BP, PROPERTY_VALUE);
     Assert.assertEquals(BP_EXPECTED_RESULT + " ; network_url = " + PROPERTY_VALUE,
         p.serialize());
   }
 
   @Test
   public void testMicroversioProperty() {
-    BaseUrlProperty p = new MicroversionProperty(BP, PROPERTY_VALUE);
+    MicroversionProperty p = new MicroversionProperty(BP, PROPERTY_VALUE);
     Assert.assertEquals(BP_EXPECTED_RESULT + " ; microversion = " + PROPERTY_VALUE,
         p.serialize());
   }
