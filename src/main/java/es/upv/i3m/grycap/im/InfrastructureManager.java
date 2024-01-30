@@ -275,11 +275,14 @@ public class InfrastructureManager {
    * 
    * @param infId
    *          : infrastructure id
+   * @param force
+   *          : force parameter
    */
-  public void destroyInfrastructureAsync(String infId) throws ImClientException {
+  public void destroyInfrastructureAsync(String infId, boolean force) throws ImClientException {
     RestParameter asyncParameter = createCallParameters(REST_PARAMETER_NAME_ASYNC, true);
+    RestParameter forceParameter = createCallParameters("force", force);
     getImClient().delete(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId,
-        String.class, asyncParameter);
+        String.class, asyncParameter, forceParameter);
   }
 
   /**
