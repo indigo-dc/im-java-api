@@ -41,8 +41,8 @@ topology_template:
           properties:
             # host Operating System image properties
             type: linux 
-            distribution: centos 
-            version: 7
+            #distribution: centos 
+            #version: 7
 
   outputs:
     galaxy_url:
