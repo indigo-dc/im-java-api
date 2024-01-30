@@ -52,6 +52,7 @@ public class InfrastructureManager {
   private static final String REST_PARAMETER_NAME_CONTEXT = "context";
   private static final String REST_PARAMETER_NAME_ASYNC = "async";
   private static final String REST_PARAMETER_NAME_VMLIST = "vm_list";
+  private static final String REST_PARAMETER_NAME_FORCE = "force";
 
   private final ImClient imClient;
 
@@ -276,11 +277,12 @@ public class InfrastructureManager {
    * @param infId
    *          : infrastructure id
    * @param force
-   *          : force parameter
+   *          : flag to specify that the infra will be from the IM although not
+              all resources are deleted
    */
   public void destroyInfrastructureAsync(String infId, boolean force) throws ImClientException {
     RestParameter asyncParameter = createCallParameters(REST_PARAMETER_NAME_ASYNC, true);
-    RestParameter forceParameter = createCallParameters("force", force);
+    RestParameter forceParameter = createCallParameters(REST_PARAMETER_NAME_FORCE, force);
     getImClient().delete(PATH_INFRASTRUCTURES + PATH_SEPARATOR + infId,
         String.class, asyncParameter, forceParameter);
   }
