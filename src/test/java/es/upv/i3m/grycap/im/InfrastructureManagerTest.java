@@ -48,7 +48,7 @@ public class InfrastructureManagerTest extends ImTestWatcher {
   private static InfrastructureManager im;
   private String infrastructureId;
   private static final String IM_DUMMY_PROVIDER_URL =
-      "https://appsgrycap.i3m.upv.es:31443/im-dev";
+      "https://appsgrycap.i3m.upv.es/im-dev";
 
   private static final String AUTH_FILE_PATH = "./src/test/resources/auth.dat";
   private static final String RADL_ALTER_VM_FILE_PATH =
@@ -182,7 +182,7 @@ public class InfrastructureManagerTest extends ImTestWatcher {
     Map<?, ?> internalInfo = (Map<String, Object>) vmProperties.get(2);
     List<?> applications = (List<?>) internalInfo.get("disk.0.applications");
     Map<?, ?> applicationsInfo = (Map<?, ?>) applications.get(0);
-    Assert.assertEquals("ansible.modules.indigo-dc.galaxycloud",
+    Assert.assertEquals("ansible.roles.indigo-dc.galaxycloud",
         applicationsInfo.get("name"));
   }
 
