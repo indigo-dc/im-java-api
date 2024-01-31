@@ -24,6 +24,19 @@
     <mockito.version>2.1.0</mockito.version>
   </properties>
 
+  <distributionManagement>
+    <repository>
+      <id>cnaf-releases</id>
+      <name>CNAF releases</name>
+      <url>https://repo.cloud.cnaf.infn.it/repository/cnaf-releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>cnaf-snapshots</id>
+      <name>CNAF snapshots</name>
+      <url>https://repo.cloud.cnaf.infn.it/repository/cnaf-snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+
   <dependencies>
   <!-- Rest client -->
     <dependency>
